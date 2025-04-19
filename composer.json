@@ -1,0 +1,34 @@
+{
+    "name": "cynth/g4",
+    "description": "Pacote desenvolvido para o trabalho de Projeto Integrador de Sistemas",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "": ["src/"]
+        }
+    },
+    "authors": [
+        {
+            "name": "Cynthia",
+            "email": "cynthiaareasjardim@gmail.com"
+        },
+        {
+            "name": "Vinícius",
+            "email": "vouverney27@gmail.com"
+        }
+    ],
+    "require": {
+        "slim/slim": "^4.0",
+        "slim/psr7": "^1.7"
+    },
+    "require-dev": {
+        "kahlan/kahlan": "^6.0",
+        "phpstan/phpstan": "^2.1"
+    },
+    "scripts": {
+        "dump": "composer dump-autoload",
+        "start": "php src/index.php",
+        "test": "kahlan",
+        "stan": "vendor/bin/phpstan analyse src --level=2"
+    }
+}
