@@ -4,7 +4,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "": ["src/"]
+            "": ["api/src/"]
         }
     },
     "authors": [
@@ -27,7 +27,7 @@
     },
     "scripts": {
         "dump": "composer dump-autoload",
-        "start": "php src/index.php",
+        "start": "php api/src/index.php",
         "test": "kahlan",
         "stan": "vendor/bin/phpstan analyse src --level=2"
     }
