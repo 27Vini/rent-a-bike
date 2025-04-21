@@ -1,0 +1,4 @@
+- como ficará a organização do MVP do back
+- como será a relação entre item e bicicleta ou equipamento
+- fabricante é uma entidade a ser descrita no projeto ou apenas um atributo
+- é errado colocar um identificador de tipo no item (para saber se o item se refere a um equipamento ou a uma bicicleta na locação)

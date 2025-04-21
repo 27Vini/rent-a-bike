@@ -1,0 +1,70 @@
+CREATE DATABASE g4;
+use g4;
+
+CREATE TABLE cliente(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
+    codigo VARCHAR(255) NOT NULL , 
+    nome VARCHAR(255) NOT NULL , 
+    cpf VARCHAR(255) NOT NULL , 
+    foto BLOB NOT NULL
+);
+
+CREATE TABLE funcionario(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
+    nome VARCHAR(255) NOT NULL 
+);
+
+CREATE TABLE item(
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
+    codigo VARCHAR(255) NOT NULL , 
+    descricao VARCHAR(255) NOT NULL , 
+    modelo VARCHAR(255) NOT NULL , 
+    fabricante VARCHAR(255) NOT NULL , 
+    valorPorHora DECIMAL NOT NULL , 
+    avarias VARCHAR(255) NOT NULL , 
+    disponibilidade BOOLEAN NOT NULL DEFAULT TRUE , 
+    tipo VARCHAR(60) NOT NULL 
+);
+
+CREATE TABLE bicicleta (
+	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    idItem INT NOT NULL,
+    numeroSeguro VARCHAR(255) NOT NULL,
+    FOREIGN KEY (idItem) REFERENCES item(id)
+); 
+
+
+CREATE TABLE equipamento(
+	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    idItem INT NOT NULL,
+    FOREIGN KEY (idItem) REFERENCES item(id)
+);
+
+CREATE TABLE locacao (
+    id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    entrada DATETIME NOT NULL,
+    numero_de_horas INT NOT NULL,
+    desconto DECIMAL NOT NULL,
+    valor_total DECIMAL NOT NULL,
+    previsao_de_entrega DATETIME NOT NULL,
+    cliente_id int NOT NULL,
+    funcionario_id int NOT NULL,
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id),
+    FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
+);
+
+CREATE TABLE locacao_item(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    item_id INT NOT NULL,
+    locacao_id INT NOT NULL,
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    FOREIGN KEY (locacao_id) REFERENCES locacao(id)
+);
+
+CREATE TABLE devolucao(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    locacao_id INT NOT NULL,
+    data_de_devolucao DATETIME NOT NULL,
+    valor_pago DECIMAL NOT NULL,
+    FOREIGN KEY(locacao_id) REFERENCES locacao(id)
+);
