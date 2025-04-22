@@ -1,6 +1,10 @@
 <?php 
 
 class RepositorioEquipamentoEmBDR extends RepositorioGenericoEmBDR {
+    public function __construct(PDO $pdo){
+        parent::__construct($pdo);
+    }
+    
     public function adicionar(Equipamento $equip) : void {
         $comando = "INSERT INTO equipamento (idItem) VALUES (:idItem)";
         $this->executarComandoSql($comando, ["idItem" => $equip->getIdItem()]);

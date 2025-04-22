@@ -2,6 +2,9 @@
 
 
 class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR{
+    public function __construct(PDO $pdo){
+        parent::__construct($pdo);
+    }
 
     public function adicionar(Funcionario $funcionario) : void{
         $comando = "INSERT INTO funcionario (nome) VALUES (:nome)";

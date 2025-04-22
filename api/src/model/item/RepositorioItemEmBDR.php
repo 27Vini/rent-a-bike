@@ -1,6 +1,10 @@
 <?php
 
 class RepositorioItemEmBDR extends RepositorioGenericoEmBDR {
+    public function __construct(PDO $pdo){
+        parent::__construct($pdo);
+    }
+    
     public function adicionar(Item $item) : void{
         $comando = "INSERT INTO item (codigo, descricao, modelo, fabricante, valorPorHora, avarias, disponibilidade, tipo) VALUES (:codigo, :descricao, :modelo, :fabricante, :valorPorHora, :avarias, :disponibilidade, :tipo)";
 
