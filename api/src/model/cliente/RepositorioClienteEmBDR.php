@@ -22,4 +22,12 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR{
         return $c;
     }
 
+    public function coletarComCodigoOuCpf($valor) : null | Cliente{
+        $comando = 'SELECT * FROM cliente WHERE ';
+        $valor != 11 ? $comando .= "codigo=:valor" : $comando .= "cpf=:valor";
+        $ps = $this->executarComandoSql($comando, ["valor" => $valor]);
+        $c = $ps->fetchObject(Cliente::class) ?: null;
+        return $c;
+    }
+    
 }
