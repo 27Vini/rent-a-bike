@@ -57,6 +57,9 @@ CREATE TABLE locacao_item(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
     locacao_id INT NOT NULL,
+    qtd INT NOT NULL, 
+    precoLocacao DECIMAL NOT NULL,
+    subtotal DECIMAL NOT NULL,
     FOREIGN KEY (item_id) REFERENCES item(id),
     FOREIGN KEY (locacao_id) REFERENCES locacao(id)
 );
