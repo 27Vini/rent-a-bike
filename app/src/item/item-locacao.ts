@@ -8,7 +8,6 @@ export class ItemLocacao{
         public readonly locacao : Locacao,
         public readonly item : Item,
         public readonly precoLocacao : number,
-        public readonly qtd : number,
         public readonly subtotal : number
     ){}
 
