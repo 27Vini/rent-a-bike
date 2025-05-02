@@ -52,7 +52,7 @@ class Devolucao{
             array_push($problemas, "A data de devolução deve ser inferior ou igual a data atual.");
         }
 
-        if($this->valorPago < 0.0){
+        if($this->valorPago <= 0.0){
             array_push($problemas, "O valor pago deve ser maior que 0.");
         }
 
