@@ -1,6 +1,13 @@
+import { Cliente } from "../cliente/cliente";
+import { Funcionario } from "../funcionario/funcionario";
+import { ItemLocacao } from "../item/item-locacao";
+
 export class Locacao{
     constructor(
         public readonly id:number, 
+        public readonly cliente:Cliente,
+        public readonly funcionario:Funcionario,
+        public readonly item:ItemLocacao[],
         public readonly entrada:Date,
         public readonly numeroDeHoras:number, 
         public readonly desconto:number,
@@ -8,7 +15,7 @@ export class Locacao{
         public readonly previsaoEntrega:Date,
     ){}
 
-    public validar() : string[] | undefined{
+    public validar() : string[] {
         const erros:string[] = [];
 
         if(this.numeroDeHoras <= 0)
