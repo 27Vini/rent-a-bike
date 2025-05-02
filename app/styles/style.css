@@ -1,0 +1,118 @@
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #e6f2f7;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Estilo do cabeçalho e logo */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    background-color: #d4f0ff;
+}
+
+.logo-container {
+    position: absolute;
+    left: 0;
+}
+
+.logo {
+    width: 130px;
+    height: auto;
+}
+
+/* Estilo das abas de navegação */
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.nav-tab {
+    padding: 15px 40px;
+    background-color: #9ac4d4;
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 5px 5px 0 0;
+    margin: 0 1px;
+    text-align: center;
+    width: 200px;
+}
+
+.nav-tab.active {
+    background-color: #e6f2f7;
+}
+
+.nav-tab:hover {
+    background-color: #87b5c6;
+}
+
+/* Estilo do botão de registrar devolução */
+.register-btn {
+    background-color: #9ac4d4;
+    color: black;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.register-btn:hover {
+    background-color: #87b5c6;
+}
+
+main {
+    padding: 0 20px;
+}
+
+/* Estilo da tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+thead {
+    background-color: #9ac4d4;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+tbody tr {
+    background-color: #f0f8ff;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #e6f2f7;
+}
+
+/* Rodapé */
+footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+}
