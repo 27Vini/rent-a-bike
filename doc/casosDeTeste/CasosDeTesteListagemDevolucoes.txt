@@ -10,6 +10,7 @@ Caso 2:
     Quando abrir a listagem de devoluções
     Então a tabela deve conter ao menos um registro
 
+TODO:
 Caso 3:
     Cenário: Tabelas sem itens
     Dado que a página de devoluções é aberta
