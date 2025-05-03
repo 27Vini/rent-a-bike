@@ -1,6 +1,6 @@
-import { API } from "../../../infra/api";
+import { API } from "../../infra/api";
 
-export class GestorListagemLocacao{
+export class GestorLocacao{
     public async coletarLocacoes() : Promise<any>{
         const response = await fetch(API + "locacoes");
         if(!response.ok)

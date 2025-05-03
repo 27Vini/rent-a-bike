@@ -22,6 +22,6 @@ test.describe('Listagem de devoluções', async () => {
     test('Clicar em cadastrar deve ir para a página' , async () => {
         await tela.irPara('#devolucoes')
         await tela.irPara('.register-btn')
-        await tela.verificarUrl('http://localhost:5173/app/pages/cadastro-devolucoes.html')
+        await tela.verificarUrl('http://localhost:5173/app/pages/cadastrar-devolucoes.html')
     })
 })

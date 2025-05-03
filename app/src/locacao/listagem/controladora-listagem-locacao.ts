@@ -1,13 +1,13 @@
-import { GestorListagemLocacao } from "./gestor-listagem-locacao";
+import { GestorLocacao } from "../gestor-locacao";
 import { VisaoLocacao } from "./visao-listagem-locacao";
 
 export class ControladoraListagemLocacao{
-    private gestor:GestorListagemLocacao;
+    private gestor:GestorLocacao;
     private visao:VisaoLocacao
 
     constructor(visao){
         this.visao = visao;
-        this.gestor = new GestorListagemLocacao();
+        this.gestor = new GestorLocacao();
     }
 
     async obterLocacoes(){

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../src/locacao/cadastro/visao-cadastro-locacao-html.ts" type="module" defer></script>
+    <title>Rent-A-Bike - Cadastrar Locação</title>
+</head>
+<body>
+    <div class="group">
+        <label for="funcionario">Funcionario:</label>
+        <select id="funcionario" name="funcionario">
+            <option value="test">Teste</option>
+        </select>
+    </div>
+
+    <div class="group">
+        <label for="cliente">Cliente:</label>
+        <input type="text" name="cliente" id="cliente" class="cliente"><button id="pesquisar-cliente">🔍</button>
+        <ul id="lista-clientes"></ul>
+    </div>
+    
+    <div class="group">
+        <label for="item">Item:</label>
+        <input type="text" name="item" id="item" class="item"><button id="pesquisar-item">🔍</button>
+        <ul id="lista-itens"></ul>
+    </div>
+
+    <div class="group">
+        <label for="item">Qtd Horas:</label>
+        <input type="text" name="horas" id="horas">
+    </div>
+
+    <div class="escondido" id="entrega">
+        Data e hora de entrega: 
+    </div>
+    <button id="cadastrar">Cadastrar</button>
+
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>alo</td>
+                <td>alo</td>
+                <td>alo</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Valor Total:</td>
+            </tr>
+            <tr>
+                <td colspan="3">Desconto: </td>
+            </tr>
+            <tr>
+                <td colspan="3">Valor Final:</td>
+            </tr>
+        </tfoot>
+    </table>
+   
+</body>
+</html>
