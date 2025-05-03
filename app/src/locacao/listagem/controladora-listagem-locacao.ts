@@ -13,6 +13,9 @@ export class ControladoraListagemLocacao{
     async obterLocacoes(){
         try{
             const locacoes = await this.gestor.coletarLocacoes();
+            if(!locacoes)
+                this.visao.exibirMensagem("Não há locações para serem exibidas.");
+            
             return locacoes;
         }catch(error){
             this.visao.exibirMensagem(error.message)

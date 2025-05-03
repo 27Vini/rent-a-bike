@@ -32,7 +32,7 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
     }
 
     exibirMensagem(mensagem: string) {
-        alert(mensagem)
+        document.querySelector("output")!.innerText = mensagem;
     }
 }
 
