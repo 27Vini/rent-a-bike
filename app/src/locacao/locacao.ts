@@ -4,10 +4,10 @@ import { ItemLocacao } from "../item/item-locacao";
 
 export class Locacao{
     constructor(
-        public readonly id:number, 
-        public readonly cliente:Cliente,
-        public readonly funcionario:Funcionario,
-        public readonly item:ItemLocacao[],
+        public readonly id:number = 0, 
+        public readonly cliente:Cliente | number,
+        public readonly funcionario:Funcionario | number,
+        public readonly item:ItemLocacao[] | Object[],
         public readonly entrada:Date,
         public readonly numeroDeHoras:number, 
         public readonly desconto:number,

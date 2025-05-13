@@ -19,6 +19,11 @@
         <input type="text" name="cliente" id="cliente" class="cliente"><button id="pesquisar-cliente">🔍</button>
         <ul id="lista-clientes"></ul>
     </div>
+
+    <div class="group">
+        <label for="item">Qtd Horas:</label>
+        <input type="text" name="horas" id="horas" value="0">
+    </div>
     
     <div class="group">
         <label for="item">Item:</label>
@@ -26,13 +31,8 @@
         <ul id="lista-itens"></ul>
     </div>
 
-    <div class="group">
-        <label for="item">Qtd Horas:</label>
-        <input type="text" name="horas" id="horas">
-    </div>
-
-    <div class="escondido" id="entrega">
-        Data e hora de entrega: 
+    <div hidden id="entrega">
+        Data e hora de entrega: <span></span>
     </div>
     <button id="cadastrar">Cadastrar</button>
 
@@ -46,21 +46,17 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>alo</td>
-                <td>alo</td>
-                <td>alo</td>
-            </tr>
+            
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="3">Valor Total:</td>
+                <td colspan="3">Valor Total:<span class="valor-total"></span></td>
             </tr>
             <tr>
-                <td colspan="3">Desconto: </td>
+                <td colspan="3">Desconto:<span class="valor-desconto"></span> </td>
             </tr>
             <tr>
-                <td colspan="3">Valor Final:</td>
+                <td colspan="3">Valor Final:<span class="valor-final"></span></td>
             </tr>
         </tfoot>
     </table>

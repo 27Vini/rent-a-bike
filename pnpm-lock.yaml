@@ -17,6 +17,9 @@ importers:
       json-server:
         specifier: 1.0.0-beta.3
         version: 1.0.0-beta.3
+      ts-money:
+        specifier: ^0.4.8
+        version: 0.4.8
       vite:
         specifier: ^6.3.2
         version: 6.3.2
@@ -513,6 +516,9 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+
   loupe@3.1.3:
     resolution: {integrity: sha512-kkIp7XSkP78ZxJEsSxW3712C6teJVoeHHwgo9zJ380de7IYyJ2ISlxojcH2pC5OFLewESmnRi/+XCDIEEVyoug==}
 
@@ -639,6 +645,9 @@ packages:
   totalist@3.0.1:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
     engines: {node: '>=6'}
+
+  ts-money@0.4.8:
+    resolution: {integrity: sha512-tYOzrAzyhfp4+GWLcXSlgPKbQIhGBR33/bVuzY5EPQceBHiH6YPo+lDkYusKXsCVb4hNAZtld44qjSdaQcNTig==}
 
   type-fest@4.40.1:
     resolution: {integrity: sha512-9YvLNnORDpI+vghLU/Nf+zSv0kL47KbVJ1o3sKgoTefl6i+zebxbiDQWoe/oWWqPhIgQdRZRT1KA9sCPL810SA==}
@@ -1101,6 +1110,8 @@ snapshots:
 
   json5@2.2.3: {}
 
+  lodash@4.17.21: {}
+
   loupe@3.1.3: {}
 
   lowdb@7.0.1:
@@ -1211,6 +1222,10 @@ snapshots:
   tinyspy@3.0.2: {}
 
   totalist@3.0.1: {}
+
+  ts-money@0.4.8:
+    dependencies:
+      lodash: 4.17.21
 
   type-fest@4.40.1: {}
 

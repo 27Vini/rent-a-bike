@@ -1,6 +1,6 @@
 import { VisaoCliente } from "./visao-cliente";
 import { ControladoraCliente } from "./controladora-cliente";
-
+import { salvarEmLocalStorage } from "../../infra/util/gestor-localstorage";
 export class VisaoClienteHTML implements VisaoCliente {
     private controladora:ControladoraCliente;
 
@@ -8,20 +8,26 @@ export class VisaoClienteHTML implements VisaoCliente {
         this.controladora = new ControladoraCliente(this);
     }
 
-    async listarClienteComCodigoOuCpf(parametro:string){
+    async clienteComCodigoOuCpf(parametro:string){
         const clientes = await this.controladora.obterClientesComCodigoOuCpf(parametro);
+        let cliente = clientes[0];
+        
         let ul = document.querySelector("#lista-clientes");
-        ul!.innerHTML = clientes.map(c => 
-            this.transformarEmLI(c)
-        ).join('')
+        ul!.innerHTML = this.transformarEmLI(cliente);
+
+        this.salvarEmLocalStorage(cliente);
     }
 
     private transformarEmLI(c){
         return `
             <li>
-                <img src=""/> ${c.nome} <button data-cliente-id='${c.id}'>+</button>
+                <img src="${c.foto}" width="50px" height="50px"/> ${c.nome}
             </li>
         `
+    }
+
+    private salvarEmLocalStorage(cliente){
+        salvarEmLocalStorage("cliente", cliente);
     }
 
     exibirAlerta(mensagem: string) {

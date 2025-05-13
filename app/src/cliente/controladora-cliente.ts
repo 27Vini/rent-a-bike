@@ -10,11 +10,18 @@ export class ControladoraCliente {
         this.gestor = new GestorCliente();
     }
 
-    async obterClientesComCodigoOuCpf(parametro:string){
+    async obterClientesComCodigoOuCpf(parametro:string) : Promise<any>{
         try{
+            if(parametro == ''){
+                this.visao.exibirAlerta("Digite um código ou cpf para consultar.");
+                return;
+            }
+
             const clientes = await this.gestor.coletarClientes(parametro);
-            if(!clientes)
+            if(clientes.length == 0){
                 this.visao.exibirAlerta("Nenhum cliente encontrado.");
+                return;
+            }
 
             return clientes;
         }catch(erro){
