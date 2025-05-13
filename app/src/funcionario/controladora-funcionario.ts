@@ -13,8 +13,10 @@ export class ControladoraFuncionario {
     async obterFuncionarios(){
         try{
             const funcionarios = await this.gestor.coletarFuncionarios();
-            if(!funcionarios)
+            if(funcionarios.length == 0){
                 this.visao.exibirAlerta("Nenhum funcionário cadastrado.");
+                return;
+            }
 
             return funcionarios;
         }catch(erro){

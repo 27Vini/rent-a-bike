@@ -14,7 +14,7 @@ export class ControladoraListagemDevolucao{
     async obterDevolucoes(){
         try{
             const devolucoes = await this.gestor.coletarDevolucoes()
-            if(!devolucoes){
+            if(devolucoes.length == 0){
                 this.visao.exibirMensagem('Sem dados de devoluções');
             }
             return devolucoes;
