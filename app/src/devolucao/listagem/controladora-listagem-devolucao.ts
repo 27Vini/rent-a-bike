@@ -1,14 +1,14 @@
 import { VisaoListagemDevolucao } from "./visao-listagem-devolucao.js";
-import {GestorListagemDevolucao} from './gestor-listagem-devolucao.js';
+import {GestorDevolucao} from '../gestor-devolucao.js';
 
 export class ControladoraListagemDevolucao{
 
     private visao : VisaoListagemDevolucao;
-    private gestor : GestorListagemDevolucao
+    private gestor : GestorDevolucao
 
     public constructor(visao : VisaoListagemDevolucao){
         this.visao = visao;
-        this.gestor = new GestorListagemDevolucao()
+        this.gestor = new GestorDevolucao()
     }
 
     async obterDevolucoes(){

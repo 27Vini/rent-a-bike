@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../src/devolucao/cadastro/visao-cadastro-devolucao-html.ts" type="module" defer></script>
+    <title>Rent-A-Bike - Cadastrar Devolução</title>
+</head>
+<body>
+    
+    <div class="group-devolucao">
+        <label for="devolucao">Devolução:</label>
+        <input type="datetime-local" id="devolucao" name="devolucao">
+    </div>
+    
+    <div class="group-locacao">
+        <label for="locacao">Locação:</label>
+        <input type="text" name="locacao" id="locacao" placeholder="Id Locação ou CPF Cliente"><button id="pesquisar-locacao">🔍</button>
+        <select id="locacaoId" name="locacaoId" hidden>
+        </select>
+        <div id="locacaoOutput"></div>
+    </div>
+    
+    <table border="1">
+        <thead>
+            <th>Código</th>
+            <th>Descrição</th>
+            <th>Subtotal</th>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Valor Total: R$<span id="valor-total"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3">Desconto: R$<span id="desconto"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3">Valor Final: R$<span id="valor-final"></span></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <output></output>
+    <button id="devolver">Devolver</button>
+</body>
+</html>

@@ -7,7 +7,7 @@ export class Locacao{
         public readonly id:number = 0, 
         public readonly cliente:Cliente | number,
         public readonly funcionario:Funcionario | number,
-        public readonly item:ItemLocacao[] | Object[],
+        public readonly itens:ItemLocacao[] | Object[],
         public readonly entrada:Date,
         public readonly numeroDeHoras:number, 
         public readonly desconto:number,

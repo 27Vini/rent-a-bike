@@ -1,0 +1,131 @@
+import { ControladoraCadastroDevolucao } from "./controladora-cadastro-devolucao.js";
+import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
+import { sel } from './seletores-cadastro-devolucao.js';
+
+export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
+    private controladora : ControladoraCadastroDevolucao;
+
+    public constructor(){
+        this.controladora = new ControladoraCadastroDevolucao(this);
+    }
+
+    iniciar(){
+        document.querySelector(sel.pesquisarLocacao)?.addEventListener('click', this.controladora.pesquisarLocacao.bind(this.controladora));
+        document.querySelector(sel.devolverBtn)?.addEventListener('click', this.controladora.enviarDados.bind(this.controladora));
+        document.querySelector(sel.selectLocacao)?.addEventListener('change', this.controladora.procurarLocacaoDoSelecionada.bind(this.controladora));
+        document.querySelector(sel.devolucao)?.addEventListener('input', this.bloquearInputLocacao.bind(this));
+
+        this.bloquearInputLocacao();
+    }
+
+    bloquearInputLocacao(): void {
+        const data = this.coletarDataDevolucao();
+        const inputLocacao = document.querySelector<HTMLInputElement>(sel.locacaoInput);
+        const botaoPesquisar = document.querySelector<HTMLButtonElement>(sel.pesquisarLocacao);
+        if(!data || data == ''){
+            inputLocacao!.disabled = true;
+            botaoPesquisar!.disabled = true;
+        }
+        else{
+            inputLocacao!.disabled = false;
+            botaoPesquisar!.disabled = false;
+        }
+    }
+
+    exibirMensagem(mensagem: string) {
+        document.querySelector<HTMLOutputElement>(sel.output)!.innerHTML = mensagem;
+    }
+
+    coletarInputLocacao() {
+        return document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value;
+    }
+
+    coletarValorFinal() : string | null{
+        return document.querySelector(sel.valorFinal)!.textContent;
+    }
+
+    coletarIdLocacaoDoSelect(): number {
+        return Number(document.querySelector<HTMLSelectElement>(sel.selectLocacao)!.value);
+    }
+
+    coletarSubtotais(): number[] {
+        const valores : number[] = [];
+        const trs = document.querySelectorAll('tbody tr');
+        for(const tr of trs){
+            const td = tr.querySelectorAll('td')[2];
+            valores.push(Number(td.textContent));
+        }
+        return valores;
+    }
+
+    exibirLocacoes(locacoes) {
+        if(locacoes.length > 1){
+            this.exibirLocacoesDoCliente(locacoes);
+        }
+        else{
+            this.exibirLocacaoUnica(locacoes);
+        }
+    }
+    
+    exibirLocacoesDoCliente(locacaoes) {
+        document.querySelector<HTMLSelectElement>(sel.locacaoOutput)!.hidden = true;
+        const select = document.querySelector<HTMLSelectElement>(sel.selectLocacao)!
+        select!.innerHTML = ""
+        select?.removeAttribute("hidden")
+        this.criarOptionPadrao(select);
+        
+        for(const locacao of locacaoes){
+            const option = document.createElement('option');
+            option.value = String(locacao.id);
+            const apenasData = locacao.previsaoEntrega.substring(0, 10);
+            option.innerText = `R$${locacao.valorTotal} ${apenasData}`;
+            select!.append(option)
+        }
+    }
+
+    criarOptionPadrao(select : HTMLSelectElement){
+        const optionPadrao = document.createElement('option')
+        optionPadrao.innerText = '--Selecione--'
+        select?.append(optionPadrao);
+    }
+
+    exibirLocacaoUnica(locacao) {
+        document.querySelector<HTMLOutputElement>(sel.selectLocacao)!.hidden = true;
+        const div = document.querySelector<HTMLOutputElement>(sel.locacaoOutput)
+        div?.removeAttribute('hidden')
+        const apenasData = locacao.previsaoEntrega.substring(0, 10);
+        div!.innerText = `Locação de valor R$${locacao.valorTotal} para entregar ${apenasData}`
+        div!.dataset.id = String(locacao.id)
+        this.desenharTabela(locacao);
+    }
+
+    desenharTabela(locacao){
+        const tbody = document.querySelector('tbody')
+        tbody!.innerHTML = ""
+        for(const item of locacao.itens){
+            const subtotal = this.controladora.calcularSubtotal(item);
+            tbody!.innerHTML += `
+                <tr>
+                    <td>${item.codigo}</td>
+                    <td>${item.descricao}</td>
+                    <td>${subtotal}</td>
+                </tr>
+            ` 
+        }
+        this.controladora.calcularValores()
+    }
+
+    preencherValores({valorTotal, desconto, valorFinal}){
+        document.querySelector<HTMLOutputElement>(sel.valorTotal)!.innerText = valorTotal.toString()
+        document.querySelector<HTMLOutputElement>(sel.desconto)!.innerText = desconto.toString()
+        document.querySelector<HTMLOutputElement>(sel.valorFinal)!.innerText = valorFinal.toString()
+    }
+
+    coletarDataDevolucao() {
+        return document.querySelector<HTMLInputElement>(sel.devolucao)!.value;
+    }
+
+}
+
+const visao = new VisaoCadastroDevolucaoHTML();
+visao.iniciar()
