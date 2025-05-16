@@ -32,8 +32,8 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         }
     }
 
-    exibirMensagem(mensagem: string) {
-        document.querySelector<HTMLOutputElement>(sel.output)!.innerHTML = mensagem;
+    exibirMensagens(mensagens: string[]) {
+        document.querySelector<HTMLOutputElement>(sel.output)!.innerText = mensagens.join("\n");
     }
 
     coletarInputLocacao() {

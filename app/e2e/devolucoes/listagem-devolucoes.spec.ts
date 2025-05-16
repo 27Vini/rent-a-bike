@@ -1,12 +1,12 @@
 import {test} from '@playwright/test'
-import { TelaDevolucao } from './TelaDevolucao.js'
+import { TelaListagemDevolucao } from './TelaListagemDevolucao.js'
 
 test.describe('Listagem de devoluções', async () => {
 
-    let tela : TelaDevolucao
+    let tela : TelaListagemDevolucao
 
     test.beforeEach( async ({page}) => {
-        tela = new TelaDevolucao(page)
+        tela = new TelaListagemDevolucao(page)
         await tela.abrir()
     })
 

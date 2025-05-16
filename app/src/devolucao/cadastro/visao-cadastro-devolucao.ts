@@ -1,5 +1,5 @@
 export interface VisaoCadastroDevolucao{
-    exibirMensagem(mensagem : string);
+    exibirMensagens(mensagem : string[]);
     coletarInputLocacao();
     exibirLocacoes(locacoes);
     coletarDataDevolucao();

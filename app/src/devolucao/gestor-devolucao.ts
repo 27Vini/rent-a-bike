@@ -3,6 +3,7 @@ import { Item } from '../item/item.js';
 import {Locacao} from '../locacao/locacao.js';
 import {Devolucao} from '../devolucao/devolucao.js'
 import {Money, Currencies} from 'ts-money'
+import { ErrorDominio } from '../../infra/ErrorDominio.js';
 
 export class GestorDevolucao{
 
@@ -20,7 +21,7 @@ export class GestorDevolucao{
 
     async pesquisarLocacao(pesquisa : string) : Promise<any>{
         if(! /^\d+$/.test(pesquisa)){
-            throw new Error( "O campo de locação deve ter apenas números." )
+            throw ErrorDominio.comProblemas([ "O campo de locação deve estar preenchido com apenas números." ] )
         }
 
         let parametro : string;
@@ -32,7 +33,7 @@ export class GestorDevolucao{
 
         const response = await fetch( API + `locacoes?${parametro}`)
         if(!response.ok){
-            throw new Error("Não foi possível coletar os dados de locação: " + response.status)
+            throw ErrorDominio.comProblemas(["Não foi possível coletar os dados de locação: " + response.status]);
         }
 
         const locacoes = await response.json();
@@ -45,13 +46,22 @@ export class GestorDevolucao{
         return locacoes;
     }
 
+    private criarDevolucao(dataDeDevolucao, valorPago) : Devolucao{
+        const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
+        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida!);
+        const problemas : string [] = devolucao.validar();
+        if(problemas.length > 0){
+            throw ErrorDominio.comProblemas(problemas);
+        }
+        return devolucao
+    }
 
     async salvarDevolucao(dataDevolucao, valorPago){
-        const devolucao = new Devolucao(0, new Date(dataDevolucao), valorPago, this.locacaoEscolhida!);
+        const devolucao = this.criarDevolucao(dataDevolucao, valorPago);
         const response = await fetch( API + 'devolucao', {method : 'POST', headers : {'Content-Type': 'application/json'}, body : JSON.stringify(devolucao)})
 
         if(!response.ok){
-            throw new Error('Não foi enviar os dados de devolução.' + response.status);
+            throw ErrorDominio.comProblemas(['Não foi enviar os dados de devolução.' + response.status]);
         }
     }
 
@@ -99,7 +109,12 @@ export class GestorDevolucao{
         const dataDevolucao = new Date(devolucao)
         const diferencaEmMilissegundos = dataDevolucao.getTime() - dataLocacao.getTime();
         const horas = diferencaEmMilissegundos / (1000 * 60 * 60);
-        this.horasCorridas = horas;
-        return horas;
+
+        if (horas >= this.locacaoEscolhida!.numeroDeHoras && horas <= this.locacaoEscolhida!.numeroDeHoras + 0.25) {
+            this.horasCorridas = this.locacaoEscolhida!.numeroDeHoras;
+        }else {
+            this.horasCorridas = Math.ceil(horas);
+        }
+        return this.horasCorridas;
     }
 }

@@ -1,6 +1,6 @@
 import {Page, expect} from '@playwright/test'
 
-export class TelaDevolucao{
+export class TelaListagemDevolucao{
     constructor(private page : Page){}
 
     async abrir(){
@@ -22,5 +22,7 @@ export class TelaDevolucao{
 
         await expect(tbody).toContainText(id.toString());
     }
+
+
 
 }

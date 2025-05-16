@@ -1,0 +1,66 @@
+import { Page, expect } from "@playwright/test";
+import { sel } from "../../src/devolucao/cadastro/seletores-cadastro-devolucao";
+
+export class TelaCadastroDevolucao{
+    constructor(private page : Page){}
+
+    async abrir(){
+        await this.page.goto('http://localhost:5173/app/pages/cadastrar-devolucoes.html')
+    }
+
+    async clicar(seletor : string){
+        await this.page.click(seletor);
+    }
+
+    async preencherDados(dados: {locacao : string | number, data : Date}){
+        const dataFormatada = this.gerarDataEHoraFormatada(dados.data);
+        await this.page.fill(sel.devolucao, dataFormatada);
+        await this.page.fill(sel.locacaoInput, dados.locacao.toString());
+        await this.page.click(sel.pesquisarLocacao);
+        const estaVisivel = await this.page.locator(sel.selectLocacao).isVisible()
+        if(estaVisivel)
+            await this.page.selectOption(sel.selectLocacao, {index : 1});
+    }
+
+    async exibirLocacoesDoCliente(data: Date ,cpf : string){
+        const dataFormatada = this.gerarDataEHoraFormatada(data);
+        await this.page.fill(sel.devolucao, dataFormatada);
+        await this.page.fill(sel.locacaoInput, cpf);
+        await this.page.click(sel.pesquisarLocacao);
+        const options = this.page.locator(`${sel.selectLocacao} option`)
+        const qtdDeOptions = await options.count();
+        expect(qtdDeOptions).toBeGreaterThan(0);
+    }
+
+    async exibirLocacaoComId(data: Date, id : string){
+        const dataFormatada = this.gerarDataEHoraFormatada(data);
+        await this.page.fill(sel.devolucao, dataFormatada);
+        await this.page.fill(sel.locacaoInput, id);
+        await this.page.click(sel.pesquisarLocacao);
+        const dataId = await this.page.getAttribute(sel.locacaoOutput, 'data-id');
+        await expect(dataId).toBe(id);
+        const div = await this.page.locator(sel.locacaoOutput);
+        const texto = await div.textContent();
+        await expect(texto?.toLocaleLowerCase()).toContain("locação de valor");
+    }
+
+    private gerarDataEHoraFormatada(data : Date): string{
+        data.setHours(data.getHours() - 3);
+        return data.toISOString().slice(0, 16);
+    }
+
+    async deveExibirMensagem( mensagem : string ){
+        const conteudo = await this.page.textContent(sel.output);
+        await expect(conteudo?.toLocaleLowerCase()).toContain( mensagem.toLowerCase() );
+    }
+
+    async tabelaDeveConter(itens : string[]){
+        const linhas = await this.page.locator('tbody tr');
+
+        for (let i = 0; i < await linhas.count(); i++) {
+            const primeiraColuna = linhas.nth(i).locator('td').first();
+            const texto = await primeiraColuna.textContent();
+            expect(texto).toContain(itens[i]);
+        }
+    }
+}

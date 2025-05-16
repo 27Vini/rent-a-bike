@@ -1,6 +1,7 @@
 import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import {GestorDevolucao} from '../gestor-devolucao.js';
 import { Item } from "../../item/item.js";
+import { ErrorDominio } from "../../../infra/ErrorDominio.js";
 
 export class ControladoraCadastroDevolucao {
     private visao : VisaoCadastroDevolucao
@@ -17,7 +18,11 @@ export class ControladoraCadastroDevolucao {
             const locacoes = await this.gestor.pesquisarLocacao(pesquisa);
             this.visao.exibirLocacoes(locacoes);
         }catch( error ){
-            this.visao.exibirMensagem( error.message );
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas());
+            else
+                this.visao.exibirMensagens([ error.message ]);
+            
             return
         }
     }
@@ -44,9 +49,12 @@ export class ControladoraCadastroDevolucao {
         try{
             const valorFinal = this.visao.coletarValorFinal();
             await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal);
-            this.visao.exibirMensagem('Cadastrado com sucesso.')
+            this.visao.exibirMensagens(['Cadastrado com sucesso.']);
         }catch( error ){
-            this.visao.exibirMensagem(error.message)
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas());
+            else
+                this.visao.exibirMensagens([ error.message ]);
         }
     }
 
