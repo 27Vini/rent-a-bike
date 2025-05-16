@@ -9,14 +9,12 @@
 <body>
     <div class="group">
         <label for="funcionario">Funcionario:</label>
-        <select id="funcionario" name="funcionario">
-            <option value="test">Teste</option>
-        </select>
+        <select id="funcionario" name="funcionario"></select>
     </div>
 
     <div class="group">
         <label for="cliente">Cliente:</label>
-        <input type="text" name="cliente" id="cliente" class="cliente"><button id="pesquisar-cliente">🔍</button>
+        <input type="text" name="cliente" id="cliente" class="cliente"><button id="pesquisar-cliente" alt="Adicionar">➕</button>
         <ul id="lista-clientes"></ul>
     </div>
 
@@ -27,7 +25,7 @@
     
     <div class="group">
         <label for="item">Item:</label>
-        <input type="text" name="item" id="item" class="item"><button id="pesquisar-item">🔍</button>
+        <input type="text" name="item" id="item" class="item" disabled><button id="pesquisar-item" alt="Pesquisar item" disabled>🔍</button>
         <ul id="lista-itens"></ul>
     </div>
 

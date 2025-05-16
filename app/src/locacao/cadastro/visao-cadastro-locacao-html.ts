@@ -1,29 +1,21 @@
 import { ControladoraCadastroLocacao } from "./controladora-cadastro-locacao";
 import { VisaoCadastroLocacao } from "./visao-cadastro-locacao";
-import { VisaoFuncionarioHTML} from "../../funcionario/visao-funcionario-html";
-import { VisaoClienteHTML } from "../../cliente/visao-cliente-html";
-import { VisaoItemHTML } from "../../item/visao-item-html";
-import { carregarDoLocalStorage, salvarEmLocalStorage } from "../../../infra/util/gestor-localstorage";
 import { Money } from "ts-money";
 
 export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     private controladora:ControladoraCadastroLocacao;
-    private visaoCliente:VisaoClienteHTML;
-    private visaoItem:VisaoItemHTML;
 
     constructor(){
-        this.visaoItem = new VisaoItemHTML();
-        this.visaoCliente = new VisaoClienteHTML();
         this.controladora = new ControladoraCadastroLocacao(this);
-        this.controladora.atualizarDadosLocacao();
     }
 
     iniciar(){
+        //preenche o select de funcionário ao abrir a página
         document.addEventListener('DOMContentLoaded', this.preencherSelectFuncionario.bind(this));
 
         document.querySelector("#pesquisar-cliente")?.addEventListener("click", this.pesquisarCliente.bind(this))
         document.querySelector("#pesquisar-item")?.addEventListener("click", this.pesquisarItem.bind(this))
-        document.querySelector("#horas")?.addEventListener("blur", this.controladora.atualizarDadosLocacao.bind(this.controladora));
+        document.querySelector("#horas")?.addEventListener("blur", this.aoDigitarHora.bind(this));
 
         document.querySelector("#cadastrar")!.addEventListener("click", this.cadastrar.bind(this));
     }
@@ -34,11 +26,10 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
 
     /** PESQUISA E OBTENÇÃO DE DADOS */
 
-    coletarDados() : {funcionario, cliente, itens, horas}{
+    coletarDados() : {funcionario, cliente, horas}{
         return {
             funcionario : document.querySelector<HTMLInputElement>("#funcionario")!.value,
-            cliente     : this.obterDoLocalStorage("cliente"),
-            itens       : this.obterDoLocalStorage("itens"),
+            cliente     : document.querySelector<HTMLInputElement>("#cliente")!.dataset.id,
             horas       : this.coletarHoras()
         }
     }
@@ -48,47 +39,104 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         return Number(input.value);
     }
 
-    obterDoLocalStorage(chave:string){
-        return carregarDoLocalStorage(chave);
+    private aoDigitarHora(){
+        if(this.coletarHoras() > 0){
+            document.querySelector<HTMLInputElement>("#item")!.disabled = false;
+            document.querySelector<HTMLButtonElement>("#pesquisar-item")!.disabled = false;
+
+            this.atualizarDados();
+        } else {
+            document.querySelector<HTMLInputElement>("#item")!.disabled = true;
+            document.querySelector<HTMLButtonElement>("#pesquisar-item")!.disabled = true;
+            document.querySelector("#entrega")?.setAttribute("hidden", "hidden");
+        }
     }
 
-    salvarNoLocalStorage(chave:string, dados:[]){
-        salvarEmLocalStorage(chave, dados);
-    }
-
+    /** SELECT DE FUNCIONÁRIOS */
     private async preencherSelectFuncionario(){
-        const visaoFuncionario = new VisaoFuncionarioHTML();
-        await visaoFuncionario.listarFuncionarios();
+        const funcionarios = await this.controladora.coletarFuncionarios();
+        const select = document.querySelector("#funcionario");
+        select!.innerHTML = funcionarios.map(f =>
+            this.transformarEmOption({value:f.id, option:f.nome})
+        ).join('');
     }
 
+    private transformarEmOption(e:{value, option}) {
+        return `<option value=${e.value}>${e.option}</option>`
+    }
+
+    /** Pesquisa de clientes */
     private async pesquisarCliente(){
         const codigoCpf = document.querySelector<HTMLInputElement>("#cliente")!.value;
-        await this.visaoCliente.clienteComCodigoOuCpf(codigoCpf);
+        const cliente = await this.controladora.coletarClienteComCodigoOuCpf(codigoCpf);
+
+        this.exibirCliente({id:cliente.id, nome:cliente.nome, foto:cliente.foto});
     }
+
+    private exibirCliente(cliente:{id, nome, foto}){
+        const inputCliente = document.querySelector<HTMLInputElement>("#cliente")!;
+        inputCliente.dataset.id = cliente.id;
+
+        const ul = document.querySelector("#lista-clientes");
+        ul!.innerHTML = '';
+
+        const li = document.createElement('li');
+        li.innerHTML = `<img src="${cliente.foto}" alt="${cliente.nome}" width='50px' /> ${cliente.nome}`;
+
+        ul!.appendChild(li);
+    }
+
+    /** Pesquisa de Item */
 
     private async pesquisarItem(){
         const codigo = document.querySelector<HTMLInputElement>("#item")!.value;
-        await this.visaoItem.itemComCodigo(codigo);
-
-        this.controladora.atualizarDadosLocacao();
+        await this.controladora.coletarItemComCodigo(codigo)
     }
 
-    /** EXIBIÇÃO DE DADOS E MENSAGENS */
+    exibirItem({descricao, disponibilidade, avarias, valorPorHora}){
+        const ul = document.querySelector("#lista-itens");
+        ul!.innerHTML = '';
 
-    exibirValorTotal(valorTotal:number){
-        const tfoot = document.querySelector<HTMLElement>('table tfoot td .valor-total');
-        tfoot!.innerHTML = Money.fromDecimal(valorTotal, 'BRL').toString();
+        let disponivel = disponibilidade ? 'disponível' : 'indisponível';
+        let condicao = avarias == '' ? '' : `- ${avarias}`;
+        let valorItem = Money.fromDecimal(valorPorHora, 'BRL');
+
+        const li = document.createElement('li');
+        li.innerHTML = `${descricao} - R$${valorItem}/h ${condicao} - <strong>${disponivel}</strong>`
+
+        ul!.appendChild(li);
+        this.atualizarDados();
     }
 
-    exibirValorDesconto(desconto:number){
-        const tfoot = document.querySelector<HTMLElement>('table tfoot td .valor-desconto');
-        tfoot!.innerHTML = Money.fromDecimal(desconto, 'BRL').toString();
+    /** TABELA DE ITENS */
+    atualizarDados(){
+        this.controladora.atualizarDados();
     }
 
-    exibirValorFinal(valorFinal:number){
-        const tfoot = document.querySelector<HTMLElement>('table tfoot td .valor-final');
-        tfoot!.innerHTML = Money.fromDecimal(valorFinal, 'BRL').toString();
+    construirTabela({itens, valores}){
+        const tbody = document.querySelector("table tbody")!;
+        const tfoot = document.querySelector("table tfoot")!;
+
+        tbody.innerHTML = itens.map(i => 
+            this.criarLinha(i)
+        ).join('');
+
+        tfoot.querySelector(".valor-total")!.innerHTML = valores.valorTotal.toString();
+        tfoot.querySelector('.valor-desconto')!.innerHTML = valores.valorDesconto.toString();
+        tfoot.querySelector('.valor-final')!.innerHTML = valores.valorFinal.toString();
     }
+
+    private criarLinha(item){
+        let subtotal = Money.fromDecimal(item.subtotal, 'BRL');
+
+        return `
+            <tr>
+                <td>${item.codigo}</td>
+                <td>${item.descricao}</td>
+                <td>R$${subtotal}</td>
+            </tr>
+        `
+    }   
 
     exibirDataHoraEntrega(entrega:Date){
         document.querySelector("#entrega span")!.innerHTML = entrega.toLocaleString();
@@ -98,27 +146,6 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     exibirMensagens(mensagens: string[]) {
         //SUBSTITUIR ESSE ALERT NO FUTURO
         alert(mensagens.join(''));
-    }
-
-    atualizarTabela(){
-        const table = document.querySelector('table tbody');
-        const itens = carregarDoLocalStorage("itens");
-        
-        table!.innerHTML = itens.map(i => 
-            this.criarLinha(i)
-        ).join('')
-    }
-
-    private criarLinha(item){
-        let subtotal = item.subtotal ? Money.fromDecimal(item.subtotal, 'BRL') : 0.00;
-
-        return `
-            <tr>
-                <td>${item.codigo}</td>
-                <td>${item.descricao}</td>
-                <td>R$${subtotal}</td>
-            </tr>
-        `
     }
 }
 

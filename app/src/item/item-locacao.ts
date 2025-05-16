@@ -1,3 +1,4 @@
+import { ErrorDominio } from "../../infra/ErrorDominio.js";
 import { Locacao } from "../locacao/locacao.js";
 import { Item } from "./item.js";
 
@@ -5,10 +6,9 @@ export class ItemLocacao{
 
     public constructor(
         public readonly id : number,
-        public readonly locacao : Locacao | number,
         public readonly item : Item,
         public readonly precoLocacao : number,
-        public readonly subtotal : number
+        public subtotal : number
     ){}
 
     validar() : string[] {
@@ -26,4 +26,10 @@ export class ItemLocacao{
         return problemas;
     }
 
+    calcularSubtotal(horas:number){
+        if(horas < 0)
+            throw ErrorDominio.comProblemas(["Horas devem ser maior do que 0."]);
+
+        this.subtotal = this.precoLocacao * horas;
+    }
 }

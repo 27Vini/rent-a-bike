@@ -1,14 +1,9 @@
 export interface VisaoCadastroLocacao{
-    coletarDados() : {funcionario, cliente, itens, horas};
+    coletarDados() : {funcionario, cliente, horas};
     coletarHoras();
-    obterDoLocalStorage(chave:string);
-    salvarNoLocalStorage(chave:string, dados:[]);
-    
-    exibirValorTotal(valor:number);
-    exibirValorDesconto(desconto:number);
-    exibirValorFinal(valorFinal);
+
+    exibirItem({codigo, descricao, disponibilidade, avarias, valorPorHora});
+    construirTabela({itens, valores});
     exibirDataHoraEntrega(entrega:Date);
     exibirMensagens(mensagens : string[]);
-
-    atualizarTabela();
 }

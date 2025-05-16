@@ -1,8 +1,8 @@
-import { ErrorLocacao } from "../ErrorLocacao";
+import { ErrorDominio } from "../ErrorDominio";
 
 export function salvarEmLocalStorage(chave:string, dados:Object|number|string){
     if(chave == ''){
-        throw ErrorLocacao.comProblemas(["Chave para LocalStorage deve estar preenchida."]);
+        throw ErrorDominio.comProblemas(["Chave para LocalStorage deve estar preenchida."]);
     }
 
     const stringDados = JSON.stringify(dados);
@@ -11,7 +11,7 @@ export function salvarEmLocalStorage(chave:string, dados:Object|number|string){
 
 export function carregarDoLocalStorage(chave:string){
     if(chave == ''){
-        throw ErrorLocacao.comProblemas(["Chave para LocalStorage deve estar preenchida."]);
+        throw ErrorDominio.comProblemas(["Chave para LocalStorage deve estar preenchida."]);
     }
 
     const dados = localStorage.getItem(chave);

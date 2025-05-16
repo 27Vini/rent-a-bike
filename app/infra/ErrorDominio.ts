@@ -1,12 +1,12 @@
-export class ErrorLocacao extends Error {
+export class ErrorDominio extends Error {
     private problemas: string[] = [];
 
     public constructor( message?: string ) {
         super( message );
     }
 
-    static comProblemas( problemas: string[] ): ErrorLocacao {
-        const e = new ErrorLocacao();
+    static comProblemas( problemas: string[] ): ErrorDominio {
+        const e = new ErrorDominio();
         e.setProblemas( problemas );
         return e;
     }
