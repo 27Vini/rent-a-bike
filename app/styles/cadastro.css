@@ -1,0 +1,71 @@
+.inputs {
+    display: flex;
+    padding-bottom: 100px;
+}
+
+input, select{
+    height: 40px;
+    width: 250px;
+    border: solid 1px;
+    border-radius: 8px;
+    background-color: #e7e7e7;
+}
+
+.inputs div.group{
+    margin-right: 30px;
+}
+
+.group{
+    display: flex;
+    flex-direction: column;
+}
+
+#item, #cliente{
+    border-radius: 8px 0px 0px 8px;
+}
+
+#pesquisar-cliente, #pesquisar-item{
+    height: 40px;
+    width: 40px;
+    border: solid 1px;
+    border-radius: 0px 8px 8px 0px;
+    background-color: #e7e7e7;
+    margin: 0;
+}
+
+#lista-itens, #lista-clientes{
+    list-style: none;
+    width: 280px;
+    border-right: dashed;
+    border-bottom: dashed;
+    border-left: dashed;
+    padding: 3px;
+    margin-left: 5px;
+}
+
+.tabela-cadastro{
+    display: flex;
+    align-items: flex-end;
+}
+
+#cadastrar {
+    background-color: #9ac4d4;
+    color: black;
+    padding: 12px 50px;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-decoration: none;
+    display: inline-block;
+    margin-left: 50px;
+}
+
+#cadastrar:hover {
+    background-color: #87b5c6;
+}
+
+table{
+    width: 58%;
+}

@@ -80,9 +80,10 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         ul!.innerHTML = '';
 
         const li = document.createElement('li');
-        li.innerHTML = `<img src="${foto}" alt="${nome}" width='50px' /> ${nome}`;
+        li.innerHTML = `<img src="${foto}" alt="${nome}" width='40px' /> ${nome}`;
 
         ul!.appendChild(li);
+        ul!.removeAttribute("hidden");
     }
 
     /** PESQUISA DE ITEM */
@@ -103,6 +104,7 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         li.innerHTML = `${descricao} - R$${valorItem}/h ${condicao} - <strong>${disponivel}</strong>`
 
         ul!.appendChild(li);
+        ul!.removeAttribute("hidden");
         this.atualizarDados();
     }
 

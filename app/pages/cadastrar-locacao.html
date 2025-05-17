@@ -3,62 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/cadastro.css">
     <script src="../src/locacao/cadastro/visao-cadastro-locacao-html.ts" type="module" defer></script>
     <title>Rent-A-Bike - Cadastrar Locação</title>
 </head>
 <body>
-    <div class="group">
-        <label for="funcionario">Funcionario:</label>
-        <select id="funcionario" name="funcionario"></select>
-    </div>
+    <header class="header">
+        <div class="logo-container">
+            <img src="../styles/images/logo.png" alt="Rent-A-Bike Logo" class="logo">
+        </div>
+        <div class="nav-tabs">
+            <a href="../pages/listagem-locacoes.html" class="nav-tab active">Locações</a>
+            <a href="../pages/listagem-devolucoes.html" class="nav-tab">Devoluções</a>
+        </div>
+    </header>
 
-    <div class="group">
-        <label for="cliente">Cliente:</label>
-        <input type="text" name="cliente" id="cliente" class="cliente" data-id="0"><button id="pesquisar-cliente" alt="Adicionar">➕</button>
-        <ul id="lista-clientes"></ul>
-    </div>
+    <main>
+        <section class="inputs">
+            <div class="group">
+                <label for="funcionario">Funcionario:</label>
+                <select id="funcionario" name="funcionario"></select>
+            </div>
 
-    <div class="group">
-        <label for="item">Qtd Horas:</label>
-        <input type="text" name="horas" id="horas" value="0">
-    </div>
-    
-    <div class="group">
-        <label for="item">Item:</label>
-        <input type="text" name="item" id="item" class="item" disabled><button id="pesquisar-item" alt="Pesquisar item" disabled>🔍</button>
-        <ul id="lista-itens"></ul>
-    </div>
+            <div class="group">
+                <label for="cliente">Cliente:</label>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Descrição</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
+                <div>
+                    <input type="text" name="cliente" id="cliente" class="cliente" data-id="0" placeholder="Código ou CPF"><button id="pesquisar-cliente" alt="Adicionar">➕</button>
+                </div>
+                <ul id="lista-clientes" hidden></ul>
+            </div>
+
+            <div class="group">
+                <label for="item">Qtd Horas:</label>
+                <input type="text" name="horas" id="horas" value="0" placeholder="Nº de Horas">
+            </div>
             
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3">Valor Total:<span class="valor-total"></span></td>
-            </tr>
-            <tr>
-                <td colspan="3">Desconto:<span class="valor-desconto"></span> </td>
-            </tr>
-            <tr>
-                <td colspan="3">Valor Final:<span class="valor-final"></span></td>
-            </tr>
-        </tfoot>
-    </table>
+            <div class="group">
+                <label for="item">Item:</label>
+                <div>
+                    <input type="text" name="item" id="item" class="item" placeholder="Código" disabled><button id="pesquisar-item" alt="Pesquisar item" disabled>🔍</button>
+                </div>
+                <ul id="lista-itens" hidden></ul>
+            </div>
+        </section>
+        
+        <section class="tabela-cadastro">
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3">Valor Total:<span class="valor-total"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Desconto:<span class="valor-desconto"></span> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">Valor Final:<span class="valor-final"></span></td>
+                    </tr>
+                </tfoot>
+            </table>
 
-    <div hidden id="entrega">
-        Data e hora de entrega: <span></span>
-    </div>
-    <button id="cadastrar">Cadastrar</button>
-
-
+            <div hidden id="entrega">
+                Data e hora de entrega: <span></span>
+            </div>
+            <button id="cadastrar">Cadastrar</button>
+        </section>
+        
+    </main>
+    
     <output></output>
+
+    <footer>
+        © Cynthia Jardim & Vinicius Ouverney
+    </footer>
 </body>
 </html>
