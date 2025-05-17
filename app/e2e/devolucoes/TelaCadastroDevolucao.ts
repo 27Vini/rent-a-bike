@@ -29,6 +29,7 @@ export class TelaCadastroDevolucao{
         await this.page.click(sel.pesquisarLocacao);
         const options = this.page.locator(`${sel.selectLocacao} option`)
         const qtdDeOptions = await options.count();
+        await this.page.waitForTimeout(1000);
         expect(qtdDeOptions).toBeGreaterThan(0);
     }
 
@@ -38,10 +39,11 @@ export class TelaCadastroDevolucao{
         await this.page.fill(sel.locacaoInput, id);
         await this.page.click(sel.pesquisarLocacao);
         const dataId = await this.page.getAttribute(sel.locacaoOutput, 'data-id');
-        await expect(dataId).toBe(id);
         const div = await this.page.locator(sel.locacaoOutput);
         const texto = await div.textContent();
-        await expect(texto?.toLocaleLowerCase()).toContain("locação de valor");
+        await this.page.waitForTimeout(1000);
+        await expect(dataId).toBe(id);
+        await expect(texto).toContain("Locação de valor");
     }
 
     private gerarDataEHoraFormatada(data : Date): string{
@@ -50,8 +52,10 @@ export class TelaCadastroDevolucao{
     }
 
     async deveExibirMensagem( mensagem : string ){
-        const conteudo = await this.page.textContent(sel.output);
-        await expect(conteudo?.toLocaleLowerCase()).toContain( mensagem.toLowerCase() );
+        const localizador = await this.page.locator(sel.output);
+        let conteudo = await localizador.textContent();
+        await this.page.waitForTimeout(1000);
+        await expect(conteudo).toContain( mensagem );
     }
 
     async tabelaDeveConter(itens : string[]){

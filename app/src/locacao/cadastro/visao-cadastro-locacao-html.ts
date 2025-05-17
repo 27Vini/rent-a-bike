@@ -1,6 +1,7 @@
 import { ControladoraCadastroLocacao } from "./controladora-cadastro-locacao";
 import { VisaoCadastroLocacao } from "./visao-cadastro-locacao";
 import { Money } from "ts-money";
+import { sel } from "./seletores-cadastro-locacao";
 
 export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     private controladora:ControladoraCadastroLocacao;
@@ -10,91 +11,88 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     }
 
     iniciar(){
-        //preenche o select de funcionário ao abrir a página
         document.addEventListener('DOMContentLoaded', this.preencherSelectFuncionario.bind(this));
 
-        document.querySelector("#pesquisar-cliente")?.addEventListener("click", this.pesquisarCliente.bind(this))
-        document.querySelector("#pesquisar-item")?.addEventListener("click", this.pesquisarItem.bind(this))
-        document.querySelector("#horas")?.addEventListener("blur", this.aoDigitarHora.bind(this));
+        document.querySelector(sel.botaoBuscarCliente)?.addEventListener("click", this.pesquisarCliente.bind(this))
+        document.querySelector(sel.botaoBuscarItem)?.addEventListener("click", this.pesquisarItem.bind(this))
+        document.querySelector(sel.inputHoras)?.addEventListener("blur", this.aoDigitarHora.bind(this));
 
-        document.querySelector("#cadastrar")!.addEventListener("click", this.cadastrar.bind(this));
+        document.querySelector(sel.botaoCadastrar)!.addEventListener("click", this.cadastrar.bind(this));
+    }
+
+    coletarDados() : {funcionario, cliente, horas}{
+        return {
+            funcionario : document.querySelector<HTMLInputElement>(sel.selectFuncionario)!.value,
+            cliente     : document.querySelector<HTMLInputElement>(sel.inputCliente)!.dataset.id,
+            horas       : this.coletarHoras()
+        }
+    }
+
+    coletarHoras(){
+        const input = document.querySelector<HTMLInputElement>(sel.inputHoras)!;
+        return Number(input.value);
     }
 
     private cadastrar(){
         this.controladora.cadastrar();
     }
 
-    /** PESQUISA E OBTENÇÃO DE DADOS */
-
-    coletarDados() : {funcionario, cliente, horas}{
-        return {
-            funcionario : document.querySelector<HTMLInputElement>("#funcionario")!.value,
-            cliente     : document.querySelector<HTMLInputElement>("#cliente")!.dataset.id,
-            horas       : this.coletarHoras()
-        }
-    }
-
-    coletarHoras(){
-        const input = document.querySelector<HTMLInputElement>("#horas")!;
-        return Number(input.value);
-    }
-
     private aoDigitarHora(){
         if(this.coletarHoras() > 0){
-            document.querySelector<HTMLInputElement>("#item")!.disabled = false;
-            document.querySelector<HTMLButtonElement>("#pesquisar-item")!.disabled = false;
+            document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.disabled = false;
+            document.querySelector<HTMLButtonElement>(sel.botaoBuscarItem)!.disabled = false;
 
             this.atualizarDados();
         } else {
-            document.querySelector<HTMLInputElement>("#item")!.disabled = true;
-            document.querySelector<HTMLButtonElement>("#pesquisar-item")!.disabled = true;
-            document.querySelector("#entrega")?.setAttribute("hidden", "hidden");
+            document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.disabled = true;
+            document.querySelector<HTMLButtonElement>(sel.botaoBuscarItem)!.disabled = true;
+            document.querySelector(sel.campoEntrega )?.setAttribute("hidden", "hidden");
         }
     }
 
     /** SELECT DE FUNCIONÁRIOS */
     private async preencherSelectFuncionario(){
         const funcionarios = await this.controladora.coletarFuncionarios();
-        const select = document.querySelector("#funcionario");
+        const select = document.querySelector(sel.selectFuncionario);
+
         select!.innerHTML = funcionarios.map(f =>
             this.transformarEmOption({value:f.id, option:f.nome})
         ).join('');
     }
 
-    private transformarEmOption(e:{value, option}) {
-        return `<option value=${e.value}>${e.option}</option>`
+    private transformarEmOption({value, option}) {
+        return `<option value=${value}>${option}</option>`
     }
 
-    /** Pesquisa de clientes */
+    /** PESQUISA DE CLIENTES */
     private async pesquisarCliente(){
-        const codigoCpf = document.querySelector<HTMLInputElement>("#cliente")!.value;
+        const codigoCpf = document.querySelector<HTMLInputElement>(sel.inputCliente)!.value;
         const cliente = await this.controladora.coletarClienteComCodigoOuCpf(codigoCpf);
 
         this.exibirCliente({id:cliente.id, nome:cliente.nome, foto:cliente.foto});
     }
 
-    private exibirCliente(cliente:{id, nome, foto}){
-        const inputCliente = document.querySelector<HTMLInputElement>("#cliente")!;
-        inputCliente.dataset.id = cliente.id;
+    private exibirCliente({id, nome, foto}){
+        const inputCliente = document.querySelector<HTMLInputElement>(sel.inputCliente)!;
+        inputCliente.dataset.id = id;
 
-        const ul = document.querySelector("#lista-clientes");
+        const ul = document.querySelector(sel.listaCliente);
         ul!.innerHTML = '';
 
         const li = document.createElement('li');
-        li.innerHTML = `<img src="${cliente.foto}" alt="${cliente.nome}" width='50px' /> ${cliente.nome}`;
+        li.innerHTML = `<img src="${foto}" alt="${nome}" width='50px' /> ${nome}`;
 
         ul!.appendChild(li);
     }
 
-    /** Pesquisa de Item */
-
+    /** PESQUISA DE ITEM */
     private async pesquisarItem(){
-        const codigo = document.querySelector<HTMLInputElement>("#item")!.value;
+        const codigo = document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.value;
         await this.controladora.coletarItemComCodigo(codigo)
     }
 
     exibirItem({descricao, disponibilidade, avarias, valorPorHora}){
-        const ul = document.querySelector("#lista-itens");
+        const ul = document.querySelector(sel.listaItem);
         ul!.innerHTML = '';
 
         let disponivel = disponibilidade ? 'disponível' : 'indisponível';
@@ -121,9 +119,9 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
             this.criarLinha(i)
         ).join('');
 
-        tfoot.querySelector(".valor-total")!.innerHTML = valores.valorTotal.toString();
-        tfoot.querySelector('.valor-desconto')!.innerHTML = valores.valorDesconto.toString();
-        tfoot.querySelector('.valor-final')!.innerHTML = valores.valorFinal.toString();
+        tfoot.querySelector(sel.campoValorTotal)!.innerHTML = valores.valorTotal.toString();
+        tfoot.querySelector(sel.campoDesconto)!.innerHTML = valores.valorDesconto.toString();
+        tfoot.querySelector(sel.campoValorFinal)!.innerHTML = valores.valorFinal.toString();
     }
 
     private criarLinha(item){
@@ -139,13 +137,12 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     }   
 
     exibirDataHoraEntrega(entrega:Date){
-        document.querySelector("#entrega span")!.innerHTML = entrega.toLocaleString();
-        document.querySelector("#entrega")?.removeAttribute("hidden");
+        document.querySelector(sel.campoEntregaSpan)!.innerHTML = entrega.toLocaleString();
+        document.querySelector(sel.campoEntrega)?.removeAttribute("hidden");
     }
 
     exibirMensagens(mensagens: string[]) {
-        //SUBSTITUIR ESSE ALERT NO FUTURO
-        alert(mensagens.join(''));
+        document.querySelector<HTMLOutputElement>(sel.output)!.innerHTML = mensagens.join('\n');
     }
 }
 

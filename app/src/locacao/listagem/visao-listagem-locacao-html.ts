@@ -26,13 +26,13 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
                 <td>${e.entrada}</td>
                 <td>${e.numeroDeHoras}</td>
                 <td>${e.previsaoEntrega}</td>
-                <td>${e.cliente.id}</td>
+                <td>${e.cliente}</td>
             </tr>
         `
     }
 
-    exibirMensagem(mensagem: string) {
-        document.querySelector("output")!.innerText = mensagem;
+    exibirMensagens(mensagens: string[]) {
+        document.querySelector("output")!.innerText = mensagens.join('\n');
     }
 }
 

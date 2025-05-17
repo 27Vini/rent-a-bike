@@ -16,6 +16,9 @@ export class Locacao{
     public validar() : string[] {
         const erros:string[] = [];
 
+        if(this.itens.length == 0)
+            erros.push("Ao menos um item deve ser cadastrado na locaçao.");
+
         if(this.numeroDeHoras <= 0)
             erros.push("Número de horas deve ser maior do que zero.");
 
@@ -30,6 +33,14 @@ export class Locacao{
 
         if(this.previsaoEntrega < this.entrada)
             erros.push("A hora de entrega deve ser posterior a hora de entrada.");
+
+        if(this.cliente <= 0){
+            erros.push("Um cliente deve estar associado à locação.");
+        }
+
+        if(this.funcionario <= 0){
+            erros.push("Um funcionário deve estar associado à locação.");
+        }
 
         return erros;
     }

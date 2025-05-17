@@ -1,5 +1,5 @@
 Caso 1 : 
-    Cenário: Verificar envio dos dados
+    Cenário: Cadastro realizado com sucesso
     Dado que desejo salvar meus dados
     quando clico em cadastrar
     então deve mostrar mensagem de sucesso
@@ -9,7 +9,6 @@ Caso 2:
     Dado que não preenchi um campo
     quando clico em cadastrar
     então deve mostrar mensagem de erro
-
 
 Caso 3:
     Cenário: Pesquisar cliente retorna cliente correto

@@ -21,5 +21,4 @@ export class TelaLocacoes {
 
         await expect(seletor).toContainText(id.toString())
     }
-
 }

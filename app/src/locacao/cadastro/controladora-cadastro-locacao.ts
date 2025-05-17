@@ -19,7 +19,10 @@ export class ControladoraCadastroLocacao{
 
             this.visao.exibirMensagens(['Locação salva com sucesso!']);
         }catch(erro){
-            this.visao.exibirMensagens([erro.message]);
+            if(erro instanceof ErrorDominio)
+                this.visao.exibirMensagens(erro.getProblemas());
+            else 
+                this.visao.exibirMensagens([erro.message]);
         }
     }
 
@@ -28,16 +31,22 @@ export class ControladoraCadastroLocacao{
             const funcionarios = this.gestor.coletarFuncionariosCadastrados();
             return funcionarios;
         }catch(erro){
-            this.visao.exibirMensagens(erro.getProblemas());
+            if(erro instanceof ErrorDominio)
+                this.visao.exibirMensagens(erro.getProblemas());
+            else 
+                this.visao.exibirMensagens([erro.message]);
         }
     }
 
     async coletarClienteComCodigoOuCpf(codigoCpf:string){
         try{
             const cliente = await this.gestor.coletarClienteComCodigoOuCpf(codigoCpf);
-            return cliente[0];
+            return cliente;
         }catch(erro){
-            this.visao.exibirMensagens(erro.getProblemas());
+            if(erro instanceof ErrorDominio)
+                this.visao.exibirMensagens(erro.getProblemas());
+            else 
+                this.visao.exibirMensagens([erro.message]);
         }
     }
 

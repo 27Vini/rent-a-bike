@@ -14,7 +14,7 @@ export class GestorLocacao{
         }
 
         if(!objItem.disponibilidade)
-            throw new Error("Item indisponível.");
+            throw ErrorDominio.comProblemas(["Item indisponível."]);
 
         const item = new Item(
             objItem.id,
@@ -38,12 +38,12 @@ export class GestorLocacao{
         this.itens.push(itemLocacao);
     }
 
-    private atualizarSubtotalItens(horas:number){
-        this.itens.map(item => item.calcularSubtotal(horas));
-    }
-
     getItens() : ItemLocacao[]{
         return this.itens;
+    }
+
+    private atualizarSubtotalItens(horas:number){
+        this.itens.map(item => item.calcularSubtotal(horas));
     }
 
     private getDadosPrincipaisItem(){
@@ -66,7 +66,7 @@ export class GestorLocacao{
         };
     }
 
-    public async salvarLocacao({funcionario, cliente, horas}) : Promise<void> {
+    async salvarLocacao({funcionario, cliente, horas}) : Promise<void> {
         const locacao = new Locacao(
             100, 
             cliente, 
@@ -100,15 +100,19 @@ export class GestorLocacao{
         }
     }
 
-    public async coletarLocacoes() : Promise<any>{
+    async coletarLocacoes() : Promise<any>{
         const response = await fetch(API + "locacoes");
         if(!response.ok)
             throw ErrorDominio.comProblemas(["Erro ao obter as locações."]);
 
-        return response.json();
+        const locacoes = await response.json();
+        if(locacoes.length == 0)
+            throw ErrorDominio.comProblemas(['Não há locações para serem exibidas.']);
+
+        return locacoes;
     }
 
-    public async coletarItemComCodigo(codigo:string){
+    async coletarItemComCodigo(codigo:string){
         if(codigo == '')
             throw ErrorDominio.comProblemas(["Digite um código válido."]);
         
@@ -125,7 +129,7 @@ export class GestorLocacao{
         return result[0];
     }
 
-    public async coletarFuncionariosCadastrados(){
+    async coletarFuncionariosCadastrados(){
         const response = await fetch(API + "funcionarios");
 
         if(!response.ok)
@@ -134,7 +138,7 @@ export class GestorLocacao{
         return response.json();
     }
     
-    public async coletarClienteComCodigoOuCpf(codigoCpf:string){
+    async coletarClienteComCodigoOuCpf(codigoCpf:string){
         if(! /^\d+$/.test(codigoCpf)){
             throw ErrorDominio.comProblemas(["O campo de cliente não deve conter caracteres especiais."]);
         }
@@ -150,6 +154,10 @@ export class GestorLocacao{
         if(!response.ok)
             throw ErrorDominio.comProblemas(["Erro ao obter cliente."+response.status]);
 
-        return response.json();
+        const cliente = await response.json();
+        if(cliente.length == 0)
+            throw ErrorDominio.comProblemas(['Cliente não encontrado.']);
+
+        return cliente[0];
     }
 }

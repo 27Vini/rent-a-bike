@@ -14,7 +14,7 @@
 
     <div class="group">
         <label for="cliente">Cliente:</label>
-        <input type="text" name="cliente" id="cliente" class="cliente"><button id="pesquisar-cliente" alt="Adicionar">➕</button>
+        <input type="text" name="cliente" id="cliente" class="cliente" data-id="0"><button id="pesquisar-cliente" alt="Adicionar">➕</button>
         <ul id="lista-clientes"></ul>
     </div>
 
@@ -28,12 +28,6 @@
         <input type="text" name="item" id="item" class="item" disabled><button id="pesquisar-item" alt="Pesquisar item" disabled>🔍</button>
         <ul id="lista-itens"></ul>
     </div>
-
-    <div hidden id="entrega">
-        Data e hora de entrega: <span></span>
-    </div>
-    <button id="cadastrar">Cadastrar</button>
-
 
     <table border="1">
         <thead>
@@ -58,6 +52,13 @@
             </tr>
         </tfoot>
     </table>
-   
+
+    <div hidden id="entrega">
+        Data e hora de entrega: <span></span>
+    </div>
+    <button id="cadastrar">Cadastrar</button>
+
+
+    <output></output>
 </body>
 </html>
