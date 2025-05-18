@@ -1,5 +1,4 @@
 import { ErrorDominio } from "../../infra/ErrorDominio.js";
-import { Locacao } from "../locacao/locacao.js";
 import { Item } from "./item.js";
 
 export class ItemLocacao{

@@ -1,7 +1,7 @@
 <?php
 
 
-class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR{
+class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements RepositorioFuncionario{
     public function __construct(PDO $pdo){
         parent::__construct($pdo);
     }

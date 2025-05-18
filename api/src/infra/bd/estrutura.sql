@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS g4;
 CREATE DATABASE g4;
 use g4;
 
@@ -6,7 +7,7 @@ CREATE TABLE cliente(
     codigo VARCHAR(255) NOT NULL , 
     nome VARCHAR(255) NOT NULL , 
     cpf VARCHAR(255) NOT NULL , 
-    foto BLOB NOT NULL
+    foto VARCHAR(2083) NOT NULL
 );
 
 CREATE TABLE funcionario(
@@ -44,8 +45,8 @@ CREATE TABLE locacao (
     id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
     entrada DATETIME NOT NULL,
     numero_de_horas INT NOT NULL,
-    desconto DECIMAL NOT NULL,
-    valor_total DECIMAL NOT NULL,
+    desconto DECIMAL(10, 2) NOT NULL,
+    valor_total DECIMAL(10, 2) NOT NULL,
     previsao_de_entrega DATETIME NOT NULL,
     cliente_id int NOT NULL,
     funcionario_id int NOT NULL,
@@ -53,13 +54,12 @@ CREATE TABLE locacao (
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
 );
 
-CREATE TABLE locacao_item(
+CREATE TABLE item_locacao(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
     locacao_id INT NOT NULL,
-    qtd INT NOT NULL, 
-    precoLocacao DECIMAL NOT NULL,
-    subtotal DECIMAL NOT NULL,
+    precoLocacao DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (item_id) REFERENCES item(id),
     FOREIGN KEY (locacao_id) REFERENCES locacao(id)
 );
@@ -68,6 +68,6 @@ CREATE TABLE devolucao(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     locacao_id INT NOT NULL,
     data_de_devolucao DATETIME NOT NULL,
-    valor_pago DECIMAL NOT NULL,
+    valor_pago DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY(locacao_id) REFERENCES locacao(id)
 );

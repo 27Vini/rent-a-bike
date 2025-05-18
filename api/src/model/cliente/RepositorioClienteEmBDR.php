@@ -1,6 +1,6 @@
 <?php
 
-class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR{
+class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements RepositorioCliente{
 
     public function __construct(PDO $pdo){
         parent::__construct($pdo);

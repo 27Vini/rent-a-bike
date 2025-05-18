@@ -1,26 +1,28 @@
 <?php
 
 class Locacao{
+    const PORCENTAGEM_DESCONTO = 0.1; 
+
     private string | int $id;
-    private string | int $itemId;
-    private string | int $clienteId;
-    private string | int $funcionarioId;
+    private $itensLocacao = [];
+    private Cliente $cliente;
+    private Funcionario $funcionario;
     private DateTime $entrada;
     private int $numeroDeHoras;
     private float $desconto;
     private float $valorTotal;
     private DateTime $previsaoDeEntrega;
 
-    public function __construct(string|int $id, string|int $itemId, string|int $clienteId, string|int $funcionarioId, DateTime $entrada, int $numeroDeHoras, float $desconto, float $valorTotal, DateTime $previsaoDeEntrega){
+    public function __construct(string|int $id, array $itens, Cliente $cliente, Funcionario $funcionario, DateTime $entrada, int $numeroDeHoras){
         $this->id = $id;
-        $this->itemId = $itemId;
-        $this->clienteId = $clienteId;
-        $this->funcionarioId = $funcionarioId;
+        $this->itensLocacao = $itens;
+        $this->cliente = $cliente;
+        $this->funcionario = $funcionario;
         $this->entrada = $entrada;
         $this->numeroDeHoras = $numeroDeHoras;
-        $this->desconto = $desconto;
-        $this->valorTotal = $valorTotal;
-        $this->previsaoDeEntrega = $previsaoDeEntrega;
+        $this->desconto = $this->calculaDesconto();
+        $this->valorTotal = $this->calculaValorTotal();
+        $this->previsaoDeEntrega = $this->calculaEntrega();
     }
 
     public function getId(): string|int {
@@ -31,28 +33,31 @@ class Locacao{
         $this->id = $id;
     }
 
-    public function getItemId(): string|int {
-        return $this->itemId;
+    /**
+     * 
+    */
+    public function getItensLocacao(): array {
+        return $this->itensLocacao;
     }
 
-    public function setItemId(string|int $itemId): void {
-        $this->itemId = $itemId;
+    public function setItensLocacao(array $itens): void {
+        $this->itensLocacao = $itens;
     }
 
-    public function getClienteId(): string|int {
-        return $this->clienteId;
+    public function getCliente(): Cliente {
+        return $this->cliente;
     }
 
-    public function setClienteId(string|int $clienteId): void {
-        $this->clienteId = $clienteId;
+    public function setCliente(Cliente $cliente): void {
+        $this->cliente = $cliente;
     }
 
-    public function getFuncionarioId(): string|int {
-        return $this->funcionarioId;
+    public function getFuncionario(): Funcionario {
+        return $this->funcionario;
     }
 
-    public function setFuncionarioId(string|int $funcionarioId): void {
-        $this->funcionarioId = $funcionarioId;
+    public function setFuncionarioId(Funcionario $funcionarioId): void {
+        $this->funcionario = $funcionarioId;
     }
 
     public function getEntrada(): DateTime {
@@ -95,17 +100,36 @@ class Locacao{
         $this->previsaoDeEntrega = $previsaoDeEntrega;
     }
 
+    public function calculaDesconto() : float {
+        $desconto = 0.0;
+        if($this->numeroDeHoras > 2)
+            $desconto = self::PORCENTAGEM_DESCONTO;
 
-    public function validar(): array{
-        $problemas = [];
-        $ids = [$this->id, $this->clienteId, $this->funcionarioId, $this->itemId];
-        foreach($ids as $id){
-            if($problemas = validarId($id)){
-                break;
-            }
+        return $desconto;
+    }
+
+    public function calculaValorTotal() : float {
+        $total = 0.0;
+
+        /** @var ItemLocacao */
+        foreach($this->itensLocacao as $itemLocacao){
+            $total += $itemLocacao->getSubtotal();
         }
 
-        if($this->entrada > new DateTime()->format("Y-m-d H:i:s")){
+        return $total;
+    }
+
+    public function calculaEntrega() : DateTime {
+        $entrega = $this->entrada;
+        $entrega->add(new DateInterval("PT{$this->numeroDeHoras}H"));
+
+        return $entrega;
+    }
+
+    public function validar(): array {       
+        $probemas = validarId($this->id);
+
+        if($this->entrada > (new DateTime())->format("Y-m-d H:i:s")){
             array_push($problemas, "A data de entrada não pode ser posterior a atual.");
         }
 

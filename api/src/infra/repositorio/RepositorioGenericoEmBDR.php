@@ -8,17 +8,6 @@ abstract class RepositorioGenericoEmBDR {
         $this->pdo = $pdo;
     }
 
-    public function coletarTodos($sql, $class, $parametros): array{
-        try{
-            $ps = $this->pdo->prepare($sql);
-            $ps->setFetchMode( PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $class);
-            $ps->execute($parametros);
-            return $ps->fetchAll();
-        } catch( PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
-        }
-    }
-
     public function removerComId(int $id, $nomeDaTabela) : bool{
         try{
             $ps = $this->pdo->prepare("DELETE FROM $nomeDaTabela WHERE id= :id");
