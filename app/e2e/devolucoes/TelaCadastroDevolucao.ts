@@ -17,9 +17,14 @@ export class TelaCadastroDevolucao{
         await this.page.fill(sel.devolucao, dataFormatada);
         await this.page.fill(sel.locacaoInput, dados.locacao.toString());
         await this.page.click(sel.pesquisarLocacao);
+        await this.esperarResposta('/locacoes')
         const estaVisivel = await this.page.locator(sel.selectLocacao).isVisible()
         if(estaVisivel)
             await this.page.selectOption(sel.selectLocacao, {index : 1});
+    }
+
+    async esperarResposta(endpoint : string){
+        await this.page.waitForResponse(response => response.url().includes(endpoint) && response.status() === 200);
     }
 
     async exibirLocacoesDoCliente(data: Date ,cpf : string){
@@ -27,9 +32,9 @@ export class TelaCadastroDevolucao{
         await this.page.fill(sel.devolucao, dataFormatada);
         await this.page.fill(sel.locacaoInput, cpf);
         await this.page.click(sel.pesquisarLocacao);
+        await this.esperarResposta('/locacoes');
         const options = this.page.locator(`${sel.selectLocacao} option`)
         const qtdDeOptions = await options.count();
-        await this.page.waitForTimeout(1000);
         expect(qtdDeOptions).toBeGreaterThan(0);
     }
 
@@ -38,10 +43,10 @@ export class TelaCadastroDevolucao{
         await this.page.fill(sel.devolucao, dataFormatada);
         await this.page.fill(sel.locacaoInput, id);
         await this.page.click(sel.pesquisarLocacao);
+        await this.esperarResposta('/locacoes')
         const dataId = await this.page.getAttribute(sel.locacaoOutput, 'data-id');
         const div = await this.page.locator(sel.locacaoOutput);
         const texto = await div.textContent();
-        await this.page.waitForTimeout(1000);
         await expect(dataId).toBe(id);
         await expect(texto).toContain("Locação de valor");
     }

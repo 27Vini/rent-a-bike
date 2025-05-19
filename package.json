@@ -10,11 +10,6 @@
     "api": "json-server api.json",
     "prepare": "husky"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pnpm e2e"
-    }
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

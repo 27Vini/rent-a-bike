@@ -16,8 +16,9 @@ test.describe('Cadastro de Devoluções', async () =>{
     })
 
     test('Cadastro é efetuado com sucesso com CPF', async () => {
-        await tela.preencherDados({locacao : '11122233344', data : new Date()})
+        await tela.preencherDados({locacao : '98765432100', data : new Date()})
         await tela.clicar(sel.devolverBtn);
+        await tela.esperarResposta('/devolucoes')
         await tela.deveExibirMensagem('Cadastrado')
     })
 
@@ -35,7 +36,7 @@ test.describe('Cadastro de Devoluções', async () =>{
     })
 
     test('As locações de um cliente devem ser preenchidas dentro do select', async () => {
-        await tela.exibirLocacoesDoCliente(new Date(), '11122233344');
+        await tela.exibirLocacoesDoCliente(new Date(), '98765432100');
     })
 
     test('A locação pesquisada pelo ID deve ser apresentada corretamente', async () => {
@@ -43,7 +44,7 @@ test.describe('Cadastro de Devoluções', async () =>{
     })
 
     test('Verifica itens da tabela', async () => {
-        await tela.preencherDados({locacao : '0', data: new Date()});
-        await tela.tabelaDeveConter(["EQP001", "BIKE002"])
+        await tela.preencherDados({locacao : '2', data: new Date()});
+        await tela.tabelaDeveConter(["I003", "I004"])
     })
 })
