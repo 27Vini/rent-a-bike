@@ -4,13 +4,15 @@ export class Devolucao {
 
     public constructor(
         public readonly id : number,
-        public readonly dataDeDevolucao : Date | undefined,
+        private dataDeDevolucao : Date | undefined,
         public readonly valorPago : number,
-        public readonly locacao : Locacao | undefined
+        public readonly locacao : string | undefined | number
     ){       
     }
 
-
+    setDataDeDevolucao(date : Date){
+        this.dataDeDevolucao = date;
+    }
     validar() : string[]{
         const problemas: string[] = [];
         if(this.id == null || this.id <= 0){

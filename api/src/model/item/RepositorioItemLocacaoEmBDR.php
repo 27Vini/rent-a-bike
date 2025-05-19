@@ -16,6 +16,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
         foreach($dadosItensLocacao as $il){
             $item = $repItem->coletarComId($il['item_id']);
             $itemLocacao = new ItemLocacao($il['id'], $item, $il['precoLocacao']);
+            $itemLocacao->setSubtotal($il['subtotal']);
 
             $itensLocacao[] = $itemLocacao;
         }

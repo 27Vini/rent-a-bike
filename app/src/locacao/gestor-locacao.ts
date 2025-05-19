@@ -109,7 +109,7 @@ export class GestorLocacao{
         if(locacoes.length == 0)
             throw ErrorDominio.comProblemas(['Não há locações para serem exibidas.']);
 
-        return locacoes;
+        return locacoes.data;
     }
 
     async coletarItemComCodigo(codigo:string){

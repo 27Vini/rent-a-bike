@@ -44,10 +44,26 @@ class GestorLocacao {
         return $itemLocacao;
     }
 
+    /**
+     * Coleta todas as locações
+     * @return array<Locacao>
+     */
     public function coletarTodos() : array {
         $locacoes = [];
         $locacoes = $this->repositorioLocacao->coletarTodos();
 
         return $locacoes;
+    }
+
+    /**
+     * Coletar com id ou array de parâmetros
+     * @param string|array $parametros
+     * @return void
+     */
+    public function coletarCom(array $parametros): array | Locacao{
+        foreach($parametros as &$p){
+            $p = htmlspecialchars($p);
+        }
+        return $this->repositorioLocacao->coletarComParametros($parametros);
     }
 }

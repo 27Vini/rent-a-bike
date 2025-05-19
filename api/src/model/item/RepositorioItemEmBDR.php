@@ -27,7 +27,8 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR {
         $comando = "SELECT * FROM item WHERE id = :id LIMIT 1";
         $ps = $this->executarComandoSql($comando, ["id" => $id]);
 
-        $item = $ps->fetchObject(Item::class); 
+        $dados = $ps->fetch();
+        $item = new Item($dados['id'], $dados['codigo'], $dados['descricao'], $dados['modelo'], $dados['fabricante'], $dados['valorPorHora'], $dados['avarias'], $dados['disponibilidade'], $dados['tipo']);
         return $item ?: null;
     } 
 

@@ -1,27 +1,26 @@
 <?php
-
+require_once './infra/util/validarId.php';
 class Devolucao{
     private string | int $id;
-    private string | int $locacaoId;
-    private DateTime $dataDeDevolucao;
+    private Locacao | null $locacao;
+    private DateTime | null $dataDeDevolucao;
     private float $valorPago;
 
-    public function  __construct(string | int $id, string|int $locacaoId ,DateTime $data, float $valor) {
+    public function  __construct(string | int $id, Locacao $locacao ,DateTime $data) {
         $this->id = $id;
-        $this->locacaoId = $locacaoId;
+        $this->locacao = $locacao;
         $this->dataDeDevolucao = $data;
-        $this->valorPago = $valor;
     }
 
     public function getId() : int | string{
         return $this->id;
     }
 
-    public function getLocacaoId(): int|string{
-        return $this->locacaoId;
+    public function getLocacao(): Locacao{
+        return $this->locacao;
     }
 
-    public function getDataDeDevolucao(){
+    public function getDataDeDevolucao(): DateTime{
         return $this->dataDeDevolucao;
     }
 
@@ -33,8 +32,8 @@ class Devolucao{
         $this->id = $id;
     }
 
-    public function setLocacaoId($id){
-        $this->locacaoId = $id;
+    public function setLocacao($id){
+        $this->locacao = $id;
     }
 
     public function setDataDeDevolucao(DateTime $dataDeDevolucao){
@@ -45,18 +44,74 @@ class Devolucao{
         $this->valorPago = $valorPago;
     }
 
-    public function validar():array{
-        $problemas = validarId($this->id);
+    public function validar(): array {
+    $problemas = validarId($this->id);
 
-        if($this->dataDeDevolucao > new DateTime()->format("Y-m-d H:i:s")){
-            array_push($problemas, "A data de devolução deve ser inferior ou igual a data atual.");
+    if ($this->dataDeDevolucao > new DateTime()) {
+        array_push($problemas, "A data de devolução deve ser inferior ou igual a data atual.");
+    }
+
+    if ($this->valorPago <= 0.0) {
+        array_push($problemas, "O valor pago deve ser maior que 0.");
+    }
+
+    return $problemas;
+}
+
+
+    /**
+     * Calcula valor a ser pago
+     * @param int horas
+     * @return double
+     * 
+     */
+    public function calcularValorASerPago(): float{
+        $total = 0;
+        $horasCorridas = $this->calcularHorasCorridas();
+        /**
+         * @var ItemLocacao $item
+         */
+        foreach($this->locacao->getItensLocacao() as $item){
+            $total += $item->calculaSubtotal($horasCorridas);
         }
+        $desconto = $this->calculaDesconto($total, $horasCorridas);
+        return $total - $desconto;
+    }
 
-        if($this->valorPago <= 0.0){
-            array_push($problemas, "O valor pago deve ser maior que 0.");
+    /**
+     * Calcula horas corridas da devolução
+     * @return int
+     */
+    public function calcularHorasCorridas(): int{
+        $dataLocacao = $this->locacao->getEntrada();
+
+        $diff = $this->dataDeDevolucao->diff($dataLocacao);
+        $horas = $diff->h;
+        $horas += $diff->days * 24;
+
+        $numeroDeHoras = $this->locacao->getNumeroDeHoras();
+
+        $horasCorridas = 0;
+        if ($horas >= $numeroDeHoras && $horas <= $numeroDeHoras + 0.25) {
+            $horasCorridas = $numeroDeHoras;
+        } else {
+            $horasCorridas = ceil($horas);
         }
+        return $horasCorridas;
+    }
 
-        return $problemas;
+    /**
+     * Calcula desconto
+     * @param int $total
+     * @param int $horasCorridas
+     * @return float
+     */
+    public function calculaDesconto(int $total, int $horasCorridas): float{
+        if ($horasCorridas > 2) {
+            $desconto = round($total * 0.1, 2);
+            return $desconto;
+        }
+        return 0.0;
     }
 
     

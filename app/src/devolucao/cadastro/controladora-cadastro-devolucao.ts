@@ -2,6 +2,7 @@ import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import {GestorDevolucao} from '../gestor-devolucao.js';
 import { Item } from "../../item/item.js";
 import { ErrorDominio } from "../../../infra/ErrorDominio.js";
+import { ItemLocacao } from "../../item/item-locacao.js";
 
 export class ControladoraCadastroDevolucao {
     private visao : VisaoCadastroDevolucao
@@ -33,7 +34,7 @@ export class ControladoraCadastroDevolucao {
         this.visao.preencherValores({valorTotal, desconto, valorFinal})
     }
 
-    calcularSubtotal(item : Item){
+    calcularSubtotal(item : ItemLocacao){
         const devolucao = this.visao.coletarDataDevolucao();
         return this.gestor.calcularSubtotal(item, devolucao);
     }

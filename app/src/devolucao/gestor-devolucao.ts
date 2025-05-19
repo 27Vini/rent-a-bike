@@ -1,13 +1,15 @@
 import {API} from '../../infra/api.js'
-import { Item } from '../item/item.js';
 import {Locacao} from '../locacao/locacao.js';
 import {Devolucao} from '../devolucao/devolucao.js'
 import {Money, Currencies} from 'ts-money'
 import { ErrorDominio } from '../../infra/ErrorDominio.js';
+import { ServicoDevolucao } from './servico-devolucao.js';
+import { ItemLocacao } from '../item/item-locacao.js';
+import {toZonedTime } from 'date-fns-tz';
 
 export class GestorDevolucao{
 
-    private locacaoesDoCliente : Locacao[];
+    private locacaoesDoCliente : [];
     private locacaoEscolhida : Locacao | undefined;
     private horasCorridas : number = 0;
 
@@ -37,28 +39,31 @@ export class GestorDevolucao{
         }
 
         const locacoes = await response.json();
-        this.locacaoesDoCliente = locacoes;
-        if(locacoes.length == 1){
-            const locacao = locacoes[0];
-            this.locacaoEscolhida = locacao;
+        this.horasCorridas = 0;
+        this.locacaoesDoCliente = locacoes.data;
+        if(locacoes.data.length == 1){
+            const locacao = locacoes.data[0];
+            this.locacaoEscolhida = new Locacao(locacao.id, locacao.cliente.id, locacao.funcionario.id, locacao.itensLocacao, locacao.entrada, locacao.horas, 0, locacao.valorTotal, locacao.previsaoDeEntrega);
             return locacao
         }
-        return locacoes;
+        return locacoes.data;
     }
 
     private criarDevolucao(dataDeDevolucao, valorPago) : Devolucao{
         const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
-        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida!);
+        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id);
         const problemas : string [] = devolucao.validar();
         if(problemas.length > 0){
             throw ErrorDominio.comProblemas(problemas);
         }
+        const dataBrasileira = toZonedTime(dataDevolucaoReal!, 'America/Sao_Paulo');
+        devolucao.setDataDeDevolucao(dataBrasileira);
         return devolucao
     }
 
     async salvarDevolucao(dataDevolucao, valorPago){
         const devolucao = this.criarDevolucao(dataDevolucao, valorPago);
-        const response = await fetch( API + 'devolucao', {method : 'POST', headers : {'Content-Type': 'application/json'}, body : JSON.stringify(devolucao)})
+        const response = await fetch( API + 'devolucoes', {method : 'POST', headers : {'Content-Type': 'application/json'}, body : JSON.stringify(devolucao)})
 
         if(!response.ok){
             throw ErrorDominio.comProblemas(['Não foi enviar os dados de devolução.' + response.status]);
@@ -72,39 +77,23 @@ export class GestorDevolucao{
     }
 
     calcularValores(subtotais : number []) : {valorTotal, desconto, valorFinal}{
-        const valorTotal = this.calcularValorTotal(subtotais);
-        const desconto = this.calcularDesconto(valorTotal);
-        const valorFinal = this.calcularValorFinal(valorTotal, desconto);
-        return {valorTotal, desconto, valorFinal};
+        return ServicoDevolucao.calcularValores(subtotais, this.horasCorridas);
+        // const valorTotal = this.calcularValorTotal(subtotais);
+        // const desconto = this.calcularDesconto(valorTotal);
+        // const valorFinal = this.calcularValorFinal(valorTotal, desconto);
+        // return {valorTotal, desconto, valorFinal};
     }
 
-    private calcularValorTotal(subtotais : number []) : Money{
-        let valorTotal = new Money(0, Currencies.BRL)
-        for(const subtotal of subtotais){
-            valorTotal = valorTotal.add(new Money(subtotal * 100, Currencies.BRL));
-        }
-        return valorTotal;
-    }
-
-    private calcularDesconto(valorTotal : Money) : Money{
-        if(this.horasCorridas > 2){
-            const desconto = Math.round(valorTotal.amount * 0.1);
-            return new Money(desconto, Currencies.BRL);
-        }
-        return new Money(0, Currencies.BRL);
-    }
-
-    private calcularValorFinal(valorTotal : Money , desconto : Money) :Money{
-        return valorTotal.subtract(desconto);
-    }
-
-    calcularSubtotal(item : Item, devolucao) : Money{
+    calcularSubtotal(item : ItemLocacao, devolucao) : Money{
         const horasCorridas = this.calcularHorasCorridas(devolucao);
-        const valorPorHora = new Money(item.valorPorHora * 100, Currencies.BRL);
+        const valorPorHora = new Money(item.precoLocacao * 100, Currencies.BRL);
         return valorPorHora.multiply(horasCorridas);
     }
 
     private calcularHorasCorridas(devolucao){
+        if(this.horasCorridas != 0 ){
+            return this.horasCorridas;
+        }
         const dataLocacao = new Date(this.locacaoEscolhida!.entrada)
         const dataDevolucao = new Date(devolucao)
         const diferencaEmMilissegundos = dataDevolucao.getTime() - dataLocacao.getTime();

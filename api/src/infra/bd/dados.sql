@@ -1,3 +1,5 @@
+use g4;
+
 INSERT INTO cliente (codigo, nome, cpf, foto) VALUES
 ('C001', 'João Silva', '12345678900', 'https://lh3.googleusercontent.com/pw/AP1GczPDBp5n89vccP2zxg_QLB_2AzFGMAGpLrTo0gw6h0f89SoaK8Hf5aFUCiutECGc50y1c_YLxgabwfJUY7cGDrbbb52hrB7T7W6bpwnVlk5FjavOv-BNdBmxeu9Bls5oFvZjMlqNz_yYxJgc5Jd24cpB=w740-h740-s-no-gm?authuser=0'),
 ('C002', 'Maria Oliveira', '98765432100', 'https://lh3.googleusercontent.com/pw/AP1GczPDBp5n89vccP2zxg_QLB_2AzFGMAGpLrTo0gw6h0f89SoaK8Hf5aFUCiutECGc50y1c_YLxgabwfJUY7cGDrbbb52hrB7T7W6bpwnVlk5FjavOv-BNdBmxeu9Bls5oFvZjMlqNz_yYxJgc5Jd24cpB=w740-h740-s-no-gm?authuser=0');

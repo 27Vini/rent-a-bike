@@ -1,6 +1,6 @@
 <?php
 
-class Funcionario{
+class Funcionario implements \JsonSerializable{
     const TAM_MAX_NOME = 100;
     const TAM_MIN_NOME = 2;
 
@@ -36,5 +36,12 @@ class Funcionario{
         }
 
         return $problemas;
+    }
+
+    public function jsonSerialize(): mixed {
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome
+        ];
     }
 }

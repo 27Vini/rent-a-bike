@@ -1,9 +1,12 @@
 <?php
 
-class Locacao{
+class Locacao implements \JsonSerializable{
     const PORCENTAGEM_DESCONTO = 0.1; 
 
     private string | int $id;
+    /**
+     * @var array<ItemLocacao>
+     */
     private $itensLocacao = [];
     private Cliente $cliente;
     private Funcionario $funcionario;
@@ -120,10 +123,23 @@ class Locacao{
     }
 
     public function calculaEntrega() : DateTime {
-        $entrega = $this->entrada;
+        $entrega = clone $this->entrada;
         $entrega->add(new DateInterval("PT{$this->numeroDeHoras}H"));
 
         return $entrega;
+    }
+
+    public function jsonSerialize(): mixed {
+        return [
+            'id' => $this->id,
+            'cliente' => $this->cliente,
+            'funcionario' => $this->funcionario,
+            'itensLocacao' => $this->itensLocacao,
+            'entrada' => $this->entrada->format('Y-m-d H:i:s'),
+            'horas' => $this->numeroDeHoras,
+            'valorTotal' => $this->valorTotal,
+            'previsaoDeEntrega' => $this->previsaoDeEntrega->format('Y-m-d H:i:s')
+        ];
     }
 
     public function validar(): array {       

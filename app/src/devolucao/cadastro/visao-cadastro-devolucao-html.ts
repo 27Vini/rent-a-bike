@@ -77,7 +77,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         for(const locacao of locacaoes){
             const option = document.createElement('option');
             option.value = String(locacao.id);
-            const apenasData = locacao.previsaoEntrega.substring(0, 10);
+            const apenasData = locacao.previsaoDeEntrega.substring(0, 10);
             option.innerText = `R$${locacao.valorTotal} ${apenasData}`;
             select!.append(option)
         }
@@ -93,7 +93,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLOutputElement>(sel.selectLocacao)!.hidden = true;
         const div = document.querySelector<HTMLOutputElement>(sel.locacaoOutput)
         div?.removeAttribute('hidden')
-        const apenasData = locacao.previsaoEntrega.substring(0, 10);
+        const apenasData = locacao.previsaoDeEntrega.substring(0, 10);
         div!.innerText = `Locação de valor R$${locacao.valorTotal} para entregar ${apenasData}`
         div!.dataset.id = String(locacao.id)
         this.desenharTabela(locacao);
@@ -102,12 +102,12 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     desenharTabela(locacao){
         const tbody = document.querySelector('tbody')
         tbody!.innerHTML = ""
-        for(const item of locacao.itens){
-            const subtotal = this.controladora.calcularSubtotal(item);
+        for(const itemLoc of locacao.itensLocacao){
+            const subtotal = this.controladora.calcularSubtotal(itemLoc);
             tbody!.innerHTML += `
                 <tr>
-                    <td>${item.codigo}</td>
-                    <td>${item.descricao}</td>
+                    <td>${itemLoc.item.codigo}</td>
+                    <td>${itemLoc.item.descricao}</td>
                     <td>${subtotal}</td>
                 </tr>
             ` 

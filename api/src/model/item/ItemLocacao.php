@@ -1,22 +1,23 @@
 <?php
 
-class ItemLocacao {
+class ItemLocacao implements \JsonSerializable {
     private int   $id = 0;
     private Item  $item;
     private float $precoLocacao;
     private float $subtotal;
 
-    public function __construct(int $id = 0, Item $item, float $precoLocacao){
-        $this->id = 0;
+    public function __construct(int $id, Item $item, float $precoLocacao){
+        $this->id = $id;
         $this->item = $item;
         $this->precoLocacao = $precoLocacao;
+        $this->subtotal = 0.0;
     }
 
     public function calculaSubtotal(int $horas) : float{
         if($horas < 0)
             throw DominioException::com(["Horas devem ser maior do que 0."]);
 
-        return $this->subtotal;
+        return $this->precoLocacao * $horas;
     }
 
     public function setId(int $id){
@@ -67,5 +68,14 @@ class ItemLocacao {
         }
 
         return $problemas;
+    }
+
+    public function jsonSerialize(): mixed {
+        return [
+            'id' => $this->id,
+            'item' => $this->item,
+            'precoLocacao' => $this->precoLocacao,
+            'subtotal' =>$this->subtotal
+        ];
     }
 }

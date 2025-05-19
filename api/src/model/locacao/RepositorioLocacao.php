@@ -6,12 +6,7 @@ interface RepositorioLocacao {
      * @throws RepositorioException
      */
     public function adicionar(Locacao $locacao) : void;
-
-    /**
-     * @return null | Locacao
-     */
-    public function coletarComId(int $id): null | Locacao;
-
     public function coletarTodos();
+    public function coletarComParametros(array $parametros): array;
 
 }

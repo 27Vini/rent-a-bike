@@ -1,6 +1,6 @@
 <?php
 
-class Item {
+class Item implements \JsonSerializable{
     const TAM_CODIGO = 8;
     const TAM_MIN_STRING = 2;
     const TAM_MAX_DESCRICAO = 200;
@@ -128,5 +128,19 @@ class Item {
         }
 
         return $problemas;
+    }
+
+    public function jsonSerialize(): mixed {
+        return [
+            'id' => $this->id,
+            'codigo' => $this->codigo,
+            'descricao' => $this->descricao,
+            'modelo' => $this->modelo,
+            'fabricante' => $this->fabricante,
+            'valorPorHora' => $this->valorPorHora,
+            'avarias' => $this->avarias,
+            'disponibilidade' => $this->disponibilidade,
+            'tipo' => $this->tipo
+        ];
     }
 }

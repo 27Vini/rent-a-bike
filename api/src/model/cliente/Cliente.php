@@ -1,7 +1,7 @@
 <?php
 
 
-class Cliente{
+class Cliente implements \JsonSerializable{
     private int|string $id;
     private string $codigo;
     private string $cpf;
@@ -12,7 +12,7 @@ class Cliente{
     private const MAX_NOME = 100;
     private const MSG_NOME = "O nome deve ter entre ".self::MIN_NOME." e ".self::MAX_NOME." caracteres.";
 
-	private static const TAM_CPF = 11;
+	private const TAM_CPF = 11;
 	private const MSG_CPF = "O cpf deve ter ".self::TAM_CPF . " caracteres sem caracteres especiais.";
 	private const TAM_CODIGO = 8;
 	private const MSG_CODIGO = "O código deve ter ".self::TAM_CODIGO." caracteres.";
@@ -84,5 +84,15 @@ class Cliente{
 		}
 		return $problemas;
 	}
+
+	public function jsonSerialize(): mixed {
+        return [
+            'id' => $this->id,
+            'codigo' => $this->codigo,
+            'cpf' => $this->cpf,
+            'nome' => $this->nome,
+            'foto' => $this->foto
+        ];
+    }
 
 }
