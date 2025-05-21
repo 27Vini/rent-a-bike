@@ -1,8 +1,8 @@
 DROP DATABASE IF EXISTS g4;
 CREATE DATABASE IF NOT EXISTS g4 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-use g4;
+USE g4;
 
-CREATE TABLE cliente(
+CREATE TABLE IF NOT EXISTS cliente(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     codigo VARCHAR(255) NOT NULL , 
     nome VARCHAR(255) NOT NULL , 
@@ -10,12 +10,12 @@ CREATE TABLE cliente(
     foto VARCHAR(2083) NOT NULL
 );
 
-CREATE TABLE funcionario(
+CREATE TABLE IF NOT EXISTS funcionario(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     nome VARCHAR(255) NOT NULL 
 );
 
-CREATE TABLE item(
+CREATE TABLE IF NOT EXISTS item(
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT , 
     codigo VARCHAR(255) NOT NULL , 
     descricao VARCHAR(255) NOT NULL , 
@@ -27,21 +27,20 @@ CREATE TABLE item(
     tipo VARCHAR(60) NOT NULL 
 );
 
-CREATE TABLE bicicleta (
+CREATE TABLE IF NOT EXISTS bicicleta (
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     idItem INT NOT NULL,
     numeroSeguro VARCHAR(255) NOT NULL,
     FOREIGN KEY (idItem) REFERENCES item(id)
 ); 
 
-
-CREATE TABLE equipamento(
+CREATE TABLE IF NOT EXISTS equipamento(
 	id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     idItem INT NOT NULL,
     FOREIGN KEY (idItem) REFERENCES item(id)
 );
 
-CREATE TABLE locacao (
+CREATE TABLE IF NOT EXISTS locacao (
     id int PRIMARY KEY AUTO_INCREMENT NOT NULL,
     entrada DATETIME NOT NULL,
     numero_de_horas INT NOT NULL,
@@ -55,7 +54,7 @@ CREATE TABLE locacao (
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
 );
 
-CREATE TABLE item_locacao(
+CREATE TABLE IF NOT EXISTS item_locacao(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
     locacao_id INT NOT NULL,
@@ -65,7 +64,7 @@ CREATE TABLE item_locacao(
     FOREIGN KEY (locacao_id) REFERENCES locacao(id)
 );
 
-CREATE TABLE devolucao(
+CREATE TABLE IF NOT EXISTS devolucao(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     locacao_id INT NOT NULL,
     data_de_devolucao DATETIME NOT NULL,

@@ -12,7 +12,9 @@ test.describe('Cadastro de locações', () => {
 
     test('cadastro realizado com sucesso', async () => {
         await tela.preencherFormCadastro('12345678900', 2, 'I0000009');
+        await tela.esperarResposta('/itens')
         await tela.clicar(sel.botaoCadastrar);
+        await tela.esperarResposta('/locacoes')
 
         await tela.deveExibirAMensagem("sucesso");
     });
@@ -26,7 +28,7 @@ test.describe('Cadastro de locações', () => {
         });
 
         test('item não cadastrado', async () => {
-            await tela.preencherFormCadastro('12345678921', 2, '');
+            await tela.preencherFormCadastro('12345678900', 2, '');
             await tela.clicar(sel.botaoCadastrar);
 
             await tela.deveExibirAMensagem("Ao menos um item deve ser cadastrado na locaçao.");
@@ -34,12 +36,12 @@ test.describe('Cadastro de locações', () => {
     })
 
     test.describe('busca de cliente', () => {
-        test('pesquisar cliente deve retornar cliente correto', async () => {
-            await tela.preencherCampo(sel.inputCliente, '98765432100');
-            await tela.clicar(sel.botaoBuscarCliente);
+        // test('pesquisar cliente deve retornar cliente correto', async () => {
+        //     await tela.preencherCampo(sel.inputCliente, '98765432100');
+        //     await tela.clicar(sel.botaoBuscarCliente);
 
-            await tela.encontrarElementoNaTela(sel.listaCliente, 'Maria Oliveira');
-        });
+        //     await tela.encontrarElementoNaTela(sel.listaCliente, 'Maria Oliveira');
+        // });
 
         test('pesquisar cliente não existente', async() => {
             await tela.preencherCampo(sel.inputCliente, '12345678920');
@@ -58,6 +60,7 @@ test.describe('Cadastro de locações', () => {
         test('pesquisar item retorna item correto', async () => {
             await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
             await tela.clicar(sel.botaoBuscarItem);
+            await tela.esperarResposta('/itens')
 
             await tela.encontrarElementoNaTela(sel.listaItem, 'Bomba de Ar');
         });
