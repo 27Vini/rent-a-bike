@@ -50,6 +50,7 @@ CREATE TABLE locacao (
     previsao_de_entrega DATETIME NOT NULL,
     cliente_id int NOT NULL,
     funcionario_id int NOT NULL,
+    ativo BOOLEAN NOT NULL DEFAULT TRUE,
     FOREIGN KEY (cliente_id) REFERENCES cliente(id),
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id)
 );

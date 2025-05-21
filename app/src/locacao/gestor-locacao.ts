@@ -117,16 +117,16 @@ export class GestorLocacao{
             throw ErrorDominio.comProblemas(["Digite um código válido."]);
         
         const response = await fetch(API + "itens?codigo=" + codigo);
-        if(!response.ok)
-            throw ErrorDominio.comProblemas(["Erro ao obter itens. "+response.status]);
+        const retorno = await response.json();
 
-        const result = await response.json();
-        if(result.length == 0)
+        if(!retorno.success)
+            throw ErrorDominio.comProblemas([retorno.message]);
+
+        if(retorno.data.length == 0)
             throw ErrorDominio.comProblemas(["Nenhum item encontrado."]);
 
-
-        this.setItem(result[0]);
-        return result[0];
+        this.setItem(retorno.data);
+        return retorno.data;
     }
 
     async coletarFuncionariosCadastrados(){
@@ -135,7 +135,8 @@ export class GestorLocacao{
         if(!response.ok)
             throw ErrorDominio.comProblemas(["Erro ao obter funcionários."+response.status]);
 
-        return response.json();
+        const dados = await response.json();
+        return dados.data;
     }
     
     async coletarClienteComCodigoOuCpf(codigoCpf:string){
@@ -143,21 +144,17 @@ export class GestorLocacao{
             throw ErrorDominio.comProblemas(["O campo de cliente não deve conter caracteres especiais."]);
         }
 
-        let campo = '';
-        if(codigoCpf.length == 11){
-            campo = "?cpf="+codigoCpf;
-        } else {
-            campo = "?codigo="+codigoCpf;
+        let campo = "?parametro="+codigoCpf;
+        const response = await fetch(API + "clientes"+campo);
+        const retorno = await response.json();
+        
+        if(!retorno.success){
+            throw ErrorDominio.comProblemas([retorno.message]);
         }
 
-        const response = await fetch(API + "clientes"+campo);
-        if(!response.ok)
-            throw ErrorDominio.comProblemas(["Erro ao obter cliente."+response.status]);
-
-        const cliente = await response.json();
-        if(cliente.length == 0)
+        if(retorno.data.length == 0)
             throw ErrorDominio.comProblemas(['Cliente não encontrado.']);
 
-        return cliente[0];
+        return retorno.data;
     }
 }

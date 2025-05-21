@@ -28,7 +28,7 @@ abstract class RepositorioGenericoEmBDR {
             $ps->execute($parametros);
             return $ps;
         } catch ( PDOException $e ) {
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            throw new RepositorioException("Erro ao executar comando SQL.");
         }
     }
 

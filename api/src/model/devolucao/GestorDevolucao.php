@@ -14,16 +14,16 @@ class GestorDevolucao{
         $dataDeDevolucaoString = htmlspecialchars($dados["dataDeDevolucao"] ?? '');
         $locacaoId = htmlspecialchars( $dados["locacao"] ?? '' );
         if(!$dataDeDevolucaoString || !$locacaoId){
-            throw DominioException::com(["Locação ou data de devolução não foram enviados."]);
+            throw new DominioException("Locação ou data de devolução não foram enviados.");
         }
 
         $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId]);
         if($locacao == null){
-            throw DominioException::com(["Locação não encontrada com id " . $locacaoId]);
+            throw new DominioException("Locação não encontrada com id " . $locacaoId);
         }
 
         $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString);
-
+    
 
         $this->repositorioDevolucao->adicionar($devolucao);
     }
@@ -33,7 +33,11 @@ class GestorDevolucao{
      * @return array<Devolucao>
      */
     public function coletarDevolucoes():array{
-        return $this->repositorioDevolucao->coletarTodos();
+        try{
+            return $this->repositorioDevolucao->coletarTodos();
+        }catch(Exception $e){
+            throw $e;
+        }
     }
 
     /**
@@ -48,11 +52,11 @@ class GestorDevolucao{
         $devolucao = new Devolucao('1', $locacao, $dataDeDevolucao);
 
         $valorASerPago = $devolucao->calcularValorASerPago();
-
+    
         $devolucao->setValorPago($valorASerPago);
         $problemas = $devolucao->validar();
         if(!empty($problemas)){
-            throw DominioException::com($problemas);
+            throw new DominioException(implode('\n', $problemas));
         }
         return $devolucao;
     }

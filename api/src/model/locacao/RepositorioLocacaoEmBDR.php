@@ -8,26 +8,47 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
 
     public function adicionar(Locacao $locacao) : void{
         try{
+            $this->pdo->beginTransaction();
+
             $comando = "INSERT INTO locacao(entrada,numero_de_horas,desconto,valor_total,previsao_de_entrega, cliente_id, funcionario_id) VALUES (:entrada,:numero_de_horas,:desconto,:valor_total,:previsao_de_entrega, :cliente_id, :funcionario_id)";
+            
             $dados = [
-                "entrada" => $locacao->getEntrada(), 
-                "numero_de_horas" => $locacao->getNumeroDeHoras(), 
-                "desconto" => $locacao->getDesconto(), 
-                "valor_total" => $locacao->getValorTotal(),
-                "previsao_de_entrega" => $locacao->getPrevisaoDeEntrega(), 
-                "cliente_id" => $locacao->getCliente()->getId(),
-                "funcionario_id" => $locacao->getFuncionario()->getId()
+                "entrada"               => $locacao->getEntrada()->format("Y-m-d H:i:s"), 
+                "numero_de_horas"       => $locacao->getNumeroDeHoras(), 
+                "desconto"              => $locacao->getDesconto(), 
+                "valor_total"           => $locacao->getValorTotal(),
+                "previsao_de_entrega"   => $locacao->getPrevisaoDeEntrega()->format("Y-m-d H:i:s"), 
+                "cliente_id"            => $locacao->getCliente()->getId(),
+                "funcionario_id"        => $locacao->getFuncionario()->getId()
             ];
         
             $this->executarComandoSql($comando, $dados);
-        
             $locacao->setId($this->ultimoIdAdicionado());
+
+            $this->adicionarItens($locacao);
+
+            $this->pdo->commit();
         }catch(PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            if($this->pdo->inTransaction())
+                $this->pdo->rollBack();
+
+            throw new RepositorioException("Erro ao adicionar nova locação.", $e->getCode());
         }
     }
 
-    
+    public function adicionarItens(Locacao $locacao){
+        try{
+            $repositorioItemLocacaoBDR = new RepositorioItemLocacaoEmBDR($this->pdo);
+
+            foreach($locacao->getItensLocacao() as $itemLocacao){
+                $repositorioItemLocacaoBDR->adicionar($itemLocacao, $locacao->getId());
+            }
+
+        }catch(Exception $e){
+            throw new RepositorioException("Erro ao salvar itens da locação.", $e->getCode());
+        }
+    }
+
     /**
      * Coleta locações com algum filtro
      * @param array $parametros
@@ -38,22 +59,25 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
             $sql = "SELECT l.id, l.entrada as entrada, l.numero_de_horas, l.desconto, l.valor_total, l.previsao_de_entrega, c.id as id_cliente, c.codigo as codigo_cliente, c.nome as nome_cliente, c.cpf, c.foto, f.id as id_funcionario, f.nome as nome_funcionario
             FROM locacao l 
             JOIN cliente c ON l.cliente_id = c.id 
-            JOIN funcionario f ON l.funcionario_id = f.id";
+            JOIN funcionario f ON l.funcionario_id = f.id
+            WHERE 1 ";
 
+            if(isset($parametros['verificarAtivo'])){
+                $sql .= " AND l.ativo = :verificarAtivo";
+            } 
             if(isset($parametros['id'])){
-                $sql .= " WHERE l.id = :id";
+                $sql .= " AND l.id = :id";
             }else{
-                $sql .= " WHERE c.cpf = :cpf";
+                $sql .= " AND c.cpf = :cpf";
             }
-
+            
             $ps = $this->executarComandoSql($sql, $parametros);
             $dadosLocacoes = $ps->fetchAll();
-            $locacoes = $this->transformarEmLocacoes($dadosLocacoes);
-            
-            return $locacoes;
 
+            $locacoes = $this->transformarEmLocacoes($dadosLocacoes);
+            return $locacoes;
         } catch( PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            throw new RepositorioException("Erro ao obter locações.", $e->getCode());
         }
     }
 
@@ -76,7 +100,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
             return $locacoes;
 
         } catch( PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            throw new RepositorioException("Erro interno do servidor.", $e->getCode());
         }
     }
 
@@ -96,5 +120,14 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
             $locacoes[] = $locacao;
         }
         return $locacoes;
+    }
+
+    /**
+     * Marca uma locação como devolvida
+     * @param Locacao $locacao
+     */
+    public function marcarComoDevolvida(Locacao $locacao) : void{
+        $comando = "UPDATE locacao SET ativo = 0 WHERE id=:id";
+        $ps = $this->executarComandoSql($comando, ["id" => $locacao->getId()]);
     }
 }

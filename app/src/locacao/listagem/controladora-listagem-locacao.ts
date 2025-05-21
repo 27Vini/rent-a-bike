@@ -14,6 +14,10 @@ export class ControladoraListagemLocacao{
     async obterLocacoes(){
         try{
             const locacoes = await this.gestor.coletarLocacoes();
+            if(locacoes.length == 0){
+                this.visao.exibirMensagens(["Nenhuma locação encontrada."]);
+            }
+            
             return locacoes;
         }catch(error){
             if(error instanceof ErrorDominio)

@@ -19,7 +19,7 @@ test.describe('Cadastro de Devoluções', async () =>{
         await tela.preencherDados({locacao : '98765432100', data : new Date()})
         await tela.clicar(sel.devolverBtn);
         await tela.esperarResposta('/devolucoes')
-        await tela.deveExibirMensagem('Cadastrado')
+        await tela.deveExibirMensagem('Devolvido')
     })
 
     test('Cadastro sem campo preenchido retorna mensagem de erro', async ()=> {

@@ -2,6 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+date_default_timezone_set('America/Sao_Paulo');
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
@@ -11,6 +13,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 $app = AppFactory::create();
 
 $pdo = null;
+$gestorDevolucao = null;
+$gestorLocacao = null;
 try {
     $pdo = new PDO(
         'mysql:dbname=g4;host=localhost;charset=utf8',
@@ -18,8 +22,11 @@ try {
         [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            ]
+        ]
     );
+
+    $gestorLocacao = new GestorLocacao(new RepositorioLocacaoEmBDR($pdo), new RepositorioClienteEmBDR($pdo), new RepositorioFuncionarioEmBDR($pdo));
+    $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo), new RepositorioLocacaoEmBDR($pdo));
 } catch ( PDOException $e ) {
     http_response_code( 500 );
     die( 'Erro ao criar o banco de dados.' );
@@ -38,22 +45,16 @@ $app->options('/{routes:.+}', function (Request $request, Response $response) {
     return $response;
 });
 
-$app->get('/locacoes', function(Request $request, Response $response) use($pdo) {
-    $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo); 
-    $repositorioCliente = new RepositorioClienteEmBDR($pdo);
-    $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
-
-    $gestorLocacao = new GestorLocacao($repositorioLocacao, $repositorioCliente, $repositorioFuncionario);
+$app->get('/locacoes', function(Request $request, Response $response) use($gestorLocacao) {
     $parametros = $request->getQueryParams();
     try {
         $locacoes = [];
-        if(isset($parametros['cpf'])){
-            $locacoes = $gestorLocacao->coletarCom(["cpf" => $parametros['cpf']]);
-        }else if(isset($parametros['id'])){
-            $locacoes = $gestorLocacao->coletarCom(["id" => $parametros['id']]);
+        if(count($parametros) > 0){
+            $locacoes = $gestorLocacao->coletarCom($parametros);
         }else{
             $locacoes = $gestorLocacao->coletarTodos();
         }
+        
         $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => true,
@@ -86,13 +87,80 @@ $app->get('/locacoes', function(Request $request, Response $response) use($pdo) 
     }
 });
 
-$app->post('/devolucoes', callable: function(Request $request, Response $response) use ($pdo){
+$app->post('/locacoes', callable: function(Request $request, Response $response) use ($gestorLocacao){
+    try{
+        $dados = $request->getBody();
+        $gestorLocacao->salvarLocacao(json_decode($dados, true));
+
+        $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'message' => 'Locação cadastrada com sucesso!'
+        ]));
+    }catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor:'.$e->getMessage()
+        ]));
+    }catch(DominioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor:'.$e->getMessage()
+        ]));
+    }catch(Exception $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor.'
+        ]));
+    }
+    finally{
+        return $response;
+    }
+});
+
+$app->get('/devolucoes', callable:function(Request $request, Response $response) use($pdo, $gestorDevolucao){
+    try{
+        $devolucoes = $gestorDevolucao->coletarDevolucoes();
+        $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'data' => $devolucoes
+        ]));
+    }catch (DominioException $e) {
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(Exception $e) {
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Erro interno do servidor: ' . $e->getMessage()
+        ]));
+
+    } finally{
+        return $response;
+    }
+});
+
+$app->post('/devolucoes', callable: function(Request $request, Response $response) use ($gestorDevolucao){
     $jsonBody = $request->getBody()->getContents();
     $dados = json_decode($jsonBody, true);
-    $gestor = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo), new RepositorioLocacaoEmBDR($pdo));
     try{
-        $gestor->salvarDevolucao($dados);
-        
+        $gestorDevolucao->salvarDevolucao($dados);
+      
         $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => true
@@ -123,6 +191,103 @@ $app->post('/devolucoes', callable: function(Request $request, Response $respons
         return $response;
     }
 
+});
+
+$app->get('/funcionarios', callable:function(Request $request, Response $response) use($pdo){
+    try{
+        $gestorFuncionario = new GestorFuncionario(new RepositorioFuncionarioEmBDR($pdo));
+        $funcionarios = $gestorFuncionario->coletarFuncionarios();
+
+        $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'data' => $funcionarios
+        ]));
+    }catch(DominioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor:'.$e->getMessage()
+        ]));
+    }catch(Exception $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor.'
+        ]));
+    }
+    finally{
+        return $response;
+    }
+});
+
+$app->get('/clientes', callable:function(Request $request, Response $response) use($pdo){
+    try{
+        $parametro = $request->getQueryParams();
+
+        $gestorCliente = new GestorCliente(new RepositorioClienteEmBDR($pdo));
+        $cliente = $gestorCliente->coletarComCodigoOuCpf($parametro['parametro']);
+
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'data'    => $cliente
+        ]));
+    } catch(DominioException $e){
+        $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+    }catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => $e->getMessage()
+        ]));
+    }catch(Exception $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor.'
+        ]));
+    }
+    finally{
+        return $response;
+    }
+});
+
+$app->get('/itens', callable:function(Request $request, Response $response) use($pdo){
+    try{
+        $parametro = $request->getQueryParams();
+
+        $gestorItem = new GestorItem(new RepositorioItemEmBDR($pdo));
+        $item = $gestorItem->coletarComCodigo($parametro['codigo']);
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'data'    => $item
+        ]));
+    }catch(DominioException $e){
+        $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+    }catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => $e->getMessage()
+        ]));
+    }catch(Exception $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor.'
+        ]));
+    }
+    finally{
+        return $response;
+    }
 });
 
 $app->run();

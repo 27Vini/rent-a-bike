@@ -14,7 +14,6 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
 
     async listarLocacoes(){
         const locacoes = await this.controladora.obterLocacoes();
-        console.log(locacoes)
         document.querySelector('tbody')!.innerHTML = locacoes.map(
             e => this.desenharLinhaLocacao(e)
         ).join('')

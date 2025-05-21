@@ -11,7 +11,7 @@ test.describe('Cadastro de locações', () => {
     });
 
     test('cadastro realizado com sucesso', async () => {
-        await tela.preencherFormCadastro('12345678921', 2, 'BIKE9001');
+        await tela.preencherFormCadastro('12345678900', 2, 'I0000009');
         await tela.clicar(sel.botaoCadastrar);
 
         await tela.deveExibirAMensagem("sucesso");
@@ -19,7 +19,7 @@ test.describe('Cadastro de locações', () => {
 
     test.describe('dado não preenchido', () => {
         test('cliente não preenchido', async () => {
-            await tela.preencherFormCadastro('', 2, 'BIKE9001');
+            await tela.preencherFormCadastro('', 2, 'I0000009');
             await tela.clicar(sel.botaoCadastrar);
 
             await tela.deveExibirAMensagem("Um cliente deve estar associado à locação.");
@@ -35,10 +35,10 @@ test.describe('Cadastro de locações', () => {
 
     test.describe('busca de cliente', () => {
         test('pesquisar cliente deve retornar cliente correto', async () => {
-            await tela.preencherCampo(sel.inputCliente, '12345678921');
+            await tela.preencherCampo(sel.inputCliente, '98765432100');
             await tela.clicar(sel.botaoBuscarCliente);
 
-            await tela.encontrarElementoNaTela(sel.listaCliente, 'Carlos da Silva');
+            await tela.encontrarElementoNaTela(sel.listaCliente, 'Maria Oliveira');
         });
 
         test('pesquisar cliente não existente', async() => {
@@ -56,24 +56,24 @@ test.describe('Cadastro de locações', () => {
         });
         
         test('pesquisar item retorna item correto', async () => {
-            await tela.preencherCampo(sel.inputCodigoItem, 'BIKE9001');
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
             await tela.clicar(sel.botaoBuscarItem);
 
-            await tela.encontrarElementoNaTela(sel.listaItem, 'Bicicleta aro 29');
+            await tela.encontrarElementoNaTela(sel.listaItem, 'Bomba de Ar');
         });
 
         test('pesquisar item não existente', async () => {
             await tela.preencherCampo(sel.inputCodigoItem, 'BIKE9011');
             await tela.clicar(sel.botaoBuscarItem);
 
-            await tela.deveExibirAMensagem('Nenhum item encontrado');
+            await tela.deveExibirAMensagem('Item não encontrado');
         });
 
         test('item adicionado aparece na tabela', async () => {
-            await tela.preencherCampo(sel.inputCodigoItem, 'BIKE9001');
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
             await tela.clicar(sel.botaoBuscarItem);
 
-            await tela.encontrarElementoNaTela(sel.tabelaItens, 'Bicicleta aro 29');
+            await tela.encontrarElementoNaTela(sel.tabelaItens, 'Bomba de Ar');
         });
     });
 
@@ -90,12 +90,12 @@ test.describe('Cadastro de locações', () => {
 
     test('valores são calculados corretamente', async() => {
         await tela.preencherCampo(sel.inputHoras, '2');
-        await tela.preencherCampo(sel.inputCodigoItem, 'BIKE9001');
+        await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
         await tela.clicar(sel.botaoBuscarItem);
 
-        await tela.preencherCampo(sel.inputCodigoItem, 'EQP0002');
+        await tela.preencherCampo(sel.inputCodigoItem, 'I0000008');
         await tela.clicar(sel.botaoBuscarItem);
 
-        await tela.encontrarElementoNaTela(sel.campoValorFinal, '40.00');
+        await tela.encontrarElementoNaTela(sel.campoValorFinal, '14.00');
     });
 });

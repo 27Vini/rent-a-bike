@@ -48,6 +48,10 @@ input, select{
     align-items: flex-end;
 }
 
+#entrega{
+    margin-bottom: 20px;
+}
+
 #cadastrar {
     background-color: #9ac4d4;
     color: black;

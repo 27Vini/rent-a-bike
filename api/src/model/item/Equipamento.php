@@ -1,4 +1,5 @@
 <?php
+require_once './infra/util/validarId.php';
 
 class Equipamento extends Item{
     private int $id;

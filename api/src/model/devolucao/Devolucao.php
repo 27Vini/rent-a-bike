@@ -1,12 +1,12 @@
 <?php
 require_once './infra/util/validarId.php';
-class Devolucao{
+class Devolucao implements \JsonSerializable{
     private string | int $id;
     private Locacao | null $locacao;
     private DateTime | null $dataDeDevolucao;
     private float $valorPago;
 
-    public function  __construct(string | int $id, Locacao $locacao ,DateTime $data) {
+    public function  __construct(string | int $id, Locacao $locacao, DateTime $data) {
         $this->id = $id;
         $this->locacao = $locacao;
         $this->dataDeDevolucao = $data;
@@ -51,6 +51,10 @@ class Devolucao{
         array_push($problemas, "A data de devolução deve ser inferior ou igual a data atual.");
     }
 
+    if($this->dataDeDevolucao < $this->locacao->getEntrada()){
+        array_push($problemas, "A data de devolução não pode ser menor do que a data de locação.");
+    }
+
     if ($this->valorPago <= 0.0) {
         array_push($problemas, "O valor pago deve ser maior que 0.");
     }
@@ -88,11 +92,13 @@ class Devolucao{
         $diff = $this->dataDeDevolucao->diff($dataLocacao);
         $horas = $diff->h;
         $horas += $diff->days * 24;
-
+    
         $numeroDeHoras = $this->locacao->getNumeroDeHoras();
 
         $horasCorridas = 0;
-        if ($horas >= $numeroDeHoras && $horas <= $numeroDeHoras + 0.25) {
+        if($horas == 0){
+            $horas = 1;
+        }if ($horas >= $numeroDeHoras && $horas <= $numeroDeHoras + 0.25) {
             $horasCorridas = $numeroDeHoras;
         } else {
             $horasCorridas = ceil($horas);
@@ -114,5 +120,12 @@ class Devolucao{
         return 0.0;
     }
 
-    
+     public function jsonSerialize(): mixed {
+        return [
+            'id'                => $this->id,
+            'locacao'           => $this->locacao,
+            'dataDeDevolucao'   => $this->dataDeDevolucao->format('Y-m-d H:i:s'),
+            'valorPago'         => $this->valorPago
+        ];
+    }
 }

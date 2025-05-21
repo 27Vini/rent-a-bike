@@ -6,21 +6,43 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
     }
 
     public function coletarComIdLocacao(int $idLocacao): array{
-        $sql = "SELECT * FROM item_locacao WHERE locacao_id = :idLocacao";
-        $ps = $this->executarComandoSql($sql, ["idLocacao" => $idLocacao]);
+        try{
+            $sql = "SELECT * FROM item_locacao WHERE locacao_id = :idLocacao";
+            $ps = $this->executarComandoSql($sql, ["idLocacao" => $idLocacao]);
 
-        $dadosItensLocacao = $ps->fetchAll();
-        $itensLocacao = [];
+            $dadosItensLocacao = $ps->fetchAll();
+            $itensLocacao = [];
 
-        $repItem = (new RepositorioItemEmBDR($this->pdo));
-        foreach($dadosItensLocacao as $il){
-            $item = $repItem->coletarComId($il['item_id']);
-            $itemLocacao = new ItemLocacao($il['id'], $item, $il['precoLocacao']);
-            $itemLocacao->setSubtotal($il['subtotal']);
+            $repItem = (new RepositorioItemEmBDR($this->pdo));
+            foreach($dadosItensLocacao as $il){
+                $item = $repItem->coletarComId($il['item_id']);
+                $itemLocacao = new ItemLocacao($il['id'], $item, $il['precoLocacao']);
+                $itemLocacao->setSubtotal($il['subtotal']);
 
-            $itensLocacao[] = $itemLocacao;
+                $itensLocacao[] = $itemLocacao;
+            }
+        
+            return $itensLocacao;
+        }catch(DominioException $e){
+            throw $e;
+        }catch(Exception $e){
+            throw new RepositorioException("Erro ao coletar item com id de locação.", $e->getCode());
         }
-    
-        return $itensLocacao;
+    }
+
+    public function adicionar(ItemLocacao $itemLocacao, int $idLocacao){
+        try{
+            $comando = "INSERT INTO item_locacao(item_id, locacao_id, precoLocacao, subtotal) VALUES (:idItem, :idLocacao, :precoLocacao, :subtotal)";
+            $dados = [
+                "idItem"        => $itemLocacao->getItem()->getId(),
+                "idLocacao"     => $idLocacao,
+                "precoLocacao"  => $itemLocacao->getPrecoLocacao(),
+                "subtotal"      => $itemLocacao->getSubtotal()
+            ];
+
+            $this->executarComandoSql($comando, $dados);
+        }catch(Exception $e){
+            throw new RepositorioException("Erro ao cadastrar item de locação. ", $e->getCode());
+        }
     }
 }

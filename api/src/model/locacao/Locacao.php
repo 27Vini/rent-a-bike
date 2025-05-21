@@ -1,4 +1,5 @@
 <?php
+require_once './infra/util/validarId.php';
 
 class Locacao implements \JsonSerializable{
     const PORCENTAGEM_DESCONTO = 0.1; 
@@ -23,8 +24,8 @@ class Locacao implements \JsonSerializable{
         $this->funcionario = $funcionario;
         $this->entrada = $entrada;
         $this->numeroDeHoras = $numeroDeHoras;
-        $this->desconto = $this->calculaDesconto();
         $this->valorTotal = $this->calculaValorTotal();
+        $this->desconto = $this->calculaDesconto();
         $this->previsaoDeEntrega = $this->calculaEntrega();
     }
 
@@ -36,9 +37,6 @@ class Locacao implements \JsonSerializable{
         $this->id = $id;
     }
 
-    /**
-     * 
-    */
     public function getItensLocacao(): array {
         return $this->itensLocacao;
     }
@@ -103,14 +101,6 @@ class Locacao implements \JsonSerializable{
         $this->previsaoDeEntrega = $previsaoDeEntrega;
     }
 
-    public function calculaDesconto() : float {
-        $desconto = 0.0;
-        if($this->numeroDeHoras > 2)
-            $desconto = self::PORCENTAGEM_DESCONTO;
-
-        return $desconto;
-    }
-
     public function calculaValorTotal() : float {
         $total = 0.0;
 
@@ -122,6 +112,14 @@ class Locacao implements \JsonSerializable{
         return $total;
     }
 
+    public function calculaDesconto() : float {
+        $desconto = 0.0;
+        if($this->numeroDeHoras > 2)
+            $desconto = $this->valorTotal * self::PORCENTAGEM_DESCONTO;
+
+        return $desconto;
+    }
+
     public function calculaEntrega() : DateTime {
         $entrega = clone $this->entrada;
         $entrega->add(new DateInterval("PT{$this->numeroDeHoras}H"));
@@ -131,21 +129,21 @@ class Locacao implements \JsonSerializable{
 
     public function jsonSerialize(): mixed {
         return [
-            'id' => $this->id,
-            'cliente' => $this->cliente,
-            'funcionario' => $this->funcionario,
-            'itensLocacao' => $this->itensLocacao,
-            'entrada' => $this->entrada->format('Y-m-d H:i:s'),
-            'horas' => $this->numeroDeHoras,
-            'valorTotal' => $this->valorTotal,
+            'id'                => $this->id,
+            'cliente'           => $this->cliente,
+            'funcionario'       => $this->funcionario,
+            'itensLocacao'      => $this->itensLocacao,
+            'entrada'           => $this->entrada->format('Y-m-d H:i:s'),
+            'horas'             => $this->numeroDeHoras,
+            'valorTotal'        => $this->valorTotal,
             'previsaoDeEntrega' => $this->previsaoDeEntrega->format('Y-m-d H:i:s')
         ];
     }
 
-    public function validar(): array {       
-        $probemas = validarId($this->id);
+    public function validar(): array { 
+        $problemas = validarId($this->id);
 
-        if($this->entrada > (new DateTime())->format("Y-m-d H:i:s")){
+        if($this->entrada > new DateTime()){
             array_push($problemas, "A data de entrada não pode ser posterior a atual.");
         }
 

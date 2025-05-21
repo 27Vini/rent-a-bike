@@ -13,9 +13,9 @@ interface RepositorioDevolucao{
      * Coleta devolução com o ID.
      * @param int $id
      * @throws RepositorioException
-     * @return void
+     * @return Devolucao
      */
-    public function coletarComId(int $id): null | Devolucao;
+    public function coletarComId(int $id): Devolucao;
 
     /**
      * Retorna todas as devoluções.

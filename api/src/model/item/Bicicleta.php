@@ -1,5 +1,5 @@
 <?php
-
+require_once './infra/util/validarId.php';
 
 class Bicicleta extends Item{
     private int $id;

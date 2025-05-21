@@ -1,4 +1,6 @@
 <?php
+require_once './infra/util/validarId.php';
+
 
 class Item implements \JsonSerializable{
     const TAM_CODIGO = 8;
@@ -123,8 +125,8 @@ class Item implements \JsonSerializable{
             $problemas[] = "O fabricante deve ter entre ".self::TAM_MIN_STRING." e ".self::TAM_MAX_FABRICANTE." caracteres.";
         }
 
-        if($this->tipo != TipoItem::BICICLETA || $this->tipo != TipoItem::EQUIPAMENTO){
-            $problemas[] = "Tipo inválido.";
+        if(!TipoItem::isValid($this->tipo)){
+            $problemas[] = "Tipo de item inválido.";
         }
 
         return $problemas;
@@ -132,15 +134,15 @@ class Item implements \JsonSerializable{
 
     public function jsonSerialize(): mixed {
         return [
-            'id' => $this->id,
-            'codigo' => $this->codigo,
-            'descricao' => $this->descricao,
-            'modelo' => $this->modelo,
-            'fabricante' => $this->fabricante,
-            'valorPorHora' => $this->valorPorHora,
-            'avarias' => $this->avarias,
-            'disponibilidade' => $this->disponibilidade,
-            'tipo' => $this->tipo
+            'id'                => $this->id,
+            'codigo'            => $this->codigo,
+            'descricao'         => $this->descricao,
+            'modelo'            => $this->modelo,
+            'fabricante'        => $this->fabricante,
+            'valorPorHora'      => $this->valorPorHora,
+            'avarias'           => $this->avarias,
+            'disponibilidade'   => $this->disponibilidade,
+            'tipo'              => $this->tipo
         ];
     }
 }

@@ -28,6 +28,10 @@ select {
     font-size: 16px;
 }
 
+#locacao{
+    border-radius: 10px 0px 0px 10px;
+}
+
 button {
     background-color: #9ac4d4;
     color: black;
@@ -49,7 +53,8 @@ button:hover {
     font-size: 18px;
     padding: 0;
     border-radius: 0px 10px 10px 0px;
-    margin-left: -5px;
+    margin-left: 0px;
+    margin-top: -4px;
 }
 
 table {

@@ -1,45 +1,55 @@
 <?php
 
 class GestorLocacao {
-    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario){
-        
-    }
+    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario){}
 
     public function salvarLocacao(array $dadosLocacao){
-        $cliente = $this->repositorioCliente->coletarComId((int)$dadosLocacao['cliente']);
-        $funcionario = $this->repositorioFuncionario->coletarComId((int)$dadosLocacao['funcionario']);
+       try{
+            $cliente = $this->repositorioCliente->coletarComId((int)$dadosLocacao['cliente']);
+            $funcionario = $this->repositorioFuncionario->coletarComId((int)$dadosLocacao['funcionario']);
+            
+            $itensLocacao = [];
+            foreach($dadosLocacao['itens'] as $itemLocacao){
+                $item = $this->transformarEmItem($itemLocacao['item']);
+                $itemLocacao = $this->transformarEmItemLocacao($itemLocacao, $item, $dadosLocacao['numeroDeHoras']);
+                $itensLocacao[] = $itemLocacao;
+            }   
+            
+            $locacao = new Locacao(0, $itensLocacao, $cliente, $funcionario, new DateTime(), $dadosLocacao['numeroDeHoras']);
 
-        $itensLocacao = [];
-        foreach($dadosLocacao['itensLocacao'] as $itemLocacao){
-            $item = $this->transformarEmItem($itemLocacao['item']);
-            $itemLocacao = $this->transformarEmItemLocacao($itemLocacao, $item);
-            $itensLocacao[] = $itemLocacao;
+            $problemas = $locacao->validar();
+            if(count($problemas) > 0){
+                throw new DominioException(implode('\n', $problemas));
+            }
+
+            $this->repositorioLocacao->adicionar($locacao);
+    
+        }catch(DominioException $e){
+            throw $e;
+        } catch(Exception $e){
+            throw $e;
         }
-
-        $locacao = new Locacao(0, $itensLocacao, $cliente, $funcionario, new DateTime(), $dadosLocacao['horas']);
-        $problemas = $locacao->validar();
-        if(count($problemas) > 0)
-            throw DominioException::com($problemas);
-
-        $this->repositorioLocacao->adicionar($locacao);
     }
 
     private function transformarEmItem(array $dadosItem) : Item {
-        $item = new Item($dadosItem['item']['id'], $dadosItem['item']['codigo'], $dadosItem['item']['descricao'], $dadosItem['item']['modelo'], $dadosItem['item']['fabricante'], $dadosItem['item']['valorPorHora'], $dadosItem['item']['avarias'], $dadosItem['item']['disponibilidade'], $dadosItem['item']['tipo']);
+        $item = new Item($dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
 
         $problemas = $item->validar();
-        if(count($problemas) > 0)
-            throw DominioException::com($problemas);
+        if(count($problemas) > 0){
+            throw new DominioException(implode('\n', $problemas));
+        }
 
         return $item;
     }
 
-    private function transformarEmItemLocacao(array $dadosItemLocacao, Item $item) : ItemLocacao{
+    private function transformarEmItemLocacao(array $dadosItemLocacao, Item $item, int $horas) : ItemLocacao{
         $itemLocacao = new ItemLocacao(0, $item, $dadosItemLocacao['precoLocacao']);
-        $problemas = $itemLocacao->validar();
+        $itemLocacao->calculaSubtotal($horas);
 
-        if(count($problemas))
-            throw DominioException::com($problemas);
+        $problemas = $itemLocacao->validar();
+        if(count($problemas)){
+            throw new DominioException(implode('\n', $problemas));
+        }
 
         return $itemLocacao;
     }
@@ -61,9 +71,13 @@ class GestorLocacao {
      * @return void
      */
     public function coletarCom(array $parametros): array | Locacao{
-        foreach($parametros as &$p){
-            $p = htmlspecialchars($p);
+        try{
+            foreach($parametros as &$p){
+                $p = htmlspecialchars($p);
+            }
+            return $this->repositorioLocacao->coletarComParametros($parametros);
+        }catch(Exception $e){
+            throw $e;
         }
-        return $this->repositorioLocacao->coletarComParametros($parametros);
     }
 }

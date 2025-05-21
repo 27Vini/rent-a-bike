@@ -1,4 +1,5 @@
 <?php
+require_once './infra/util/validarId.php';
 
 class ItemLocacao implements \JsonSerializable {
     private int   $id = 0;
@@ -15,9 +16,10 @@ class ItemLocacao implements \JsonSerializable {
 
     public function calculaSubtotal(int $horas) : float{
         if($horas < 0)
-            throw DominioException::com(["Horas devem ser maior do que 0."]);
+            throw new DominioException("Horas devem ser maior do que 0.");
 
-        return $this->precoLocacao * $horas;
+        $this->subtotal = $this->precoLocacao * $horas;
+        return $this->subtotal;
     }
 
     public function setId(int $id){
@@ -54,10 +56,7 @@ class ItemLocacao implements \JsonSerializable {
 
     public function validar() : array {
         $problemas = [];
-
-        if($this->id == null || $this->id <= 0){
-            array_push($problemas, "O item de locação deve ter um ID maior que 0.");
-        }
+        $problemas = validarId($this->id);
 
         if($this->precoLocacao <= 0.0){
             array_push($problemas, "O preço da locação deve ser maior que 0.0 .");
@@ -72,10 +71,10 @@ class ItemLocacao implements \JsonSerializable {
 
     public function jsonSerialize(): mixed {
         return [
-            'id' => $this->id,
-            'item' => $this->item,
-            'precoLocacao' => $this->precoLocacao,
-            'subtotal' =>$this->subtotal
+            'id'            => $this->id,
+            'item'          => $this->item,
+            'precoLocacao'  => $this->precoLocacao,
+            'subtotal'      => $this->subtotal
         ];
     }
 }

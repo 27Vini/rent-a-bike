@@ -14,46 +14,70 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
             
             $ps = $this->executarComandoSql($sql);
             $dadosDevolucao = $ps->fetchAll();
-            $devolucoes = [];
+            
             $repositorioLocacao = new RepositorioLocacaoEmBDR($this->pdo);
+            
+            $devolucoes = [];
             foreach($dadosDevolucao as $devolucao){
-                $locacao = $repositorioLocacao->coletarComParametros(['id' => $dadosDevolucao['locacao_id']]);
-                $devolucao = new Devolucao($dadosDevolucao['id'], $locacao[0], $dadosDevolucao['data_de_devolucao']);
-                $devolucoes[] = $devolucao;
+                $devolucoes[] = $this->transformarEmDevolucao($devolucao, $repositorioLocacao);
             }
     
             return $devolucoes;
         }catch( PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            throw new RepositorioException("Erro ao coletar devoluções.", $e->getCode());
         }
 
     }
 
     public function adicionar(Devolucao $devolucao) : void{
         try{
+            $this->pdo->beginTransaction();
             $comando = "INSERT INTO devolucao (locacao_id,data_de_devolucao,valor_pago) VALUES (:locacao_id,:data_de_devolucao,:valor_pago)";
             $this->executarComandoSql($comando, ["locacao_id" => $devolucao->getLocacao()->getId(), "data_de_devolucao" => $devolucao->getDataDeDevolucao()->format('Y-m-d H:i:s'),
-                                                                  "valor_pago" => $devolucao->getValorPago()
-                                                                ]);
+                "valor_pago" => $devolucao->getValorPago()
+            ]);
         
             $devolucao->setId($this->ultimoIdAdicionado());
+            (new RepositorioLocacaoEmBDR($this->pdo))->marcarComoDevolvida($devolucao->getLocacao());
+            $this->pdo->commit();
         }catch( PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            if($this->pdo->inTransaction())
+                $this->pdo->rollBack();
+            throw new RepositorioException("Erro ao adicionar devolução.", $e->getCode());
         } catch(Throwable $e){
+            if($this->pdo->inTransaction())
+                $this->pdo->rollBack();
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }
 
-    public function coletarComId($id): null | Devolucao{
+    public function coletarComId($id): Devolucao{
         try{
             $comando = "SELECT * FROM devolucao WHERE id=:id";
             $ps = $this->executarComandoSql($comando, ["id" => $id ]);
-            $c = $ps->fetchObject(Devolucao::class) ?: null;
-            return $c;
+            
+            $dadosDevolucao = $ps->fetch();
+            if(count($dadosDevolucao) == 0){
+                throw new DominioException("Nenhuma devolução encontrada.");
+            }
+
+            return $this->transformarEmDevolucao($dadosDevolucao, new RepositorioLocacaoEmBDR($this->pdo));
+        }catch(DominioException $e){
+            throw $e;
         }catch( PDOException $e){
-            throw new RepositorioException($e->getMessage(), $e->getCode());
+            throw new RepositorioException("Erro ao obter devolução de id: ".$id, $e->getCode());
         }
     }
 
+    private function transformarEmDevolucao(array $dadosDevolucao, RepositorioLocacao $repositorioLocacao){
+        try{
+            $locacao = $repositorioLocacao->coletarComParametros(['id' => $dadosDevolucao['locacao_id']]);
+            $devolucao = new Devolucao($dadosDevolucao['id'], $locacao[0], new DateTime($dadosDevolucao['data_de_devolucao']));
+            $devolucao->setValorPago($dadosDevolucao['valor_pago']);
 
+            return $devolucao;
+        }catch(Throwable $e){
+            throw new DominioException("Erro ao instanciar nova devolução.", $e->getCode());
+        }
+    }
 }

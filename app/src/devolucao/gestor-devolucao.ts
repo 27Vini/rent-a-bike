@@ -13,12 +13,15 @@ export class GestorDevolucao{
     private locacaoEscolhida : Locacao | undefined;
     private horasCorridas : number = 0;
 
-    async coletarDevolucoes() : Promise<any>{
-        const response = await fetch( API + 'devolucao');
-        if(!response.ok){
-            throw new Error("Não foi possível coletar os dados de devolução: " + response.status);
+    async coletarDevolucoes(){
+        const response = await fetch( API + 'devolucoes');
+        const retorno = await response.json();
+        
+        if(!retorno.success){
+            throw ErrorDominio.comProblemas([retorno.message]);
         }
-        return response.json();
+
+        return retorno.data;
     }
 
     async pesquisarLocacao(pesquisa : string) : Promise<any>{
@@ -27,10 +30,11 @@ export class GestorDevolucao{
         }
 
         let parametro : string;
+        parametro = `verificarAtivo=1`;
         if(pesquisa.length == 11){
-            parametro = `cpf=${pesquisa}`;
+            parametro += `&cpf=${pesquisa}`;
         }else{
-            parametro = `id=${pesquisa}`;
+            parametro += `&id=${pesquisa}`;
         }
 
         const response = await fetch( API + `locacoes?${parametro}`)
