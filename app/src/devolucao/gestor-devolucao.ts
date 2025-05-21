@@ -94,7 +94,7 @@ export class GestorDevolucao{
         return valorPorHora.multiply(horasCorridas);
     }
 
-    private calcularHorasCorridas(devolucao){
+    public calcularHorasCorridas(devolucao){
         if(this.horasCorridas != 0 ){
             return this.horasCorridas;
         }

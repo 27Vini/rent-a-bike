@@ -8,7 +8,10 @@
     "e2e": "playwright test",
     "start": "vite",
     "api": "json-server api.json",
-    "prepare": "husky"
+    "prepare": "husky",
+    "db:e": "mysql -u root --password=\"\" < api/src/infra/bd/estrutura.sql",
+    "db:d": "mysql -u root --password=\"\" g4 < api/src/infra/bd/dados.sql",
+    "db": "pnpm run db:e && pnpm run db:d"
   },
   "keywords": [],
   "author": "",
