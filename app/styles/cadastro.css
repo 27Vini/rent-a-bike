@@ -31,6 +31,8 @@ input, select{
     border-radius: 0px 8px 8px 0px;
     background-color: #e7e7e7;
     margin: 0;
+    position: relative;
+    top: 1.5px;
 }
 
 #lista-itens, #lista-clientes{
@@ -45,31 +47,72 @@ input, select{
 
 .tabela-cadastro{
     display: flex;
-    align-items: flex-end;
-}
-
-#entrega{
-    margin-bottom: 20px;
 }
 
 #cadastrar {
-    background-color: #9ac4d4;
     color: black;
     padding: 12px 50px;
     border: none;
     border-radius: 20px;
     font-size: 16px;
     cursor: pointer;
-    margin-bottom: 20px;
     text-decoration: none;
-    display: inline-block;
-    margin-left: 50px;
+    width: 20%;
+    flex-direction: column;
 }
 
-#cadastrar:hover {
-    background-color: #87b5c6;
+.cadastrar{
+    display: flex;
+    justify-content: flex-end;
 }
 
-table{
-    width: 58%;
+.icon{
+    width: 20px;
+    position: relative;
+    top: 5px;
+}
+
+/* CSS CADASTRO DEVOLUCAO */
+.cadastro-devolucao{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+#devolver {
+    background-color: #9ac4d4;
+    font-size: 18px;
+    padding: 12px 40px;
+    margin: 30px auto;
+    color: black;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#locacaoOutput {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px dashed #999;
+    width: 300px;
+    background-color: #f7f7f7;
+}
+
+#locacao{
+    border-radius: 10px 0px 0px 10px;
+}
+
+#pesquisar-locacao {
+    height: 40px;
+    width: 40px;
+    font-size: 18px;
+    padding: 0;
+    border-radius: 0px 10px 10px 0px;
+    margin-left: 0px;
+    position: relative;
+    top: 3px;
+    border: solid 1px;
 }

@@ -15,7 +15,7 @@ test.describe('Listagem de locações', () => {
     })
 
     test('verificar listagem de locações registradas', async() => {
-        await tela.irPara("#locacoes");
+        await tela.irPara(".pages #locacoes");
         await tela.deveExibirUmaLocacao(1);
     })
 

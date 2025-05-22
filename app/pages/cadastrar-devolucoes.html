@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/cadastro.css">
-    <link rel="stylesheet" href="../styles/cadastro-devolucoes.css">
+    <!-- <link rel="stylesheet" href="../styles/cadastro-devolucoes.css"> -->
     <script src="../src/devolucao/cadastro/visao-cadastro-devolucao-html.ts" type="module" defer></script>
     <title>Rent-A-Bike - Cadastrar Devolução</title>
 </head>
@@ -20,18 +20,21 @@
         </div>
     </header>
     
-    <div class="group-devolucao">
-        <label for="devolucao">Devolução:</label>
-        <input type="datetime-local" id="devolucao" name="devolucao">
-    </div>
-    
-    <div class="group-locacao">
-        <label for="locacao">Locação:</label>
-        <input type="text" name="locacao" id="locacao" placeholder="Id Locação ou CPF Cliente"><button id="pesquisar-locacao">🔍</button>
-        <select id="locacaoId" name="locacaoId" hidden>
-        </select>
-        <div id="locacaoOutput" hidden></div>
-    </div>
+    <section class="cadastro-devolucao">
+        <div class="group-devolucao">
+            <label for="devolucao">Devolução:</label>
+            <input type="datetime-local" id="devolucao" name="devolucao">
+        </div>
+        
+        <div class="group-locacao">
+            <label for="locacao">Locação:</label>
+            <input type="text" name="locacao" id="locacao" placeholder="Id Locação ou CPF Cliente"><button id="pesquisar-locacao">🔍</button>
+            <select id="locacaoId" name="locacaoId" hidden>
+            </select>
+        </div>
+    </section>
+
+    <div id="locacaoOutput" hidden></div>
     
     <table border="1">
         <thead>
@@ -42,18 +45,31 @@
         <tbody></tbody>
         <tfoot>
             <tr>
-                <td colspan="3">Valor Total: R$<span id="valor-total"></span></td>
+                <td colspan="3"><img src="../styles/images/total.png" class="icon"/> Valor Total: R$<span id="valor-total"></span></td>
             </tr>
             <tr>
-                <td colspan="3">Desconto: R$<span id="desconto"></span></td>
+                <td colspan="3"><img src="../styles/images/desconto.png" class="icon"/> Desconto: R$<span id="desconto"></span></td>
             </tr>
             <tr>
-                <td colspan="3">Valor Final: R$<span id="valor-final"></span></td>
+                <td colspan="3"><img src="../styles/images/final.png" class="icon"/> Valor Final: R$<span id="valor-final"></span></td>
             </tr>
         </tfoot>
     </table>
     
     <output></output>
     <button id="devolver">Devolver</button>
+
+    <footer>
+        <hr>
+        <div class="links">
+            <a href="./listagem-locacoes.html">Listar Locações</a>
+            <a href="./listagem-devolucoes.html">Listar Devoluções</a>
+            <a href="./cadastrar-locacao.html">Cadastrar Locaçãos</a>
+            <a href="./cadastrar-devolucoes.html">Cadastrar Devoluções</a>
+        </div>
+        <div>
+            © Cynthia Jardim & Vinicius Ouverney
+        </div>
+    </footer>
 </body>
 </html>

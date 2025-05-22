@@ -7,7 +7,7 @@
 }
 
 body {
-    background-color: #e6f2f7;
+    background-color: #e7e7e7;
     padding: 0px;
     display: flex;
     flex-direction: column;
@@ -21,7 +21,7 @@ body {
     align-items: center;
     margin-bottom: 30px;
     position: relative;
-    background-color: #d4f0ff;
+    border-bottom: solid 1px;
 }
 
 .logo-container {
@@ -34,6 +34,36 @@ body {
     height: auto;
 }
 
+
+/* Estilos da index */
+.index-header{
+    background-image: url("/app/styles/images/header.jpg");
+    width: 100%;
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.9;
+}
+
+.pages{
+    display: flex;
+    justify-content: center;
+}
+
+.pages a{
+    margin: 2px;
+    padding: 30px;
+    background-color: #7fb3c2;
+    position: relative;
+    top: -30px;
+    text-decoration: none;
+    color: black;
+}
+
+.pages a:hover{
+    border: 1px solid gray;
+}
+
 /* Estilo das abas de navegação */
 .nav-tabs {
     display: flex;
@@ -43,7 +73,6 @@ body {
 
 .nav-tab {
     padding: 15px 40px;
-    background-color: #9ac4d4;
     color: black;
     text-decoration: none;
     font-size: 18px;
@@ -51,18 +80,29 @@ body {
     margin: 0 1px;
     text-align: center;
     width: 200px;
+    transition: transform .1s
 }
 
 .nav-tab.active {
-    background-color: #e6f2f7;
+    background-color: #a6a6a6;
 }
 
 .nav-tab:hover {
-    background-color: #87b5c6;
+    transform: scale(1.1);
 }
 
 main {
     padding: 0 20px;
+}
+
+button{
+    background-color: #9ac4d4;
+}
+
+button:hover{
+    background-color: #7fb3c2;
+    transition: transform .1s;
+    transform: scale(1.1);
 }
 
 /* Estilo da tabela */
@@ -74,7 +114,8 @@ table {
 }
 
 thead {
-    background-color: #9ac4d4;
+    background-color: #c9c9c9;
+    font-weight: bold;
 }
 
 th, td {
@@ -97,4 +138,12 @@ footer {
     text-align: center;
     padding: 10px;
     font-size: 14px;
+}
+
+.links{
+    margin-bottom: 15px;
+}
+
+.links a{
+    padding: 15px;
 }

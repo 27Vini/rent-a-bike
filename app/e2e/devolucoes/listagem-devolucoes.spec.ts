@@ -11,7 +11,7 @@ test.describe('Listagem de devoluções', async () => {
     })
 
     test('Consegue ir para a página correta', async () => {
-        await tela.irPara('#devolucoes')
+        await tela.irPara('.pages #devolucoes')
         await tela.verificarUrl('http://localhost:5173/app/pages/listagem-devolucoes.html')
     })
 

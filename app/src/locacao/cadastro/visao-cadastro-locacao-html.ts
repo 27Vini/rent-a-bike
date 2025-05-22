@@ -46,7 +46,7 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         } else {
             document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.disabled = true;
             document.querySelector<HTMLButtonElement>(sel.botaoBuscarItem)!.disabled = true;
-            document.querySelector(sel.campoEntrega )?.setAttribute("hidden", "hidden");
+            // document.querySelector(sel.campoEntrega )?.setAttribute("hidden", "hidden");
         }
     }
 
@@ -114,16 +114,17 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     }
 
     construirTabela({itens, valores}){
-        const tbody = document.querySelector("table tbody")!;
-        const tfoot = document.querySelector("table tfoot")!;
+        const tbody = document.querySelector(sel.tabelaItens)!;
+        const tresumo = document.querySelector(sel.tabelaResumo)!;
+        console.log(tbody, tresumo);
 
         tbody.innerHTML = itens.map(i => 
             this.criarLinha(i)
         ).join('');
 
-        tfoot.querySelector(sel.campoValorTotal)!.innerHTML = valores.valorTotal.toString();
-        tfoot.querySelector(sel.campoDesconto)!.innerHTML = valores.valorDesconto.toString();
-        tfoot.querySelector(sel.campoValorFinal)!.innerHTML = valores.valorFinal.toString();
+        tresumo.querySelector(sel.campoValorTotal)!.innerHTML = valores.valorTotal.toString();
+        tresumo.querySelector(sel.campoDesconto)!.innerHTML = valores.valorDesconto.toString();
+        tresumo.querySelector(sel.campoValorFinal)!.innerHTML = valores.valorFinal.toString();
     }
 
     private criarLinha(item){
@@ -134,13 +135,14 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
                 <td>${item.codigo}</td>
                 <td>${item.descricao}</td>
                 <td>R$${subtotal}</td>
+                <td><a data-item-id="${item.codigo}"><img src=".../../../styles/images/remover.png" class='icon'/></a></td>
             </tr>
         `
     }   
 
     exibirDataHoraEntrega(entrega:Date){
         document.querySelector(sel.campoEntregaSpan)!.innerHTML = entrega.toLocaleString();
-        document.querySelector(sel.campoEntrega)?.removeAttribute("hidden");
+        // document.querySelector(sel.campoEntrega)?.removeAttribute("hidden");
     }
 
     exibirMensagens(mensagens: string[]) {
