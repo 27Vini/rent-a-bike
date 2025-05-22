@@ -26,7 +26,7 @@ describe("Serviço Devolução", ()=>{
 
 })
 
-describe("Gestorr de Devolução", () => {
+describe("Gestor de Devolução", () => {
     let gestor : GestorDevolucao;
 
     beforeEach(() => {
