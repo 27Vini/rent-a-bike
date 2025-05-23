@@ -1,10 +1,11 @@
 <?php
 
 class GestorLocacao {
-    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario){}
+    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario, private Transacao $transacao){}
 
     public function salvarLocacao(array $dadosLocacao){
        try{
+            $this->transacao->iniciar();
             $cliente = $this->repositorioCliente->coletarComId((int)$dadosLocacao['cliente']);
             $funcionario = $this->repositorioFuncionario->coletarComId((int)$dadosLocacao['funcionario']);
             
@@ -23,10 +24,12 @@ class GestorLocacao {
             }
 
             $this->repositorioLocacao->adicionar($locacao);
-    
+            $this->transacao->finalizar();
         }catch(DominioException $e){
+            $this->transacao->desfazer();
             throw $e;
         } catch(Exception $e){
+            $this->transacao->desfazer();
             throw $e;
         }
     }

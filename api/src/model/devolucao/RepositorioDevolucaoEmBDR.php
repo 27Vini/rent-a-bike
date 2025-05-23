@@ -29,7 +29,6 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
 
     public function adicionar(Devolucao $devolucao) : void{
         try{
-            $this->pdo->beginTransaction();
             $comando = "INSERT INTO devolucao (locacao_id,data_de_devolucao,valor_pago) VALUES (:locacao_id,:data_de_devolucao,:valor_pago)";
             $this->executarComandoSql($comando, ["locacao_id" => $devolucao->getLocacao()->getId(), "data_de_devolucao" => $devolucao->getDataDeDevolucao()->format('Y-m-d H:i:s'),
                 "valor_pago" => $devolucao->getValorPago()
@@ -37,14 +36,9 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
         
             $devolucao->setId($this->ultimoIdAdicionado());
             $this->repositorioLocacao->marcarComoDevolvida($devolucao->getLocacao());
-            $this->pdo->commit();
         }catch( PDOException $e){
-            if($this->pdo->inTransaction())
-                $this->pdo->rollBack();
             throw new RepositorioException("Erro ao adicionar devolução.", $e->getCode());
         } catch(Throwable $e){
-            if($this->pdo->inTransaction())
-                $this->pdo->rollBack();
             throw new Exception($e->getMessage(), $e->getCode());
         }
     }

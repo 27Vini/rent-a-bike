@@ -1,7 +1,7 @@
 <?php
 
 class GestorDevolucao{
-    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao){
+    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private Transacao $transacao){
 
     }
 
@@ -16,16 +16,22 @@ class GestorDevolucao{
         if(!$dataDeDevolucaoString || !$locacaoId){
             throw new DominioException("Locação ou data de devolução não foram enviados.");
         }
-
-        $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId, 'verificarAtivo' => '1']);
-        if($locacao == null){
-            throw new DominioException("Locação não encontrada com id " . $locacaoId);
-        }
-
-        $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString);
+        try{
+            $this->transacao->iniciar();
+            $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId, 'verificarAtivo' => '1']);
+            if($locacao == null){
+                throw new DominioException("Locação não encontrada com id " . $locacaoId);
+            }
     
-
-        $this->repositorioDevolucao->adicionar($devolucao);
+            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString);
+        
+    
+            $this->repositorioDevolucao->adicionar($devolucao);
+            $this->transacao->finalizar();
+        } catch(Exception $e){
+            $this->transacao->desfazer();
+            throw $e;
+        }
     }
 
     /**

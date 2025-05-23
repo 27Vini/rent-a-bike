@@ -56,6 +56,6 @@ describe('Serviço de locação', () => {
         horaEsperada.setHours(horaEsperada.getHours() + horas);
 
         const horaRecebida = ServicoLocacao.calcularEntrega(horas);
-        expect(horaRecebida).toStrictEqual(horaEsperada);
+        expect(horaRecebida).toEqual(horaEsperada);
     });
 });

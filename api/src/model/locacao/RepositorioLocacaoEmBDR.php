@@ -8,8 +8,6 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
 
     public function adicionar(Locacao $locacao) : void{
         try{
-            $this->pdo->beginTransaction();
-
             $comando = "INSERT INTO locacao(entrada,numero_de_horas,desconto,valor_total,previsao_de_entrega, cliente_id, funcionario_id) VALUES (:entrada,:numero_de_horas,:desconto,:valor_total,:previsao_de_entrega, :cliente_id, :funcionario_id)";
             
             $dados = [
@@ -26,12 +24,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
             $locacao->setId($this->ultimoIdAdicionado());
 
             $this->adicionarItens($locacao);
-
-            $this->pdo->commit();
         }catch(PDOException $e){
-            if($this->pdo->inTransaction())
-                $this->pdo->rollBack();
-
             throw new RepositorioException("Erro ao adicionar nova locação.", $e->getCode());
         }
     }

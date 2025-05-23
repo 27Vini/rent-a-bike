@@ -8,7 +8,8 @@ describe('Gestor Devolução', function(){
 
         $repoLocacao = new RepositorioLocacaoEmBDR($pdo);
         $repo = new RepositorioDevolucaoEmBDR( $pdo, $repoLocacao);
-        $this->gestor = new GestorDevolucao($repo, $repoLocacao);
+        $transacao = new TransacaoComPDO($pdo);
+        $this->gestor = new GestorDevolucao($repo, $repoLocacao, $transacao);
     });
 
     it("Cadastra uma devolução válida", function(){
