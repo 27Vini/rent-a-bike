@@ -92,6 +92,17 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         await this.controladora.coletarItemComCodigo(codigo)
     }
 
+    private removerItem(e){
+        e.preventDefault();
+        const botao = e.target.parentNode;
+        const codigoItem = botao.dataset.itemId;
+    
+        this.controladora.removerItemComCodigo(codigoItem);
+
+        const linha = botao.parentNode.parentNode;
+        linha.remove();
+    }
+
     exibirItem({descricao, disponibilidade, avarias, valorPorHora}){
         const ul = document.querySelector(sel.listaItem);
         ul!.innerHTML = '';
@@ -116,11 +127,12 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     construirTabela({itens, valores}){
         const tbody = document.querySelector(sel.tabelaItens)!;
         const tresumo = document.querySelector(sel.tabelaResumo)!;
-        console.log(tbody, tresumo);
 
         tbody.innerHTML = itens.map(i => 
             this.criarLinha(i)
         ).join('');
+
+        document.querySelectorAll<HTMLElement>(sel.botaoRemoverItem)!.forEach((e) => e.onclick = this.removerItem.bind(this));
 
         tresumo.querySelector(sel.campoValorTotal)!.innerHTML = valores.valorTotal.toString();
         tresumo.querySelector(sel.campoDesconto)!.innerHTML = valores.valorDesconto.toString();
@@ -135,7 +147,7 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
                 <td>${item.codigo}</td>
                 <td>${item.descricao}</td>
                 <td>R$${subtotal}</td>
-                <td><a data-item-id="${item.codigo}"><img src=".../../../styles/images/remover.png" class='icon'/></a></td>
+                <td><a data-item-id="${item.codigo}" class="remover-item" alt="Remover item da locação"><img src=".../../../styles/images/remover.png" class='icon'/></a></td>
             </tr>
         `
     }   

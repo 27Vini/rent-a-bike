@@ -47,4 +47,10 @@ export class TelaCadastroLocacao{
         
         await expect(lista).toContainText(texto);
     }
+
+    async naoDeveEstarNaTela(seletor:string, texto:string){
+        let elemento = this.page.locator(seletor);
+
+        await expect(elemento).not.toContainText(texto);
+    }
 }

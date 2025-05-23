@@ -63,6 +63,15 @@ export class ControladoraCadastroLocacao{
         }
     }
 
+    removerItemComCodigo(codigo:string){
+        try{
+            this.gestor.removerItemComCodigo(codigo);
+            this.visao.exibirMensagens(["Item de código "+codigo+" removido com sucesso."]);
+        }catch(erro){
+            this.visao.exibirMensagens([erro.message]);
+        }
+    }
+
     atualizarDados(){
         try{
             const horas = this.visao.coletarHoras();

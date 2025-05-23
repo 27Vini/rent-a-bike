@@ -129,6 +129,11 @@ export class GestorLocacao{
         return retorno.data;
     }
 
+    removerItemComCodigo(codigo:string){
+        const posicao = this.itens.findIndex(e => e.item.codigo == codigo);
+        this.itens.splice(posicao, 1);
+    }
+
     async coletarFuncionariosCadastrados(){
         const response = await fetch(API + "funcionarios");
 

@@ -6,6 +6,7 @@ export const sel = {
     botaoCadastrar      : "#cadastrar",
     botaoBuscarCliente  : "#pesquisar-cliente",
     botaoBuscarItem     : "#pesquisar-item",
+    botaoRemoverItem    : ".remover-item",
     listaCliente        : "#lista-clientes",
     listaItem           : "#lista-itens",
     tabelaItens         : ".itens-locacao tbody",

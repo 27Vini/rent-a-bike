@@ -16,7 +16,7 @@ export class TelaListagemDevolucao{
     }
 
     async deveConterDevolucao( id : number){
-        this.irPara('#devolucoes')
+        await this.irPara('#devolucoes')
         const tbody = this.page.locator('tbody')
         tbody.waitFor();
 

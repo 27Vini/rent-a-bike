@@ -73,11 +73,33 @@ test.describe('Cadastro de locações', () => {
             await tela.deveExibirAMensagem('Item não encontrado');
         });
 
+        test('pesquisar item já adicionado', async () => {
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000003');
+            await tela.clicar(sel.botaoBuscarItem);
+            await tela.esperarResposta('/itens');
+
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000003');
+            await tela.clicar(sel.botaoBuscarItem);
+            await tela.esperarResposta('/itens');
+
+            await tela.deveExibirAMensagem("já adicionado");
+        });
+
         test('item adicionado aparece na tabela', async () => {
             await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
             await tela.clicar(sel.botaoBuscarItem);
 
             await tela.encontrarElementoNaTela(sel.tabelaItens, 'Bomba de Ar');
+        });
+
+        test('remoção de itens da locação', async () => {
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000003');
+            await tela.clicar(sel.botaoBuscarItem);
+            await tela.esperarResposta('/itens');
+
+            await tela.clicar(sel.botaoRemoverItem);
+            await tela.naoDeveEstarNaTela(sel.tabelaItens, 'I0000003');
+
         });
     });
 

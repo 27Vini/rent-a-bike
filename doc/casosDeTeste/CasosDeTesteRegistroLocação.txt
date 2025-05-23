@@ -48,7 +48,18 @@ Caso 8:
 
 Caso 9:
     Cenário: Valores são calculados corretamente
-    Dado que adicionei itens desejados
-    quando coloco a qtd de horas
-    então deve calcular o total corretamente
-    
+    Dado que adicionei a qtd de horas
+    quando adiciono os itens desejados
+    então o total deve ser calculado corretamente
+
+Caso 10:
+    Cenário: Remoção de itens da locação 
+    Dado que adicionei itens indesejados
+    quando clico no botão de remover item
+    Então o item deve ser removido da tabela 
+
+Caso 11:
+    Cenário: Item já adicionado não deve ser adicionado novamente
+    Dado que adicionei um item desejado
+    quando tento novamente adicioná-lo à locação
+    Então uma mensagem deve informar que item já foi adicionado
