@@ -13,6 +13,11 @@
     "db:d": "mysql --default-character-set=utf8mb4 -u root --password=\"\" g4 < api/src/infra/bd/dados.sql",
     "db": "pnpm run db:e && pnpm run db:d"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": ["pnpm e2e", "pnpm test", "composer test"]
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

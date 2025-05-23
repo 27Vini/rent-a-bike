@@ -1,5 +1,5 @@
 <?php
-require_once './infra/util/validarId.php';
+require_once __DIR__.'/../../infra/util/validarId.php';
 
 class Cliente implements \JsonSerializable{
     private int|string $id;

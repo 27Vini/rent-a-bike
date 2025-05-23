@@ -1,5 +1,5 @@
 <?php
-require_once './infra/util/validarId.php';
+require_once __DIR__.'/../../infra/util/validarId.php';
 class Devolucao implements \JsonSerializable{
     private string | int $id;
     private Locacao | null $locacao;
@@ -108,11 +108,11 @@ class Devolucao implements \JsonSerializable{
 
     /**
      * Calcula desconto
-     * @param int $total
+     * @param float $total
      * @param int $horasCorridas
      * @return float
      */
-    public function calculaDesconto(int $total, int $horasCorridas): float{
+    public function calculaDesconto(float $total, int $horasCorridas): float{
         if ($horasCorridas > 2) {
             $desconto = round($total * 0.1, 2);
             return $desconto;

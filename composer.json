@@ -4,7 +4,10 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "": [   "api/src/", 
+            "": [   
+                    "api/",
+                    "api/spec/", 
+                    "api/src/",
                     "api/src/model/", 
                     "api/src/model/cliente/", 
                     "api/src/model/devolucao/", 
@@ -39,7 +42,7 @@
     "scripts": {
         "dump": "composer dump-autoload",
         "start": "php api/src/index.php",
-        "test": "kahlan",
+        "test": "vendor/bin/kahlan --spec=api/spec",
         "stan": "vendor/bin/phpstan analyse src --level=2"
     }
 }

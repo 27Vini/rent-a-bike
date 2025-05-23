@@ -36,12 +36,13 @@ test.describe('Cadastro de locações', () => {
     })
 
     test.describe('busca de cliente', () => {
-        // test('pesquisar cliente deve retornar cliente correto', async () => {
-        //     await tela.preencherCampo(sel.inputCliente, '98765432100');
-        //     await tela.clicar(sel.botaoBuscarCliente);
+        test('pesquisar cliente deve retornar cliente correto', async () => {
+            await tela.preencherCampo(sel.inputCliente, '98765432100');
+            await tela.clicar(sel.botaoBuscarCliente);
+            await tela.esperarResposta('/clientes')
 
-        //     await tela.encontrarElementoNaTela(sel.listaCliente, 'Maria Oliveira');
-        // });
+            await tela.encontrarElementoNaTela(sel.listaCliente, 'Maria Oliveira');
+        });
 
         test('pesquisar cliente não existente', async() => {
             await tela.preencherCampo(sel.inputCliente, '12345678920');

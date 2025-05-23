@@ -1,0 +1,3 @@
+pnpm e2e
+pnpm test
+composer test

@@ -17,7 +17,7 @@ class GestorDevolucao{
             throw new DominioException("Locação ou data de devolução não foram enviados.");
         }
 
-        $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId]);
+        $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId, 'verificarAtivo' => '1']);
         if($locacao == null){
             throw new DominioException("Locação não encontrada com id " . $locacaoId);
         }

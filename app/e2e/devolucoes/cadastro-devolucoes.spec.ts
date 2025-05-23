@@ -45,6 +45,8 @@ test.describe('Cadastro de Devoluções', async () =>{
     test('Cadastro é efetuado com sucesso com ID' , async () => {
         await tela.preencherDados({locacao : '2', data : new Date()});
         await tela.clicar(sel.devolverBtn);
+        await tela.esperarResposta('/devolucoes')
+        await tela.deveExibirMensagem('Devolvido')
     })
     
     test('Cadastro é efetuado com sucesso com CPF', async () => {

@@ -44,7 +44,7 @@ export class TelaCadastroLocacao{
 
     async encontrarElementoNaTela(seletor:string, texto:string){
         let lista = this.page.locator(seletor);
-
+        
         await expect(lista).toContainText(texto);
     }
 }

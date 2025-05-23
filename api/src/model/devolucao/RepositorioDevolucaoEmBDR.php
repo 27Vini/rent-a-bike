@@ -2,7 +2,7 @@
 
 class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements RepositorioDevolucao{
 
-    public function __construct(private PDO $pdo){
+    public function __construct(private PDO $pdo, private RepositorioLocacao $repositorioLocacao){
         parent::__construct($pdo);
     }
 
@@ -15,11 +15,9 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
             $ps = $this->executarComandoSql($sql);
             $dadosDevolucao = $ps->fetchAll();
             
-            $repositorioLocacao = new RepositorioLocacaoEmBDR($this->pdo);
-            
             $devolucoes = [];
             foreach($dadosDevolucao as $devolucao){
-                $devolucoes[] = $this->transformarEmDevolucao($devolucao, $repositorioLocacao);
+                $devolucoes[] = $this->transformarEmDevolucao($devolucao, $this->repositorioLocacao);
             }
     
             return $devolucoes;
@@ -38,7 +36,7 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
             ]);
         
             $devolucao->setId($this->ultimoIdAdicionado());
-            (new RepositorioLocacaoEmBDR($this->pdo))->marcarComoDevolvida($devolucao->getLocacao());
+            $this->repositorioLocacao->marcarComoDevolvida($devolucao->getLocacao());
             $this->pdo->commit();
         }catch( PDOException $e){
             if($this->pdo->inTransaction())
@@ -61,7 +59,7 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
                 throw new DominioException("Nenhuma devolução encontrada.");
             }
 
-            return $this->transformarEmDevolucao($dadosDevolucao, new RepositorioLocacaoEmBDR($this->pdo));
+            return $this->transformarEmDevolucao($dadosDevolucao, $this->repositorioLocacao);
         }catch(DominioException $e){
             throw $e;
         }catch( PDOException $e){

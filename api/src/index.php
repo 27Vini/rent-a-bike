@@ -25,8 +25,9 @@ try {
         ]
     );
 
+    $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo);
     $gestorLocacao = new GestorLocacao(new RepositorioLocacaoEmBDR($pdo), new RepositorioClienteEmBDR($pdo), new RepositorioFuncionarioEmBDR($pdo));
-    $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo), new RepositorioLocacaoEmBDR($pdo));
+    $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao), $repositorioLocacao);
 } catch ( PDOException $e ) {
     http_response_code( 500 );
     die( 'Erro ao criar o banco de dados.' );
