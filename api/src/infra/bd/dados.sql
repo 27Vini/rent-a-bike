@@ -39,7 +39,7 @@ INSERT INTO locacao (entrada, numero_de_horas, desconto, valor_total, previsao_d
 ('2025-05-21 10:00:00', 2, 0.00, 30.00, '2025-05-21 12:00:00', 2, 1, 0),
 ('2025-05-21 14:30:00', 3, 0.00, 36.00,'2025-05-21 17:30:00', 2, 1, 1);
 
-INSERT INTO item_locacao (item_id, locacao_id, precoLocacao, subtotal) VALUES
+INSERT INTO item_locacao (item_id, locacao_id, preco_locacao, subtotal) VALUES
 (1, 1, 15.00, 60.00), -- 4 horas
 (3, 2, 5.00, 10.00),  -- 2 horas
 (4, 2, 8.00, 16.00),

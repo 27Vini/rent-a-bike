@@ -25,9 +25,10 @@ try {
         ]
     );
 
-    $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo);
+    $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
+    $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo, $repositorioItemLocacao);
     $transacao = new TransacaoComPDO($pdo);
-    $gestorLocacao = new GestorLocacao(new RepositorioLocacaoEmBDR($pdo), new RepositorioClienteEmBDR($pdo), new RepositorioFuncionarioEmBDR($pdo), $transacao);
+    $gestorLocacao = new GestorLocacao($repositorioLocacao, new RepositorioClienteEmBDR($pdo), new RepositorioFuncionarioEmBDR($pdo), $transacao);
     $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao), $repositorioLocacao, $transacao);
 } catch ( PDOException $e ) {
     http_response_code( 500 );

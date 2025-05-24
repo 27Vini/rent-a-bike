@@ -14,7 +14,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
      */
     public function adicionar(ItemLocacao $itemLocacao, int $idLocacao) : void{
         try{
-            $comando = "INSERT INTO item_locacao(item_id, locacao_id, precoLocacao, subtotal) VALUES (:idItem, :idLocacao, :precoLocacao, :subtotal)";
+            $comando = "INSERT INTO item_locacao(item_id, locacao_id, preco_locacao, subtotal) VALUES (:idItem, :idLocacao, :precoLocacao, :subtotal)";
             $dados = [
                 "idItem"        => $itemLocacao->getItem()->getId(),
                 "idLocacao"     => $idLocacao,
@@ -46,7 +46,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
             $repItem = (new RepositorioItemEmBDR($this->pdo));
             foreach($dadosItensLocacao as $il){
                 $item = $repItem->coletarComId($il['item_id']);
-                $itemLocacao = new ItemLocacao($il['id'], $item, $il['precoLocacao']);
+                $itemLocacao = new ItemLocacao($il['id'], $item, $il['preco_locacao']);
                 $itemLocacao->setSubtotal($il['subtotal']);
 
                 $itensLocacao[] = $itemLocacao;
