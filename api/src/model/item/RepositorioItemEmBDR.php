@@ -5,6 +5,11 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
         parent::__construct($pdo);
     }
     
+    /**
+     * Salva um item no banco de dados
+     * @param Item @item
+     * @return void
+     */
     public function adicionar(Item $item) : void{
         try{
             $comando = "INSERT INTO item (codigo, descricao, modelo, fabricante, valorPorHora, avarias, disponibilidade, tipo) VALUES (:codigo, :descricao, :modelo, :fabricante, :valorPorHora, :avarias, :disponibilidade, :tipo)";
@@ -27,6 +32,12 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
         }
     }
 
+    /**
+     * Coleta um item com o id informado
+     * @param int $id
+     * @return Item
+     * @throws DominioException
+     */
     public function coletarComId(int $id) : Item {
         try{
             $comando = "SELECT * FROM item WHERE id = :id LIMIT 1";
@@ -44,6 +55,12 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
         }
     } 
 
+    /**
+     * Coleta um item com o código informado
+     * @param string $codigo
+     * @return Item
+     * @throws DominioException
+     */
     public function coletarComCodigo(string $codigo) : Item {
         try{
             $comando = "SELECT * FROM item WHERE codigo = :codigo LIMIT 1";
@@ -58,6 +75,25 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
             throw $e;
         }catch(Exception $e){
             throw new RepositorioException("Erro ao obter item com código.", $e->getCode());
+        }
+    }
+
+    /**
+     * Altera a disponibilidade do item salvo 
+     * @param Item $item
+     * @return void
+     */
+    public function atualizarDisponibilidade(Item $item) : void {
+        try{
+            $comando = "UPDATE item SET disponibilidade = :disponibilidade WHERE codigo = :codigo";
+            $dados = [
+                "disponibilidade" => intval($item->getDisponibilidade()),
+                "codigo"          => $item->getCodigo()
+            ];
+
+            $this->executarComandoSql($comando, $dados);
+        }catch(Exception $e){
+            throw new RepositorioException("Erro ao alterar a disponibilidade do item.");
         }
     }
     

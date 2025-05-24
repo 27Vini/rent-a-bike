@@ -3,6 +3,11 @@
 class GestorItem{
     public function __construct(private RepositorioItem $repositorioItem){}
 
+    /**
+     * Coleta um item com o código informado
+     * @param string $codigo
+     * @return Item
+     */
     public function coletarComCodigo(string $codigo) : Item{
         try{
             $item = $this->repositorioItem->coletarComCodigo($codigo);

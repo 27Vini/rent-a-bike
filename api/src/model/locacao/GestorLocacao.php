@@ -3,9 +3,16 @@
 class GestorLocacao {
     public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario, private Transacao $transacao){}
 
-    public function salvarLocacao(array $dadosLocacao){
+    /**
+     * Salva uma locaçao 
+     * @param array dadosLocacao
+     * @return void
+     * @throws DominioException
+     */
+    public function salvarLocacao(array $dadosLocacao) : void {
        try{
             $this->transacao->iniciar();
+
             $cliente = $this->repositorioCliente->coletarComId((int)$dadosLocacao['cliente']);
             $funcionario = $this->repositorioFuncionario->coletarComId((int)$dadosLocacao['funcionario']);
             
@@ -24,6 +31,7 @@ class GestorLocacao {
             }
 
             $this->repositorioLocacao->adicionar($locacao);
+
             $this->transacao->finalizar();
         }catch(DominioException $e){
             $this->transacao->desfazer();
@@ -34,6 +42,12 @@ class GestorLocacao {
         }
     }
 
+    /**
+     * Transforma um array com dados do Item em um objeto de Item
+     * @param array dadosItem
+     * @return Item
+     * @throws DominioException
+     */
     private function transformarEmItem(array $dadosItem) : Item {
         $item = new Item($dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
 
@@ -45,6 +59,14 @@ class GestorLocacao {
         return $item;
     }
 
+    /**
+     * Transforma um array com dados da locação e do Item em um objeto de ItemLocacao
+     * @param array dadosItemLocacao
+     * @param Item item
+     * @param int horas
+     * @return ItemLocacao
+     * @throws DominioException
+     */
     private function transformarEmItemLocacao(array $dadosItemLocacao, Item $item, int $horas) : ItemLocacao{
         $itemLocacao = new ItemLocacao(0, $item, $dadosItemLocacao['precoLocacao']);
         $itemLocacao->calculaSubtotal($horas);
@@ -62,14 +84,18 @@ class GestorLocacao {
      * @return array<Locacao>
      */
     public function coletarTodos() : array {
-        $locacoes = [];
-        $locacoes = $this->repositorioLocacao->coletarTodos();
+        try{
+            $locacoes = [];
+            $locacoes = $this->repositorioLocacao->coletarTodos();
 
-        return $locacoes;
+            return $locacoes;
+        } catch(Exception $e){
+            throw $e;
+        }
     }
 
     /**
-     * Coletar com id ou array de parâmetros
+     * Coleta uma locação ou array de locações com array de parâmetros
      * @param string|array $parametros
      * @return void
      */

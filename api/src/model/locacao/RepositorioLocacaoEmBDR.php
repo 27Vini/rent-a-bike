@@ -6,6 +6,11 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
         parent::__construct($pdo);
     }
 
+    /**
+     * Salva uma locação no banco de dados
+     * @param Locacao $locacao
+     * @return void
+     */
     public function adicionar(Locacao $locacao) : void{
         try{
             $comando = "INSERT INTO locacao(entrada,numero_de_horas,desconto,valor_total,previsao_de_entrega, cliente_id, funcionario_id) VALUES (:entrada,:numero_de_horas,:desconto,:valor_total,:previsao_de_entrega, :cliente_id, :funcionario_id)";
@@ -29,7 +34,12 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
         }
     }
 
-    public function adicionarItens(Locacao $locacao){
+    /**
+     * Salva em uma tabela de relacionamento os itens pertencentes à uma locação
+     * @param Locacao $locacao
+     * @return void
+     */
+    public function adicionarItens(Locacao $locacao) : void{
         try{
             $repositorioItemLocacaoBDR = new RepositorioItemLocacaoEmBDR($this->pdo);
 
@@ -37,9 +47,9 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
                 $repositorioItemLocacaoBDR->adicionar($itemLocacao, $locacao->getId());
             }
 
-        }catch(Exception $e){
-            throw new RepositorioException("Erro ao salvar itens da locação.", $e->getCode());
-        }
+            $repositorioItemLocacaoBDR->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), false);
+        }catch(Throwable $e){
+            throw new RepositorioException("Erro ao salvar itens da locação.", $e->getCode());        }
     }
 
     /**
@@ -91,7 +101,6 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
             $locacoes = $this->transformarEmLocacoes($dadosLocacoes);
 
             return $locacoes;
-
         } catch( PDOException $e){
             throw new RepositorioException("Erro interno do servidor.", $e->getCode());
         }
@@ -122,5 +131,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
     public function marcarComoDevolvida(Locacao $locacao) : void{
         $comando = "UPDATE locacao SET ativo = 0 WHERE id=:id";
         $ps = $this->executarComandoSql($comando, ["id" => $locacao->getId()]);
+
+        (new RepositorioItemLocacaoEmBDR($this->pdo))->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), true);
     }
 }

@@ -95,8 +95,9 @@ export class GestorLocacao{
             }
         );
 
-        if(!response.ok) {
-            throw ErrorDominio.comProblemas(['Erro ao cadastrar locação. Status: '+ response.status]);
+        const retorno = await response.json()
+        if(!retorno.success){
+            throw new ErrorDominio(retorno.message);
         }
     }
 

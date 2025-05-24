@@ -5,6 +5,33 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
         parent::__construct($pdo);
     }
 
+    /**
+     * Salva um item da locação no banco de dados 
+     * @param ItemLocacao $itemLocacao
+     * @param int $idLocacao
+     * @return void
+     */
+    public function adicionar(ItemLocacao $itemLocacao, int $idLocacao) : void{
+        try{
+            $comando = "INSERT INTO item_locacao(item_id, locacao_id, precoLocacao, subtotal) VALUES (:idItem, :idLocacao, :precoLocacao, :subtotal)";
+            $dados = [
+                "idItem"        => $itemLocacao->getItem()->getId(),
+                "idLocacao"     => $idLocacao,
+                "precoLocacao"  => $itemLocacao->getPrecoLocacao(),
+                "subtotal"      => $itemLocacao->getSubtotal()
+            ];
+
+            $this->executarComandoSql($comando, $dados);            
+        }catch(Exception $e){
+            throw new RepositorioException("Erro ao cadastrar item de locação. ", $e->getCode());
+        }
+    }
+
+    /**
+     * Coleta itens da locação com o id da locação
+     * @param int $idLocacao
+     * @return array
+     */
     public function coletarComIdLocacao(int $idLocacao): array{
         try{
             $sql = "SELECT * FROM item_locacao WHERE locacao_id = :idLocacao";
@@ -30,19 +57,23 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
         }
     }
 
-    public function adicionar(ItemLocacao $itemLocacao, int $idLocacao){
+    /**
+     * Atualiza a disponibilidade dos itens da locação
+     * @param array<ItemLocacao> $itensLocacao
+     * @param bool $disponibilidade
+     * @return void
+     */
+    public function atualizarDisponibilidadeItensLocacao(array $itensLocacao, bool $disponibilidade) : void{
         try{
-            $comando = "INSERT INTO item_locacao(item_id, locacao_id, precoLocacao, subtotal) VALUES (:idItem, :idLocacao, :precoLocacao, :subtotal)";
-            $dados = [
-                "idItem"        => $itemLocacao->getItem()->getId(),
-                "idLocacao"     => $idLocacao,
-                "precoLocacao"  => $itemLocacao->getPrecoLocacao(),
-                "subtotal"      => $itemLocacao->getSubtotal()
-            ];
+            $repositorioItem = new RepositorioItemEmBDR($this->pdo);
+            foreach($itensLocacao as $itemLocacao){
+                $item = $itemLocacao->getItem();
+                $item->setDisponibilidade($disponibilidade);
 
-            $this->executarComandoSql($comando, $dados);
+                $repositorioItem->atualizarDisponibilidade($item, $disponibilidade);
+            }
         }catch(Exception $e){
-            throw new RepositorioException("Erro ao cadastrar item de locação. ", $e->getCode());
+            throw new RepositorioException("Erro ao alterar disponibilidade de itens.");
         }
     }
 }

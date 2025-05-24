@@ -59,11 +59,11 @@ test.describe('Cadastro de locações', () => {
         });
         
         test('pesquisar item retorna item correto', async () => {
-            await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000003');
             await tela.clicar(sel.botaoBuscarItem);
             await tela.esperarResposta('/itens')
 
-            await tela.encontrarElementoNaTela(sel.listaItem, 'Bomba de Ar');
+            await tela.encontrarElementoNaTela(sel.listaItem, 'Capacete');
         });
 
         test('pesquisar item não existente', async () => {
@@ -86,10 +86,10 @@ test.describe('Cadastro de locações', () => {
         });
 
         test('item adicionado aparece na tabela', async () => {
-            await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
+            await tela.preencherCampo(sel.inputCodigoItem, 'I0000006');
             await tela.clicar(sel.botaoBuscarItem);
 
-            await tela.encontrarElementoNaTela(sel.tabelaItens, 'Bomba de Ar');
+            await tela.encontrarElementoNaTela(sel.tabelaItens, 'Bicicleta Infantil');
         });
 
         test('remoção de itens da locação', async () => {
@@ -116,12 +116,12 @@ test.describe('Cadastro de locações', () => {
 
     test('valores são calculados corretamente', async() => {
         await tela.preencherCampo(sel.inputHoras, '2');
-        await tela.preencherCampo(sel.inputCodigoItem, 'I0000009');
+        await tela.preencherCampo(sel.inputCodigoItem, 'I0000001');
         await tela.clicar(sel.botaoBuscarItem);
 
         await tela.preencherCampo(sel.inputCodigoItem, 'I0000008');
         await tela.clicar(sel.botaoBuscarItem);
 
-        await tela.encontrarElementoNaTela(sel.campoValorFinal, '14.00');
+        await tela.encontrarElementoNaTela(sel.campoValorFinal, '38.00');
     });
 });

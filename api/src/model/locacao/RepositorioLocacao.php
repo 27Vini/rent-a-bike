@@ -1,13 +1,36 @@
 <?php
 
 interface RepositorioLocacao {
-    /** 
+    /**
+     * Salva uma locação no banco de dados
+     * @param Locacao $locacao
      * @return void
-     * @throws RepositorioException
      */
     public function adicionar(Locacao $locacao) : void;
-    public function coletarTodos();
-    public function coletarComParametros(array $parametros): array;
-    public function marcarComoDevolvida(Locacao $locacao) : void;
 
+    /**
+     * Salva em uma tabela de relacionamento os itens pertencentes à uma locação
+     * @param Locacao $locacao
+     * @return void
+     */
+    public function adicionarItens(Locacao $locacao) : void;
+
+    /**
+     * Coleta locações com algum filtro
+     * @param array $parametros
+     * @return array<Locacao>
+     */
+    public function coletarComParametros(array $parametros): array;
+
+    /**
+     * Coleta todas as locações
+     * @return array<Locacao>
+     */
+    public function coletarTodos() : array;
+
+    /**
+     * Marca uma locação como devolvida
+     * @param Locacao $locacao
+     */
+    public function marcarComoDevolvida(Locacao $locacao) : void;
 }
