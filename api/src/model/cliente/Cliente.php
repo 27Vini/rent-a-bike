@@ -66,6 +66,10 @@ class Cliente implements \JsonSerializable{
 	}
 
 
+	/**
+	 * Valida dados do cliente
+	 * @return array<string>
+	 */
 	public function validar(): array{
 		$problemas = [];
 		$problemas = validarId($this->id);
@@ -85,6 +89,10 @@ class Cliente implements \JsonSerializable{
 		return $problemas;
 	}
 
+	/**
+	 * Serializa em JSON para manuseio da API
+	 * @return array{codigo: string, cpf: string, foto: mixed, id: int|string, nome: string}
+	 */
 	public function jsonSerialize(): mixed {
         return [
             'id' => $this->id,

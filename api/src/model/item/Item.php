@@ -101,6 +101,10 @@ class Item implements \JsonSerializable{
         return $this->tipo;
     }
 
+    /**
+     * Valida dados de item.
+     * @return array
+     */
     public function validar() : array {
         $problemas = [];
         $problemas = validarId($this->id);
@@ -132,6 +136,10 @@ class Item implements \JsonSerializable{
         return $problemas;
     }
 
+    /**
+     * Serializa item para manuseio da API.
+     * @return array{avarias: string, codigo: string, descricao: string, disponibilidade: bool, fabricante: string, id: int, modelo: string, tipo: string, valorPorHora: float}
+     */
     public function jsonSerialize(): mixed {
         return [
             'id'                => $this->id,

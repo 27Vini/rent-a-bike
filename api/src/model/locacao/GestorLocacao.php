@@ -8,6 +8,7 @@ class GestorLocacao {
      * @param array dadosLocacao
      * @return void
      * @throws DominioException
+     * @throws Exception
      */
     public function salvarLocacao(array $dadosLocacao) : void {
        try{
@@ -82,6 +83,7 @@ class GestorLocacao {
     /**
      * Coleta todas as locações
      * @return array<Locacao>
+     * @throws Exception
      */
     public function coletarTodos() : array {
         try{
@@ -97,6 +99,7 @@ class GestorLocacao {
     /**
      * Coleta uma locação ou array de locações com array de parâmetros
      * @param string|array $parametros
+     * @throws Exception
      * @return void
      */
     public function coletarCom(array $parametros): array | Locacao{

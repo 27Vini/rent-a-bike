@@ -14,6 +14,12 @@ class ItemLocacao implements \JsonSerializable {
         $this->subtotal = 0.0;
     }
 
+    /**
+     * Calcula subtotal
+     * @param int $horas
+     * @throws \DominioException
+     * @return float
+     */
     public function calculaSubtotal(int $horas) : float{
         if($horas < 0)
             throw new DominioException("Horas devem ser maior do que 0.");
@@ -54,6 +60,10 @@ class ItemLocacao implements \JsonSerializable {
         return $this->subtotal;
     }
 
+    /**
+     * Valida dados de ItemLocacao
+     * @return array
+     */
     public function validar() : array {
         $problemas = [];
         $problemas = validarId($this->id);
@@ -69,6 +79,10 @@ class ItemLocacao implements \JsonSerializable {
         return $problemas;
     }
 
+    /**
+     * Serializa ItemLocacao para manuseio da API.
+     * @return array{id: int, item: Item, precoLocacao: float, subtotal: float}
+     */
     public function jsonSerialize(): mixed {
         return [
             'id'            => $this->id,

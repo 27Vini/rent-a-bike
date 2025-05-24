@@ -9,6 +9,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      * Salva um item no banco de dados
      * @param Item @item
      * @return void
+     * @throws RepositorioException
      */
     public function adicionar(Item $item) : void{
         try{
@@ -37,6 +38,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      * @param int $id
      * @return Item
      * @throws DominioException
+     * @throws RepositorioException
      */
     public function coletarComId(int $id) : Item {
         try{
@@ -60,6 +62,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      * @param string $codigo
      * @return Item
      * @throws DominioException
+     * @throws RepositorioException
      */
     public function coletarComCodigo(string $codigo) : Item {
         try{
@@ -82,6 +85,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      * Altera a disponibilidade do item salvo 
      * @param Item $item
      * @return void
+     * @throws RepositorioException
      */
     public function atualizarDisponibilidade(Item $item) : void {
         try{
@@ -97,6 +101,11 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
         }
     }
     
+    /**
+     * Transforma array de dados em objeto de Item
+     * @param array $dadosItem
+     * @return Item
+     */
     private function transformarEmItem(array $dadosItem) : Item {
         return new Item($dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
     }   

@@ -6,6 +6,11 @@ class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements Re
         parent::__construct($pdo);
     }
 
+    /**
+     * Adiciona funcionário ao banco
+     * @param Funcionario $funcionario
+     * @return void
+     */
     public function adicionar(Funcionario $funcionario) : void{
         $comando = "INSERT INTO funcionario (nome) VALUES (:nome)";
         $this->executarComandoSql($comando, ["nome" => $funcionario->getNome()]);
@@ -13,6 +18,12 @@ class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements Re
         $funcionario->setId($this->ultimoIdAdicionado());
     }
 
+    /**
+     * Coleta funcionário com o ID
+     * @param int $id
+     * @return Funcionario
+     * @throws DominioException
+     */
     public function coletarComId(int $id) : Funcionario {
         $comando = "SELECT id, nome FROM funcionario WHERE id = :id";
         $ps = $this->executarComandoSql($comando, ["id" => $id]);
@@ -24,6 +35,10 @@ class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements Re
         return new Funcionario($dadosFuncionario['id'], $dadosFuncionario['nome']);
     }
 
+    /**
+     * Coleta todos os funcionários
+     * @return Funcionario[]
+     */
     public function coletarTodos() : array {
         $comando = "SELECT id, nome FROM funcionario";
         $ps = $this->executarComandoSql($comando, []);

@@ -3,7 +3,12 @@
 class GestorCliente {
     public function __construct(private RepositorioCliente $repositorioCliente){}
 
-    public function coletarComCodigoOuCpf($parametro){
+    /**
+     * Coleta cliente pelo código ou CPF
+     * @param string
+     * @return Cliente
+     */
+    public function coletarComCodigoOuCpf(string $parametro){
         try{
             $cliente = $this->repositorioCliente->coletarComCodigoOuCpf($parametro);
 

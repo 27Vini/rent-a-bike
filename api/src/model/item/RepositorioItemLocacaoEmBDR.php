@@ -9,6 +9,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
      * Salva um item da locação no banco de dados 
      * @param ItemLocacao $itemLocacao
      * @param int $idLocacao
+     * @throws RepositorioException
      * @return void
      */
     public function adicionar(ItemLocacao $itemLocacao, int $idLocacao) : void{
@@ -30,6 +31,8 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
     /**
      * Coleta itens da locação com o id da locação
      * @param int $idLocacao
+     * @throws DominioException
+     * @throws RepositorioException
      * @return array
      */
     public function coletarComIdLocacao(int $idLocacao): array{
@@ -61,6 +64,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
      * Atualiza a disponibilidade dos itens da locação
      * @param array<ItemLocacao> $itensLocacao
      * @param bool $disponibilidade
+     * @throws RepositorioException
      * @return void
      */
     public function atualizarDisponibilidadeItensLocacao(array $itensLocacao, bool $disponibilidade) : void{
@@ -70,7 +74,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
                 $item = $itemLocacao->getItem();
                 $item->setDisponibilidade($disponibilidade);
 
-                $repositorioItem->atualizarDisponibilidade($item, $disponibilidade);
+                $repositorioItem->atualizarDisponibilidade($item);
             }
         }catch(Exception $e){
             throw new RepositorioException("Erro ao alterar disponibilidade de itens.");

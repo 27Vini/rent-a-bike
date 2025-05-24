@@ -101,6 +101,10 @@ class Locacao implements \JsonSerializable{
         $this->previsaoDeEntrega = $previsaoDeEntrega;
     }
 
+    /**
+     * Calcula valor total da Locação
+     * @return float
+     */
     public function calculaValorTotal() : float {
         $total = 0.0;
 
@@ -112,6 +116,10 @@ class Locacao implements \JsonSerializable{
         return $total;
     }
 
+    /**
+     * Calcula desconto
+     * @return float
+     */
     public function calculaDesconto() : float {
         $desconto = 0.0;
         if($this->numeroDeHoras > 2)
@@ -120,6 +128,10 @@ class Locacao implements \JsonSerializable{
         return $desconto;
     }
 
+    /**
+     * Calcula data de entrega prevista
+     * @return DateTime
+     */
     public function calculaEntrega() : DateTime {
         $entrega = clone $this->entrada;
         $entrega->add(new DateInterval("PT{$this->numeroDeHoras}H"));
@@ -127,6 +139,10 @@ class Locacao implements \JsonSerializable{
         return $entrega;
     }
 
+    /**
+     * Serializa objeto para JSON para manuseio da API
+     * @return array{cliente: Cliente, entrada: string, funcionario: Funcionario, horas: int, id: int|string, itensLocacao: ItemLocacao[], previsaoDeEntrega: string, valorTotal: float}
+     */
     public function jsonSerialize(): mixed {
         return [
             'id'                => $this->id,
@@ -140,6 +156,10 @@ class Locacao implements \JsonSerializable{
         ];
     }
 
+    /**
+     * Valida dados de Locação
+     * @return array
+     */
     public function validar(): array { 
         $problemas = validarId($this->id);
 

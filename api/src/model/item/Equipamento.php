@@ -27,6 +27,10 @@ class Equipamento extends Item{
         return $this->idItem;
     }
 
+    /**
+     * Valida dados de equipamento.
+     * @return array
+     */
     public function validar() : array {
         $problemas = [];
         $problemas = validarId($this->id);

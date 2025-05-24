@@ -5,6 +5,7 @@ interface RepositorioDevolucao{
      * Adiciona devolução ao BD.
      * @param Devolucao $devolucao
      * @throws RepositorioException
+     * @throws Exception
      * @return void
      */
     public function adicionar(Devolucao $devolucao) : void;
@@ -13,6 +14,7 @@ interface RepositorioDevolucao{
      * Coleta devolução com o ID.
      * @param int $id
      * @throws RepositorioException
+     * @throws DominioException
      * @return Devolucao
      */
     public function coletarComId(int $id): Devolucao;
@@ -20,6 +22,7 @@ interface RepositorioDevolucao{
     /**
      * Retorna todas as devoluções.
      * @return array<Devolucao>
+     * @throws RepositorioException
      */
     public function coletarTodos():array;
 }

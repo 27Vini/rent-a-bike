@@ -37,6 +37,10 @@ class Bicicleta extends Item{
         return $this->numeroSeguro;
     }
 
+    /**
+     * Valida dados de bicicleta.
+     * @return array
+     */
     public function validar(): array{
         $problemas = [];
         $problemas = validarId($this->id);

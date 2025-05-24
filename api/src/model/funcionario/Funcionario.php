@@ -29,6 +29,10 @@ class Funcionario implements \JsonSerializable{
         return $this->nome;
     }
 
+    /**
+     * Valida dados de funcionário
+     * @return string[]
+     */
     public function validar() : array{
         $problemas = [];
         if(mb_strlen($this->nome) > self::TAM_MAX_NOME || mb_strlen($this->nome) < self::TAM_MIN_NOME){
@@ -38,6 +42,10 @@ class Funcionario implements \JsonSerializable{
         return $problemas;
     }
 
+    /**
+     * Serializa objeto para JSON para manuseio da API
+     * @return array{id: int, nome: string}
+     */
     public function jsonSerialize(): mixed {
         return [
             'id' => $this->id,

@@ -44,6 +44,10 @@ class Devolucao implements \JsonSerializable{
         $this->valorPago = $valorPago;
     }
 
+    /**
+	 * Valida dados do devolução.
+	 * @return array<string>
+	 */
     public function validar(): array {
     $problemas = validarId($this->id);
 
@@ -66,7 +70,7 @@ class Devolucao implements \JsonSerializable{
     /**
      * Calcula valor a ser pago
      * @param int horas
-     * @return double
+     * @return float
      * 
      */
     public function calcularValorASerPago(): float{
@@ -120,6 +124,10 @@ class Devolucao implements \JsonSerializable{
         return 0.0;
     }
 
+     /**
+      * Serializa em JSON para manuseio da API
+      * @return array{dataDeDevolucao: string, id: int|string, locacao: Locacao|null, valorPago: float}
+      */
      public function jsonSerialize(): mixed {
         return [
             'id'                => $this->id,

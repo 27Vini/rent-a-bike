@@ -4,6 +4,11 @@ class GestorFuncionario {
     public function __construct(private RepositorioFuncionario $repositorioFuncionario)
     {}
 
+    /**
+     * Coleta todos os funcionários
+     * @return array
+     * @throws Exception
+     */
     public function coletarFuncionarios() : array {
         try{
             $funcionarios = $this->repositorioFuncionario->coletarTodos();

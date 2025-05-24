@@ -6,6 +6,12 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements Reposi
         parent::__construct($pdo);
     }
 
+    /**
+     * Salva cliente no banco de dados
+     * @param Cliente $cliente
+     * @throws \RepositorioException
+     * @return void
+     */
     public function adicionar(Cliente $cliente) : void{
         try{
             $comando = "INSERT INTO cliente (codigo,nome,cpf,foto) VALUES (:codigo,:nome,:cpf,:foto)";
@@ -21,6 +27,7 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements Reposi
         }
         
     }
+
 
     public function coletarComId($id): Cliente{
         try{
@@ -57,8 +64,13 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements Reposi
         }        
     }
 
+    /**
+     * Transforma array de dados recebido para objeto de cliente.
+     * @param array $dadosCliente
+     * @return Cliente
+     */
     private function transformarEmCliente(array $dadosCliente) : Cliente{
-        return new Cliente($dadosCliente['id'], $dadosCliente['codigo'], $dadosCliente['cpf'], $dadosCliente['nome'], $dadosCliente['foto']);
+        return new Cliente(htmlspecialchars($dadosCliente['id']), htmlspecialchars($dadosCliente['codigo']), htmlspecialchars($dadosCliente['cpf']), htmlspecialchars($dadosCliente['nome']), htmlspecialchars($dadosCliente['foto']));
     }
     
 }

@@ -7,6 +7,7 @@ class GestorItem{
      * Coleta um item com o código informado
      * @param string $codigo
      * @return Item
+     * @throws Exception
      */
     public function coletarComCodigo(string $codigo) : Item{
         try{

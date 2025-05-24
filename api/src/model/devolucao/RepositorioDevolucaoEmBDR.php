@@ -6,7 +6,11 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
         parent::__construct($pdo);
     }
 
-    
+    /**
+     * Coleta todas as devoluções
+     * @throws \RepositorioException
+     * @return Devolucao[]
+     */
     public function coletarTodos(): array{
         try{
             $sql = "SELECT d.* FROM devolucao d
@@ -27,6 +31,13 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
 
     }
 
+    /**
+     * Adiciona devolução ao banco
+     * @param Devolucao $devolucao
+     * @throws \RepositorioException
+     * @throws \Exception
+     * @return void
+     */
     public function adicionar(Devolucao $devolucao) : void{
         try{
             $comando = "INSERT INTO devolucao (locacao_id,data_de_devolucao,valor_pago) VALUES (:locacao_id,:data_de_devolucao,:valor_pago)";
@@ -43,7 +54,14 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
         }
     }
 
-    public function coletarComId($id): Devolucao{
+    /**
+     * Coleta devolução com o ID.
+     * @param int | string $id
+     * @throws \DominioException
+     * @throws \RepositorioException
+     * @return Devolucao
+     */
+    public function coletarComId(int | string $id): Devolucao{
         try{
             $comando = "SELECT * FROM devolucao WHERE id=:id";
             $ps = $this->executarComandoSql($comando, ["id" => $id ]);
@@ -61,6 +79,13 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
         }
     }
 
+    /**
+     * Transforma um array de dados em um objeto de Devolução
+     * @param array $dadosDevolucao
+     * @param RepositorioLocacao $repositorioLocacao
+     * @throws \DominioException
+     * @return Devolucao
+     */
     private function transformarEmDevolucao(array $dadosDevolucao, RepositorioLocacao $repositorioLocacao){
         try{
             $locacao = $repositorioLocacao->coletarComParametros(['id' => $dadosDevolucao['locacao_id']]);
