@@ -5,6 +5,11 @@ import { sel } from "../../src/locacao/cadastro/seletores-cadastro-locacao";
 test.describe('Cadastro de locações', () => {
     let tela:TelaCadastroLocacao;
 
+    test.beforeAll(async () => {
+        const { execa } = await import('execa');
+        await execa('pnpm', ['db'], { stdio: 'inherit' });
+    });
+    
     test.beforeEach(async ({page}) => {
         tela = new TelaCadastroLocacao(page);
         await tela.abrir();

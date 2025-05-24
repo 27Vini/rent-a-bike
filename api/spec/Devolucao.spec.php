@@ -1,6 +1,9 @@
 <?php
 
 describe("Devolução", function (){
+    beforeAll(function(){
+        `cd ../g4 && pnpm run db`;
+    });
     
     beforeEach( function(){
         $this->devolucao = null;

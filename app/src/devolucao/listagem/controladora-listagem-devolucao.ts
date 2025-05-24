@@ -15,11 +15,11 @@ export class ControladoraListagemDevolucao{
         try{
             const devolucoes = await this.gestor.coletarDevolucoes()
             if(devolucoes.length == 0){
-                this.visao.exibirMensagem('Sem dados de devoluções');
+                this.visao.exibirMensagens(['Nenhuma devolução encontrada.'], true);
             }
             return devolucoes;
         }catch(error){
-            this.visao.exibirMensagem(error.message);
+            this.visao.exibirMensagens([error.message], true);
         }
     }
 

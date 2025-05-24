@@ -1,3 +1,3 @@
 export interface VisaoListagemDevolucao{
-    exibirMensagem(mensagem : string) : void;
+    exibirMensagens(mensagens : string[], erro:boolean);
 }

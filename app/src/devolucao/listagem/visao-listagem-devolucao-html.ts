@@ -18,9 +18,23 @@ export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
         document.querySelector('tbody')!.innerHTML = devolucoes.map(e => this.desenharDevolucao(e)).join('')
     }
 
-    exibirMensagem(mensagem: string): void {
-        const output = document.querySelector('output');
-        output!.innerText = mensagem;
+    exibirMensagens(mensagens: string[], erro:boolean) {
+        const classErro = "alert";
+        const classSucesso = "success";
+
+        const output = document.querySelector<HTMLOutputElement>("output")!;
+        if(erro == true){
+            output.classList.add(classErro);
+        }else{
+            output.classList.add(classSucesso);
+        }
+
+        output.innerHTML = mensagens.join('\n');        
+        output.removeAttribute('hidden');
+
+        setTimeout(() => {
+            output.setAttribute('hidden', '');
+        }, 5000); 
     }
 
     desenharDevolucao(d){

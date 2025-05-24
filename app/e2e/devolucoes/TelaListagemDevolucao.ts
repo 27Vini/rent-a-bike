@@ -27,6 +27,8 @@ export class TelaListagemDevolucao{
         await expect(tbody).toContainText(id.toString());
     }
 
-
-
+    async deveExibirMensagem(mensagem:string){
+        const output = this.page.locator('output');
+        await expect(output).toContainText(mensagem);
+    }
 }

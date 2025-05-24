@@ -1,6 +1,10 @@
 <?php
 
 describe('Locações', function(){
+    beforeAll(function(){
+        `cd ../g4 && pnpm run db`;
+    });
+    
     describe('validação de dados', function(){
         beforeEach(function(){
             $this->item = new Item(2, 'I0000009', 'Item de teste', 'Modelo de teste', 'Fabricante', 20.00, '', true, 'Equipamento');

@@ -5,6 +5,11 @@ test.describe('Listagem de devoluções', async () => {
 
     let tela : TelaListagemDevolucao
 
+    test.beforeAll(async () => {
+        const { execa } = await import('execa');
+        await execa('pnpm', ['db'], { stdio: 'inherit' });
+    });
+
     test.beforeEach( async ({page}) => {
         tela = new TelaListagemDevolucao(page)
         await tela.abrir()
@@ -23,5 +28,13 @@ test.describe('Listagem de devoluções', async () => {
         await tela.irPara('#devolucoes')
         await tela.irPara('.register-btn')
         await tela.verificarUrl('http://localhost:5173/app/pages/cadastrar-devolucoes.html')
+    })
+
+    test('Listagem vazia exibe mensagem correta', async () => {
+        const { execa } = await import('execa');
+        await execa('pnpm', ['db:e'], { stdio: 'inherit' });
+
+        await tela.irPara('#devolucoes')
+        await tela.deveExibirMensagem("Nenhuma devolução encontrada.");
     })
 })
