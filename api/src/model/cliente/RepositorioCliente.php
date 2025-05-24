@@ -3,15 +3,15 @@
 interface RepositorioCliente {
     /**
      * Busca o cliente pelo Id informado
-     * @param int id
+     * @param int $id
      * @return Cliente
      */
     public function coletarComId(int $id) : Cliente;
 
     /**
      * Busca o cliente que possui o Código ou o CPF informado
-     * @param string codigoOuCpf
+     * @param string $codigoCpf
      * @return Cliente
      */
-    public function coletarComCodigoOuCpf($codigoCpf) : Cliente;
+    public function coletarComCodigoOuCpf(string $codigoCpf) : Cliente;
 }

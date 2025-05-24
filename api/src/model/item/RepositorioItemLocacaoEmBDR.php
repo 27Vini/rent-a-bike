@@ -33,7 +33,7 @@ class RepositorioItemLocacaoEmBDR extends RepositorioGenericoEmBDR implements Re
      * @param int $idLocacao
      * @throws DominioException
      * @throws RepositorioException
-     * @return array
+     * @return array<ItemLocacao>
      */
     public function coletarComIdLocacao(int $idLocacao): array{
         try{

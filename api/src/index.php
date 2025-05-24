@@ -124,7 +124,7 @@ $app->post('/locacoes', callable: function(Request $request, Response $response)
     }
 });
 
-$app->get('/devolucoes', callable:function(Request $request, Response $response) use($pdo, $gestorDevolucao){
+$app->get('/devolucoes', callable:function(Request $request, Response $response) use($gestorDevolucao){
     try{
         $devolucoes = $gestorDevolucao->coletarDevolucoes();
         $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');

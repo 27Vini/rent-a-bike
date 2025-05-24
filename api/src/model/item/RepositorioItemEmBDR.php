@@ -7,7 +7,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
     
     /**
      * Salva um item no banco de dados
-     * @param Item @item
+     * @param Item $item
      * @return void
      * @throws RepositorioException
      */
@@ -103,10 +103,10 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
     
     /**
      * Transforma array de dados em objeto de Item
-     * @param array $dadosItem
+     * @param array<string,string | bool> $dadosItem
      * @return Item
      */
     private function transformarEmItem(array $dadosItem) : Item {
-        return new Item($dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
+        return new Item((int) $dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], (float) $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
     }   
 }

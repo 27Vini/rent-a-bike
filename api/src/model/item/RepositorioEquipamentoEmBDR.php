@@ -7,7 +7,7 @@ class RepositorioEquipamentoEmBDR extends RepositorioGenericoEmBDR {
     
      /** 
      * Salva um equipamento no banco de dados
-     * @param Equipamento $equipamento
+     * @param Equipamento $equip
      * @return void
      */
     public function adicionar(Equipamento $equip) : void {

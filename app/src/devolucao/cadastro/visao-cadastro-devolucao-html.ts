@@ -142,6 +142,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value = ''
         document.querySelector<HTMLOutputElement>(sel.locacaoOutput)!.hidden = true;
         document.querySelector<HTMLSelectElement>(sel.selectLocacao)!.hidden = true;
+        document.querySelector('tbody')!.innerHTML = "";
     }
 
     coletarDataDevolucao() {

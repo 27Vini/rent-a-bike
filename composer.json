@@ -43,6 +43,6 @@
         "dump": "composer dump-autoload",
         "start": "php api/src/index.php",
         "test": "vendor/bin/kahlan --spec=api/spec",
-        "stan": "vendor/bin/phpstan analyse src --level=2"
+        "stan": "vendor/bin/phpstan analyse"
     }
 }

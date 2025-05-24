@@ -31,79 +31,81 @@ class Item implements \JsonSerializable{
         $this->tipo = $tipo;
     }
 
-    public function setId(int $id){
+    public function setId(int $id): void {
         $this->id = $id;
     }
 
-    public function getId(){
+    public function getId(): int {
         return $this->id;
     }
 
-    public function setCodigo(string $codigo){
+    public function setCodigo(string $codigo): void {
         $this->codigo = $codigo;
     }
 
-    public function getCodigo(){
+    public function getCodigo(): string {
         return $this->codigo;
     }
-    public function setDescricao(string $descricao){
+
+    public function setDescricao(string $descricao): void {
         $this->descricao = $descricao;
     }
 
-    public function getDescricao(){
+    public function getDescricao(): string {
         return $this->descricao;
     }
-    public function setModelo(string $modelo){
+
+    public function setModelo(string $modelo): void {
         $this->modelo = $modelo;
     }
 
-    public function getModelo(){
+    public function getModelo(): string {
         return $this->modelo;
     }
 
-    public function setFabricante(string $fabricante){
+    public function setFabricante(string $fabricante): void {
         $this->fabricante = $fabricante;
     }
 
-    public function getFabricante(){
+    public function getFabricante(): string {
         return $this->fabricante;
     }
 
-    public function setValorPorHora(float $valorPorHora){
+    public function setValorPorHora(float $valorPorHora): void {
         $this->valorPorHora = $valorPorHora;
     }
 
-    public function getValorPorHora(){
+    public function getValorPorHora(): float {
         return $this->valorPorHora;
     }
 
-    public function setAvarias(string $avarias){
+    public function setAvarias(string $avarias): void {
         $this->avarias = $avarias;
     }
 
-    public function getAvarias(){
+    public function getAvarias(): string {
         return $this->avarias;
     }
 
-    public function setDisponibilidade(bool $disponibilidade){
+    public function setDisponibilidade(bool $disponibilidade): void {
         $this->disponibilidade = $disponibilidade;
     }
 
-    public function getDisponibilidade(){
+    public function getDisponibilidade(): bool {
         return $this->disponibilidade;
     }
 
-    public function setTipo(string $tipo){
+    public function setTipo(string $tipo): void {
         $this->tipo = $tipo;
     }
 
-    public function getTipo(){
+    public function getTipo(): string {
         return $this->tipo;
     }
 
     /**
      * Valida dados de item.
-     * @return array
+     * @return array<string>
      */
     public function validar() : array {
         $problemas = [];

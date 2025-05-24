@@ -8,7 +8,7 @@ abstract class RepositorioGenericoEmBDR {
         $this->pdo = $pdo;
     }
 
-    public function removerComId(int $id, $nomeDaTabela) : bool{
+    public function removerComId(int $id, string $nomeDaTabela) : bool{
         try{
             $ps = $this->pdo->prepare("DELETE FROM $nomeDaTabela WHERE id= :id");
             $ps->execute(["id" => $id]);
@@ -22,6 +22,13 @@ abstract class RepositorioGenericoEmBDR {
         return (int) $this->pdo->lastInsertId();   
     }
 
+    /**
+     * Executa um comando
+     * @param string $sql
+     * @param array<string,string | int | float | bool> $parametros
+     * @throws \RepositorioException
+     * @return PDOStatement
+     */
     public function executarComandoSql( string $sql, array $parametros = [] ): PDOStatement {
         try {
             $ps = $this->pdo->prepare($sql);

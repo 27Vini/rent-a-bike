@@ -2,7 +2,7 @@
 
 class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements RepositorioLocacao{
 
-    public function __construct(private PDO $pdo, private RepositorioItemLocacao $repositorioItemLocacao){
+    public function __construct(PDO $pdo, private RepositorioItemLocacao $repositorioItemLocacao){
         parent::__construct($pdo);
     }
 
@@ -109,7 +109,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
 
     /**
      * Transforma dados de locação em objetos de locação
-     * @param array<string,string> $dadosLocacoes
+     * @param array<array<string,string>> $dadosLocacoes
      * @return array<Locacao>
      */
     private function transformarEmLocacoes(array $dadosLocacoes): array{
@@ -117,10 +117,10 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
 
         foreach($dadosLocacoes as $dados){
             $cliente = new Cliente($dados['id_cliente'], $dados['codigo_cliente'], $dados['cpf'], $dados['nome_cliente'], $dados['foto']);
-            $funcionario = new Funcionario($dados['id_funcionario'], $dados['nome_funcionario']);
-            $itensLocacao = $this->repositorioItemLocacao->coletarComIdLocacao($dados['id']);
+            $funcionario = new Funcionario((int) $dados['id_funcionario'], $dados['nome_funcionario']);
+            $itensLocacao = $this->repositorioItemLocacao->coletarComIdLocacao((int) $dados['id']);
 
-            $locacao = new Locacao($dados['id'], $itensLocacao, $cliente, $funcionario, new DateTime($dados['entrada']), $dados['numero_de_horas']);
+            $locacao = new Locacao((int) $dados['id'], $itensLocacao, $cliente, $funcionario, new DateTime($dados['entrada']), (int) $dados['numero_de_horas']);
 
             $locacoes[] = $locacao;
         }

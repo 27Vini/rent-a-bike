@@ -12,7 +12,7 @@ interface RepositorioItemLocacao {
     /**
      * Coleta itens da locação com o id da locação
      * @param int $idLocacao
-     * @return array
+     * @return array<ItemLocacao>
      */
     public function coletarComIdLocacao(int $idLocacao): array;
 

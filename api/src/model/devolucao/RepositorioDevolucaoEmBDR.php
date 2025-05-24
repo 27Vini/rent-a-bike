@@ -2,7 +2,7 @@
 
 class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements RepositorioDevolucao{
 
-    public function __construct(private PDO $pdo, private RepositorioLocacao $repositorioLocacao){
+    public function __construct(PDO $pdo, private RepositorioLocacao $repositorioLocacao){
         parent::__construct($pdo);
     }
 
@@ -81,7 +81,7 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
 
     /**
      * Transforma um array de dados em um objeto de Devolução
-     * @param array $dadosDevolucao
+     * @param array<string,string> $dadosDevolucao
      * @param RepositorioLocacao $repositorioLocacao
      * @throws \DominioException
      * @return Devolucao
@@ -90,7 +90,7 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
         try{
             $locacao = $repositorioLocacao->coletarComParametros(['id' => $dadosDevolucao['locacao_id']]);
             $devolucao = new Devolucao($dadosDevolucao['id'], $locacao[0], new DateTime($dadosDevolucao['data_de_devolucao']));
-            $devolucao->setValorPago($dadosDevolucao['valor_pago']);
+            $devolucao->setValorPago((float) $dadosDevolucao['valor_pago']);
 
             return $devolucao;
         }catch(Throwable $e){

@@ -6,7 +6,7 @@ class GestorFuncionario {
 
     /**
      * Coleta todos os funcionários
-     * @return array
+     * @return array<Funcionario>
      * @throws Exception
      */
     public function coletarFuncionarios() : array {

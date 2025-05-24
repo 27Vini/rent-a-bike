@@ -1,0 +1,7 @@
+parameters:
+  level: 6
+  paths:
+    - api/src
+  excludePaths:
+    analyseAndScan:
+      - api/src/index.php

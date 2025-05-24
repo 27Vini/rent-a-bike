@@ -13,19 +13,19 @@ class Funcionario implements \JsonSerializable{
         $this->nome = $nome;
     }
 
-    public function setId(int $id){
+    public function setId(int $id): void{
         $this->id = $id;
     }
 
-    public function getId(){
+    public function getId(): int{
         return $this->id;
     }
 
-    public function setNome(string $nome){
+    public function setNome(string $nome): void{
         $this->nome = $nome;
     }
 
-    public function getNome(){
+    public function getNome(): string{
         return $this->nome;
     }
 

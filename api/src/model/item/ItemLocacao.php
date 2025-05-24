@@ -28,41 +28,41 @@ class ItemLocacao implements \JsonSerializable {
         return $this->subtotal;
     }
 
-    public function setId(int $id){
+    public function setId(int $id): void{
         $this->id = $id;
     }
 
-    public function getId(){
+    public function getId(): int{
         return $this->id;
     }
 
-    public function setItem(Item $item){
+    public function setItem(Item $item): void{
         $this->item = $item;
     }
 
-    public function getItem(){
+    public function getItem(): Item{
         return $this->item;
     }
 
-    public function setPrecoLocacao(float $precoLocacao){
+    public function setPrecoLocacao(float $precoLocacao): void{
         $this->precoLocacao = $precoLocacao;
     }
 
-    public function getPrecoLocacao(){
+    public function getPrecoLocacao(): float{
         return $this->precoLocacao;
     }
 
-    public function setSubtotal(float $subtotal){
+    public function setSubtotal(float $subtotal): void{
         $this->subtotal = $subtotal;
     }
 
-    public function getSubtotal(){
+    public function getSubtotal(): float{
         return $this->subtotal;
     }
 
     /**
      * Valida dados de ItemLocacao
-     * @return array
+     * @return array<string>
      */
     public function validar() : array {
         $problemas = [];

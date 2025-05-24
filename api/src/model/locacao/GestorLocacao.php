@@ -4,8 +4,29 @@ class GestorLocacao {
     public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario, private Transacao $transacao){}
 
     /**
-     * Salva uma locaçao 
-     * @param array dadosLocacao
+     * Salva uma locação
+     *
+     * @param array{
+     *   cliente: string|int,
+     *   funcionario: string|int,
+     *   numeroDeHoras: string|int,
+     *   itens: array<int, array{
+     *     item: array{
+     *       id: int,
+     *       codigo: string,
+     *       descricao: string,
+     *       modelo: string,
+     *       fabricante: string,
+     *       valorPorHora: float,
+     *       avarias: string,
+     *       disponibilidade: bool,
+     *       tipo: string
+     *     },
+     *     precoLocacao: float,
+     *     subtotal: float
+     *   }>
+     * } $dadosLocacao
+     *
      * @return void
      * @throws DominioException
      * @throws Exception
@@ -18,6 +39,8 @@ class GestorLocacao {
             $funcionario = $this->repositorioFuncionario->coletarComId((int)$dadosLocacao['funcionario']);
             
             $itensLocacao = [];
+
+
             foreach($dadosLocacao['itens'] as $itemLocacao){
                 $item = $this->transformarEmItem($itemLocacao['item']);
                 $itemLocacao = $this->transformarEmItemLocacao($itemLocacao, $item, $dadosLocacao['numeroDeHoras']);
@@ -45,7 +68,7 @@ class GestorLocacao {
 
     /**
      * Transforma um array com dados do Item em um objeto de Item
-     * @param array dadosItem
+     * @param array $dadosItem
      * @return Item
      * @throws DominioException
      */
@@ -62,9 +85,9 @@ class GestorLocacao {
 
     /**
      * Transforma um array com dados da locação e do Item em um objeto de ItemLocacao
-     * @param array dadosItemLocacao
-     * @param Item item
-     * @param int horas
+     * @param array $dadosItemLocacao
+     * @param Item $item
+     * @param int $horas
      * @return ItemLocacao
      * @throws DominioException
      */
@@ -98,9 +121,9 @@ class GestorLocacao {
 
     /**
      * Coleta uma locação ou array de locações com array de parâmetros
-     * @param string|array $parametros
+     * @param array $parametros
      * @throws Exception
-     * @return void
+     * @return array<Locacao> | Locacao
      */
     public function coletarCom(array $parametros): array | Locacao{
         try{

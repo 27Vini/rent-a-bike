@@ -7,7 +7,7 @@ class Cliente implements \JsonSerializable{
     private string $cpf;
     private string $nome;
 
-    private $foto;
+    private string $foto;
 	private const MIN_NOME = 2;
     private const MAX_NOME = 100;
     private const MSG_NOME = "O nome deve ter entre ".self::MIN_NOME." e ".self::MAX_NOME." caracteres.";
@@ -17,7 +17,7 @@ class Cliente implements \JsonSerializable{
 	private const TAM_CODIGO = 8;
 	private const MSG_CODIGO = "O código deve ter ".self::TAM_CODIGO." caracteres.";
 
-    public function __construct(int|string $id, string $codigo, string $cpf, string $nome, $foto){
+    public function __construct(int|string $id, string $codigo, string $cpf, string $nome, string $foto){
 		$this->id = $id;
 		$this->codigo = $codigo;
 		$this->cpf = $cpf;
@@ -25,43 +25,43 @@ class Cliente implements \JsonSerializable{
 		$this->foto = $foto;
 	}
 
-	public function getId(){
+	public function getId(): int|string {
 		return $this->id;
 	}
 
-	public function setId(string|int $id){
+	public function setId(int|string $id): void {
 		$this->id = $id;
 	}
 
-	public function getCodigo(){
+	public function getCodigo(): string {
 		return $this->codigo;
 	}
 
-	public function setCodigo(string $codigo){
+	public function setCodigo(string $codigo): void {
 		$this->codigo = $codigo;
 	}
 
-	public function getCpf(){
+	public function getCpf(): string {
 		return $this->cpf;
 	}
 
-	public function setCpf(string $cpf){
+	public function setCpf(string $cpf): void {
 		$this->cpf = $cpf;
 	}
 
-	public function getNome(){
+	public function getNome(): string {
 		return $this->nome;
 	}
 
-	public function setNome(string $nome){
+	public function setNome(string $nome): void {
 		$this->nome = $nome;
 	}
 
-	public function getFoto(){
+	public function getFoto(): string {
 		return $this->foto;
 	}
 
-	public function setFoto($foto){
+	public function setFoto(string $foto): void {
 		$this->foto = $foto;
 	}
 

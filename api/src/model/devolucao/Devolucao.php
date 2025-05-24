@@ -2,8 +2,8 @@
 require_once __DIR__.'/../../infra/util/validarId.php';
 class Devolucao implements \JsonSerializable{
     private string | int $id;
-    private Locacao | null $locacao;
-    private DateTime | null $dataDeDevolucao;
+    private Locacao $locacao;
+    private DateTime $dataDeDevolucao;
     private float $valorPago;
 
     public function  __construct(string | int $id, Locacao $locacao, DateTime $data) {
@@ -24,23 +24,23 @@ class Devolucao implements \JsonSerializable{
         return $this->dataDeDevolucao;
     }
 
-    public function getValorPago(){
+    public function getValorPago(): float{
         return $this->valorPago;
     }
 
-    public function setId($id){
+    public function setId(int $id): void{
         $this->id = $id;
     }
 
-    public function setLocacao($id){
-        $this->locacao = $id;
+    public function setLocacao(Locacao $locacao): void{
+        $this->locacao = $locacao;
     }
 
-    public function setDataDeDevolucao(DateTime $dataDeDevolucao){
+    public function setDataDeDevolucao(DateTime $dataDeDevolucao): void{
         $this->dataDeDevolucao = $dataDeDevolucao;
     }
 
-    public function setValorPago(float $valorPago){
+    public function setValorPago(float $valorPago): void{
         $this->valorPago = $valorPago;
     }
 
@@ -69,9 +69,7 @@ class Devolucao implements \JsonSerializable{
 
     /**
      * Calcula valor a ser pago
-     * @param int horas
      * @return float
-     * 
      */
     public function calcularValorASerPago(): float{
         $total = 0;

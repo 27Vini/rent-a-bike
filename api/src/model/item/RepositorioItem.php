@@ -3,7 +3,7 @@
 interface RepositorioItem{
     /**
      * Salva um item no banco de dados
-     * @param Item @item
+     * @param Item $item
      * @return void
      */
     public function adicionar(Item $item) : void;

@@ -60,13 +60,13 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements Reposi
         }catch(DominioException $e){
             throw $e;
         }catch(Exception $e){
-            throw new RepositorioException("Erro ao obter cliente com código/cpf.", $e->getMessage());
+            throw new RepositorioException("Erro ao obter cliente com código/cpf.", $e->getCode());
         }        
     }
 
     /**
      * Transforma array de dados recebido para objeto de cliente.
-     * @param array $dadosCliente
+     * @param array<string,string> $dadosCliente
      * @return Cliente
      */
     private function transformarEmCliente(array $dadosCliente) : Cliente{

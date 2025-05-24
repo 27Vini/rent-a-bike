@@ -5,7 +5,7 @@ class GestorCliente {
 
     /**
      * Coleta cliente pelo código ou CPF
-     * @param string
+     * @param string $parametro
      * @return Cliente
      */
     public function coletarComCodigoOuCpf(string $parametro){

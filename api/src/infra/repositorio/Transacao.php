@@ -2,8 +2,8 @@
 
 interface Transacao {
 
-    public function iniciar();
-    public function finalizar();
-    public function desfazer();
+    public function iniciar() : void;
+    public function finalizar() : void;
+    public function desfazer() : void;
 
 }
