@@ -59,6 +59,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     exibirLocacoes(locacoes) {
+        document.querySelector<HTMLOutputElement>(sel.output)!.innerText = "";
         if(locacoes.length > 1){
             this.exibirLocacoesDoCliente(locacoes);
         }
@@ -119,6 +120,13 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLOutputElement>(sel.valorTotal)!.innerText = valorTotal.toString()
         document.querySelector<HTMLOutputElement>(sel.desconto)!.innerText = desconto.toString()
         document.querySelector<HTMLOutputElement>(sel.valorFinal)!.innerText = valorFinal.toString()
+    }
+
+    limparForm(): void {
+        document.querySelector<HTMLInputElement>(sel.devolucao)!.value = ''
+        document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value = ''
+        document.querySelector<HTMLOutputElement>(sel.locacaoOutput)!.hidden = true;
+        document.querySelector<HTMLSelectElement>(sel.selectLocacao)!.hidden = true;
     }
 
     coletarDataDevolucao() {

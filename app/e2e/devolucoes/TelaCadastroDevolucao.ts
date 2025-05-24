@@ -24,18 +24,17 @@ export class TelaCadastroDevolucao{
     }
 
     async esperarResposta(endpoint : string){
-        await this.page.waitForResponse(response => response.url().includes(endpoint) && response.status() === 200);
+        await this.page.waitForResponse(response => response.url().includes(endpoint));
     }
 
-    async exibirLocacoesDoCliente(data: Date ,cpf : string){
-        const dataFormatada = this.gerarDataEHoraFormatada(data);
-        await this.page.fill(sel.devolucao, dataFormatada);
-        await this.page.fill(sel.locacaoInput, cpf);
-        await this.page.click(sel.pesquisarLocacao);
-        await this.esperarResposta('/locacoes');
+    async exibirLocacoesDoCliente(qtdDeLocacaoes : number = -1){
         const options = this.page.locator(`${sel.selectLocacao} option`)
         const qtdDeOptions = await options.count();
-        expect(qtdDeOptions).toBeGreaterThan(0);
+        if(qtdDeLocacaoes == -1){
+            expect(qtdDeOptions).toBeGreaterThan(1); // Porque tem o --Selecione--
+        }else{
+            expect(qtdDeOptions).toBe(qtdDeLocacaoes + 1);
+        }
     }
 
     async exibirLocacaoComId(data: Date, id : string){

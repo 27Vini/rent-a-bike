@@ -12,13 +12,23 @@ test.describe('Cadastro de Devoluções', async () =>{
 
 
     test.beforeEach( async ({page}) => {
-        tela = new TelaCadastroDevolucao(page)
-        await tela.abrir()
+        tela = new TelaCadastroDevolucao(page);
+        await tela.abrir();
     })
 
     test('Cadastro sem campo preenchido retorna mensagem de erro', async ()=> {
         await tela.clicar(sel.devolverBtn);
-        await tela.deveExibirMensagem('deve ser informada')
+        await tela.deveExibirMensagem('deve ser informada');
+    })
+
+    test("Select apenas mostra as locações ativas de um cliente", async()=>{
+        await tela.preencherDados({locacao : "98765432100", data : new Date()});
+        await tela.exibirLocacoesDoCliente(3);
+    })
+
+    test("Locação inexistente deve retornar mensagem de erro", async () => {
+        await tela.preencherDados({locacao  : "23123123", data : new Date()});
+        await tela.deveExibirMensagem("Locações não encontradas.");
     })
     
     test('Data posterior a atual deve retornar mensagem com erro', async () =>{
@@ -30,7 +40,8 @@ test.describe('Cadastro de Devoluções', async () =>{
     })
     
     test('As locações de um cliente devem ser preenchidas dentro do select', async () => {
-        await tela.exibirLocacoesDoCliente(new Date(), '98765432100');
+        await tela.preencherDados({locacao :'98765432100', data : new Date() });
+        await tela.exibirLocacoesDoCliente();
     })
     
     test('A locação pesquisada pelo ID deve ser apresentada corretamente', async () => {

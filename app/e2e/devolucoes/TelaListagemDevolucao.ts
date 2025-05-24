@@ -15,10 +15,14 @@ export class TelaListagemDevolucao{
         await expect(this.page).toHaveURL(url)
     }
 
+    async esperarResposta(endpoint : string){
+        await this.page.waitForResponse(response => response.url().includes(endpoint));
+    }
+
     async deveConterDevolucao( id : number){
         await this.irPara('#devolucoes')
+        this.esperarResposta('/devolucoes')
         const tbody = this.page.locator('tbody')
-        tbody.waitFor();
 
         await expect(tbody).toContainText(id.toString());
     }

@@ -11,13 +11,17 @@ export class TelaLocacoes {
         await this.page.click(seletor)
     }
 
+    async esperarResposta(endpoint : string){
+        await this.page.waitForResponse(response => response.url().includes(endpoint));
+    }
+
     async verificarLink(url:string){
         await expect(this.page).toHaveURL(url);
     }
 
     async deveExibirUmaLocacao(id:number){
+        await this.esperarResposta('/locacoes')
         let seletor = this.page.locator("tbody");
-        seletor.waitFor();
 
         await expect(seletor).toContainText(id.toString())
     }

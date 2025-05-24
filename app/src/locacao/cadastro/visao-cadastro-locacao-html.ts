@@ -68,7 +68,6 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     private async pesquisarCliente(){
         const codigoCpf = document.querySelector<HTMLInputElement>(sel.inputCliente)!.value;
         const cliente = await this.controladora.coletarClienteComCodigoOuCpf(codigoCpf);
-
         this.exibirCliente({id:cliente.id, nome:cliente.nome, foto:cliente.foto});
     }
 
@@ -80,7 +79,9 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         ul!.innerHTML = '';
 
         const li = document.createElement('li');
-        li.innerHTML = `<img src="${foto}" alt="${nome}" width='40px' /> ${nome}`;
+        const protocol: string = window.location.protocol;
+        const host: string = window.location.host;
+        li.innerHTML = `<img src="${protocol+"//"+host+foto}" alt="${nome}" width='40px' /> ${nome}`;
 
         ul!.appendChild(li);
         ul!.removeAttribute("hidden");

@@ -50,6 +50,7 @@ export class ControladoraCadastroDevolucao {
         try{
             const valorFinal = this.visao.coletarValorFinal();
             await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal);
+            this.visao.limparForm();
             this.visao.exibirMensagens(['Devolvido com sucesso.']);
         }catch( error ){
             if(error instanceof ErrorDominio)
