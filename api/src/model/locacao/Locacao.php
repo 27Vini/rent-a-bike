@@ -167,7 +167,7 @@ class Locacao implements \JsonSerializable{
             array_push($problemas, "A data de entrada não pode ser posterior a atual.");
         }
 
-        if($this->numeroDeHoras < 0){
+        if($this->numeroDeHoras <= 0){
             array_push($problemas, "O número de horas deve ser maior que 0.");
         }
 

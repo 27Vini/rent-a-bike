@@ -6,7 +6,8 @@ describe('Gestor Devolução', function(){
         `cd ../g4 && pnpm run db`;
         $pdo = new PDO( 'mysql:dbname=g4;host=localhost;charset=utf8', 'root', '' );
 
-        $repoLocacao = new RepositorioLocacaoEmBDR($pdo);
+        $repoItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
+        $repoLocacao = new RepositorioLocacaoEmBDR($pdo, $repoItemLocacao);
         $repo = new RepositorioDevolucaoEmBDR( $pdo, $repoLocacao);
         $transacao = new TransacaoComPDO($pdo);
         $this->gestor = new GestorDevolucao($repo, $repoLocacao, $transacao);

@@ -2,7 +2,7 @@
 
 class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements RepositorioLocacao{
 
-    public function __construct(private PDO $pdo){
+    public function __construct(private PDO $pdo, private RepositorioItemLocacao $repositorioItemLocacao){
         parent::__construct($pdo);
     }
 
@@ -41,13 +41,11 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
      */
     public function adicionarItens(Locacao $locacao) : void{
         try{
-            $repositorioItemLocacaoBDR = new RepositorioItemLocacaoEmBDR($this->pdo);
-
             foreach($locacao->getItensLocacao() as $itemLocacao){
-                $repositorioItemLocacaoBDR->adicionar($itemLocacao, $locacao->getId());
+                $this->repositorioItemLocacao->adicionar($itemLocacao, $locacao->getId());
             }
 
-            $repositorioItemLocacaoBDR->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), false);
+            $this->repositorioItemLocacao->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), false);
         }catch(Throwable $e){
             throw new RepositorioException("Erro ao salvar itens da locação.", $e->getCode());        }
     }
@@ -116,12 +114,14 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
      */
     private function transformarEmLocacoes(array $dadosLocacoes): array{
         $locacoes = [];
-        $repositorioItemLocacaoBDR = (new RepositorioItemLocacaoEmBDR($this->pdo));
+
         foreach($dadosLocacoes as $dados){
             $cliente = new Cliente($dados['id_cliente'], $dados['codigo_cliente'], $dados['cpf'], $dados['nome_cliente'], $dados['foto']);
             $funcionario = new Funcionario($dados['id_funcionario'], $dados['nome_funcionario']);
-            $itensLocacao = $repositorioItemLocacaoBDR->coletarComIdLocacao($dados['id']);
+            $itensLocacao = $this->repositorioItemLocacao->coletarComIdLocacao($dados['id']);
+
             $locacao = new Locacao($dados['id'], $itensLocacao, $cliente, $funcionario, new DateTime($dados['entrada']), $dados['numero_de_horas']);
+
             $locacoes[] = $locacao;
         }
         return $locacoes;
@@ -135,6 +135,6 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
         $comando = "UPDATE locacao SET ativo = 0 WHERE id=:id";
         $ps = $this->executarComandoSql($comando, ["id" => $locacao->getId()]);
 
-        (new RepositorioItemLocacaoEmBDR($this->pdo))->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), true);
+        $this->repositorioItemLocacao->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), true);
     }
 }
