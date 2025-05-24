@@ -1,5 +1,3 @@
-import {Locacao} from '../locacao/locacao.js'
-
 export class Devolucao {
 
     public constructor(

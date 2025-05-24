@@ -78,6 +78,9 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
             $dadosLocacoes = $ps->fetchAll();
 
             $locacoes = $this->transformarEmLocacoes($dadosLocacoes);
+            if(empty($locacoes)){
+                throw new DominioException("Locações não encontradas.");
+            }
             return $locacoes;
         } catch( PDOException $e){
             throw new RepositorioException("Erro ao obter locações.", $e->getCode());

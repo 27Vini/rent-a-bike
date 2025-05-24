@@ -38,11 +38,10 @@ export class GestorDevolucao{
         }
 
         const response = await fetch( API + `locacoes?${parametro}`)
-        if(!response.ok){
-            throw ErrorDominio.comProblemas(["Não foi possível coletar os dados de locação: " + response.status]);
-        }
-
         const locacoes = await response.json();
+        if(!locacoes.success){
+            throw ErrorDominio.comProblemas([locacoes.message]);
+        }
         this.horasCorridas = 0;
         this.locacaoesDoCliente = locacoes.data;
         if(locacoes.data.length == 1){
@@ -69,8 +68,9 @@ export class GestorDevolucao{
         const devolucao = this.criarDevolucao(dataDevolucao, valorPago);
         const response = await fetch( API + 'devolucoes', {method : 'POST', headers : {'Content-Type': 'application/json'}, body : JSON.stringify(devolucao)})
 
-        if(!response.ok){
-            throw ErrorDominio.comProblemas(['Não foi enviar os dados de devolução.' + response.status]);
+        const retorno = await response.json();
+        if(!retorno.success){
+            throw ErrorDominio.comProblemas([retorno.message]);
         }
     }
 
