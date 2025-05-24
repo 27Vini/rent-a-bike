@@ -1,3 +1,3 @@
 export interface VisaoLocacao{
-    exibirMensagens(mensagens : string[]);
+    exibirMensagens(mensagens : string[], erro:boolean);
 }

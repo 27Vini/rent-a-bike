@@ -21,7 +21,7 @@ test.describe('Cadastro de locações', () => {
 
     test.describe('dado não preenchido', () => {
         test('cliente não preenchido', async () => {
-            await tela.preencherFormCadastro('', 2, 'I0000009');
+            await tela.preencherFormCadastro('', 2, 'I0000007');
             await tela.clicar(sel.botaoCadastrar);
 
             await tela.deveExibirAMensagem("Um cliente deve estar associado à locação.");
@@ -102,18 +102,7 @@ test.describe('Cadastro de locações', () => {
 
         });
     });
-
-    // test('data e hora de entrega calculados corretamente', async () => {
-    //     const dataImposta = new Date();
-        
-    //     const horas = 4;
-    //     const dataEsperada = new Date();
-    //     dataEsperada.setHours(dataImposta.getHours() + horas);
-
-    //     await tela.preencherCampo(sel.inputHoras, horas.toString());
-    //     await tela.encontrarElementoNaTela(sel.campoEntregaSpan, dataEsperada.toLocaleString());
-    // });
-
+    
     test('valores são calculados corretamente', async() => {
         await tela.preencherCampo(sel.inputHoras, '2');
         await tela.preencherCampo(sel.inputCodigoItem, 'I0000001');

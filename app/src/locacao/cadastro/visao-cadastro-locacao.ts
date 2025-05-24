@@ -5,5 +5,7 @@ export interface VisaoCadastroLocacao{
     exibirItem({codigo, descricao, disponibilidade, avarias, valorPorHora});
     construirTabela({itens, valores});
     exibirDataHoraEntrega(entrega:Date);
-    exibirMensagens(mensagens : string[]);
+    exibirMensagens(mensagens : string[], erro:boolean);
+
+    limparTelaCadastro();
 }

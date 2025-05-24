@@ -38,6 +38,46 @@ a {
     height: auto;
 }
 
+.div-alerta{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.alert {
+    padding: 20px;
+    background-color: #f55d52;
+    color: white;
+    border-left: solid 10px #f44336;
+}
+
+.success{
+    padding: 20px;
+    background-color: #10bd7d;
+    color: white;
+    border-left: solid 10px #04AA6D;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.fade-in-element {
+  opacity: 0;
+  animation: fadeIn 1s linear;
+  animation-fill-mode: forwards;
+}
+
+.fade-out-element {
+  animation: fadeOut 5s linear;
+  animation-fill-mode: forwards;
+}
 
 /* Estilos da index */
 .index-header{
@@ -93,10 +133,6 @@ a {
 
 .nav-tab:hover {
     transform: scale(1.1);
-}
-
-main {
-    padding: 0 20px;
 }
 
 button{

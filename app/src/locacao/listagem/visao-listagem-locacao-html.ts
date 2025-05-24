@@ -31,8 +31,23 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
         `
     }
 
-    exibirMensagens(mensagens: string[]) {
-        document.querySelector("output")!.innerText = mensagens.join('\n');
+    exibirMensagens(mensagens: string[], erro:boolean) {
+        const classErro = "alert";
+        const classSucesso = "success";
+
+        const output = document.querySelector<HTMLOutputElement>("output")!;
+        if(erro == true){
+            output.classList.add(classErro);
+        }else{
+            output.classList.add(classSucesso);
+        }
+
+        output.innerHTML = mensagens.join('\n');        
+        output.removeAttribute('hidden');
+
+        setTimeout(() => {
+            output.setAttribute('hidden', '');
+        }, 5000);
     }
 }
 

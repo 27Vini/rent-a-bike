@@ -34,6 +34,8 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     }
 
     private cadastrar(){
+        const botao = document.querySelector<HTMLButtonElement>(sel.botaoCadastrar)!;
+        botao.disabled = true;
         this.controladora.cadastrar();
     }
 
@@ -158,8 +160,31 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         // document.querySelector(sel.campoEntrega)?.removeAttribute("hidden");
     }
 
-    exibirMensagens(mensagens: string[]) {
-        document.querySelector<HTMLOutputElement>(sel.output)!.innerHTML = mensagens.join('\n');
+    exibirMensagens(mensagens: string[], erro:boolean) {
+        const classErro = "alert";
+        const classSucesso = "success";
+
+        const output = document.querySelector<HTMLOutputElement>(sel.output)!;
+        if(erro == true){
+            output.classList.add(classErro);
+        }else{
+            output.classList.add(classSucesso);
+        }
+
+        output.innerHTML = mensagens.join('\n');        
+        output.removeAttribute('hidden');
+
+        setTimeout(() => {
+            output.setAttribute('hidden', '');
+        }, 5000); 
+    }
+
+    limparTelaCadastro(){
+        document.querySelectorAll('input').forEach(e => e.value = '');
+        document.querySelectorAll('span').forEach(e => e.innerText = '');
+        document.querySelector(sel.tabelaItens)!.innerHTML = '';
+        document.querySelector(sel.listaCliente)!.setAttribute('hidden', '');
+        document.querySelector(sel.listaItem)!.setAttribute('hidden', '');
     }
 }
 

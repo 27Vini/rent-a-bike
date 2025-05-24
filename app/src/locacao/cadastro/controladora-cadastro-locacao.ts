@@ -17,12 +17,13 @@ export class ControladoraCadastroLocacao{
         try{
             await this.gestor.salvarLocacao({funcionario: dados.funcionario, cliente:dados.cliente, horas:dados.horas});
 
-            this.visao.exibirMensagens(['Locação salva com sucesso!']);
+            this.visao.exibirMensagens(['Locação salva com sucesso!'], false);
+            this.visao.limparTelaCadastro();
         }catch(erro){
             if(erro instanceof ErrorDominio)
-                this.visao.exibirMensagens(erro.getProblemas());
+                this.visao.exibirMensagens(erro.getProblemas(), true);
             else 
-                this.visao.exibirMensagens([erro.message]);
+                this.visao.exibirMensagens([erro.message], true);
         }
     }
 
@@ -32,9 +33,9 @@ export class ControladoraCadastroLocacao{
             return funcionarios;
         }catch(erro){
             if(erro instanceof ErrorDominio)
-                this.visao.exibirMensagens(erro.getProblemas());
+                this.visao.exibirMensagens(erro.getProblemas(), true);
             else 
-                this.visao.exibirMensagens([erro.message]);
+                this.visao.exibirMensagens([erro.message], true);
         }
     }
 
@@ -44,9 +45,9 @@ export class ControladoraCadastroLocacao{
             return cliente;
         }catch(erro){
             if(erro instanceof ErrorDominio)
-                this.visao.exibirMensagens(erro.getProblemas());
+                this.visao.exibirMensagens(erro.getProblemas(), true);
             else 
-                this.visao.exibirMensagens([erro.message]);
+                this.visao.exibirMensagens([erro.message], true);
         }
     }
 
@@ -57,18 +58,18 @@ export class ControladoraCadastroLocacao{
 
         }catch(erro){
             if(erro instanceof ErrorDominio)
-                this.visao.exibirMensagens(erro.getProblemas());
+                this.visao.exibirMensagens(erro.getProblemas(), true);
             else 
-                this.visao.exibirMensagens([erro.message]);
+                this.visao.exibirMensagens([erro.message], true);
         }
     }
 
     removerItemComCodigo(codigo:string){
         try{
             this.gestor.removerItemComCodigo(codigo);
-            this.visao.exibirMensagens(["Item de código "+codigo+" removido com sucesso."]);
+            this.visao.exibirMensagens(["Item de código "+codigo+" removido com sucesso."], false);
         }catch(erro){
-            this.visao.exibirMensagens([erro.message]);
+            this.visao.exibirMensagens([erro.message], true);
         }
     }
 
@@ -81,9 +82,9 @@ export class ControladoraCadastroLocacao{
             this.visao.exibirDataHoraEntrega(dados.entrega);
         }catch(erro){
             if(erro instanceof ErrorDominio)
-                this.visao.exibirMensagens(erro.getProblemas());
+                this.visao.exibirMensagens(erro.getProblemas(), true);
             else 
-                this.visao.exibirMensagens([erro.message]);
+                this.visao.exibirMensagens([erro.message], true);
         }
     }
 }

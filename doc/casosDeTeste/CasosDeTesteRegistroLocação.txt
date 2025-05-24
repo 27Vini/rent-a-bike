@@ -41,24 +41,18 @@ Caso 7:
     então deve aparecer na tabela
 
 Caso 8:
-    Cenário: Data e hora de entrega calculadas corretamente
-    Dado que digitei a quantidade de horas
-    quando saio do campo
-    então deve calcular a data e hora de entrega
-
-Caso 9:
     Cenário: Valores são calculados corretamente
     Dado que adicionei a qtd de horas
     quando adiciono os itens desejados
     então o total deve ser calculado corretamente
 
-Caso 10:
+Caso 9:
     Cenário: Remoção de itens da locação 
     Dado que adicionei itens indesejados
     quando clico no botão de remover item
     Então o item deve ser removido da tabela 
 
-Caso 11:
+Caso 10:
     Cenário: Item já adicionado não deve ser adicionado novamente
     Dado que adicionei um item desejado
     quando tento novamente adicioná-lo à locação

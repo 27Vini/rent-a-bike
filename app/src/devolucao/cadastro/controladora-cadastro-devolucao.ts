@@ -20,9 +20,9 @@ export class ControladoraCadastroDevolucao {
             this.visao.exibirLocacoes(locacoes);
         }catch( error ){
             if(error instanceof ErrorDominio)
-                this.visao.exibirMensagens(error.getProblemas());
+                this.visao.exibirMensagens(error.getProblemas(), true);
             else
-                this.visao.exibirMensagens([ error.message ]);
+                this.visao.exibirMensagens([ error.message ], true);
             
             return
         }
@@ -51,12 +51,12 @@ export class ControladoraCadastroDevolucao {
             const valorFinal = this.visao.coletarValorFinal();
             await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal);
             this.visao.limparForm();
-            this.visao.exibirMensagens(['Devolvido com sucesso.']);
+            this.visao.exibirMensagens(['Devolvido com sucesso.'], false);
         }catch( error ){
             if(error instanceof ErrorDominio)
-                this.visao.exibirMensagens(error.getProblemas());
+                this.visao.exibirMensagens(error.getProblemas(), true);
             else
-                this.visao.exibirMensagens([ error.message ]);
+                this.visao.exibirMensagens([ error.message ], true);
         }
     }
 

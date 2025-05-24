@@ -15,15 +15,15 @@ export class ControladoraListagemLocacao{
         try{
             const locacoes = await this.gestor.coletarLocacoes();
             if(locacoes.length == 0){
-                this.visao.exibirMensagens(["Nenhuma locação encontrada."]);
+                this.visao.exibirMensagens(["Nenhuma locação encontrada."], true);
             }
             
             return locacoes;
         }catch(error){
             if(error instanceof ErrorDominio)
-                this.visao.exibirMensagens(error.getProblemas());
+                this.visao.exibirMensagens(error.getProblemas(), true);
             else 
-                this.visao.exibirMensagens([error.message]);
+                this.visao.exibirMensagens([error.message], true);
         }
     }
 }
