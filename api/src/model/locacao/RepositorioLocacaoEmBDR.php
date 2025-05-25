@@ -42,7 +42,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
     public function adicionarItens(Locacao $locacao) : void{
         try{
             foreach($locacao->getItensLocacao() as $itemLocacao){
-                $this->repositorioItemLocacao->adicionar($itemLocacao, $locacao->getId());
+                $this->repositorioItemLocacao->adicionar($itemLocacao, intval($locacao->getId()));
             }
 
             $this->repositorioItemLocacao->atualizarDisponibilidadeItensLocacao($locacao->getItensLocacao(), false);
@@ -52,7 +52,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
 
     /**
      * Coleta locações com algum filtro
-     * @param array $parametros
+     * @param array<string,string> $parametros
      * @return array<Locacao>
      */
     public function coletarComParametros(array $parametros): array{

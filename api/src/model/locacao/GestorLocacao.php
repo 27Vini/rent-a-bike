@@ -43,11 +43,11 @@ class GestorLocacao {
 
             foreach($dadosLocacao['itens'] as $itemLocacao){
                 $item = $this->transformarEmItem($itemLocacao['item']);
-                $itemLocacao = $this->transformarEmItemLocacao($itemLocacao, $item, $dadosLocacao['numeroDeHoras']);
+                $itemLocacao = $this->transformarEmItemLocacao($itemLocacao, $item, intval($dadosLocacao['numeroDeHoras']));
                 $itensLocacao[] = $itemLocacao;
             }   
             
-            $locacao = new Locacao(0, $itensLocacao, $cliente, $funcionario, new DateTime(), $dadosLocacao['numeroDeHoras']);
+            $locacao = new Locacao(0, $itensLocacao, $cliente, $funcionario, new DateTime(), intval($dadosLocacao['numeroDeHoras']));
 
             $problemas = $locacao->validar();
             if(count($problemas) > 0){
@@ -68,12 +68,22 @@ class GestorLocacao {
 
     /**
      * Transforma um array com dados do Item em um objeto de Item
-     * @param array $dadosItem
+     * @param  array{
+     *          id:string|int,
+     *          codigo:string,
+     *          descricao:string,
+     *          modelo:string,
+     *          fabricante:string,
+     *          valorPorHora:float|int,
+     *          avarias:string,
+     *          disponibilidade:int|bool,
+     *          tipo:string
+     * } $dadosItem
      * @return Item
      * @throws DominioException
      */
     private function transformarEmItem(array $dadosItem) : Item {
-        $item = new Item($dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
+        $item = new Item(intval($dadosItem['id']), $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], floatval($dadosItem['valorPorHora']), $dadosItem['avarias'], boolval($dadosItem['disponibilidade']), $dadosItem['tipo']);
 
         $problemas = $item->validar();
         if(count($problemas) > 0){
@@ -85,7 +95,9 @@ class GestorLocacao {
 
     /**
      * Transforma um array com dados da locação e do Item em um objeto de ItemLocacao
-     * @param array $dadosItemLocacao
+     * @param array{
+     *          precoLocacao:float
+     * } $dadosItemLocacao
      * @param Item $item
      * @param int $horas
      * @return ItemLocacao
@@ -121,7 +133,7 @@ class GestorLocacao {
 
     /**
      * Coleta uma locação ou array de locações com array de parâmetros
-     * @param array $parametros
+     * @param array<string,string> $parametros
      * @throws Exception
      * @return array<Locacao> | Locacao
      */

@@ -105,7 +105,7 @@ class Devolucao implements \JsonSerializable{
         } else {
             $horasCorridas = ceil($horas);
         }
-        return $horasCorridas;
+        return intval($horasCorridas);
     }
 
     /**

@@ -17,7 +17,7 @@ interface RepositorioLocacao {
 
     /**
      * Coleta locações com algum filtro
-     * @param array $parametros
+     * @param array<string,string> $parametros
      * @return array<Locacao>
      */
     public function coletarComParametros(array $parametros): array;

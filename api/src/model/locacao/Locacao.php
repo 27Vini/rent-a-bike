@@ -17,6 +17,9 @@ class Locacao implements \JsonSerializable{
     private float $valorTotal;
     private DateTime $previsaoDeEntrega;
 
+    /**
+     * @param array<ItemLocacao> $itens
+     */
     public function __construct(string|int $id, array $itens, Cliente $cliente, Funcionario $funcionario, DateTime $entrada, int $numeroDeHoras){
         $this->id = $id;
         $this->itensLocacao = $itens;
@@ -37,10 +40,16 @@ class Locacao implements \JsonSerializable{
         $this->id = $id;
     }
 
+    /**
+     * @return array<ItemLocacao>
+     */
     public function getItensLocacao(): array {
         return $this->itensLocacao;
     }
 
+    /**
+     * @param array<ItemLocacao> $itens
+     */
     public function setItensLocacao(array $itens): void {
         $this->itensLocacao = $itens;
     }
@@ -158,7 +167,7 @@ class Locacao implements \JsonSerializable{
 
     /**
      * Valida dados de Locação
-     * @return array
+     * @return array<string>
      */
     public function validar(): array { 
         $problemas = validarId($this->id);

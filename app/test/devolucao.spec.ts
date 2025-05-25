@@ -32,7 +32,7 @@ describe("Gestor de Devolução", () => {
     beforeEach(() => {
         gestor = new GestorDevolucao();
 
-        const entrada = new Date(Date.now() - 2 * 60 * 60 * 1000); // menos daus horas em relacao a agora
+        const entrada = new Date(Date.now() - 2 * 60 * 60 * 1000); // menos duas horas em relacao a agora
         const locacao = new Locacao(1, 1, 1, [], entrada, 4, 0, 0, new Date(Date.now() + 2 * 60 * 60 * 1000)); // mais duas horas em relacao a agora
 
         // @ts-ignore

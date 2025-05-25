@@ -103,10 +103,20 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
     
     /**
      * Transforma array de dados em objeto de Item
-     * @param array<string,string | bool> $dadosItem
+     * @param array{
+     *      id:string|int,
+     *      codigo:string,
+     *      descricao:string,
+     *      modelo:string,
+     *      fabricante:string,
+     *      valorPorHora:float,
+     *      avarias:string,
+     *      disponibilidade:int|bool,
+     *      tipo:string
+     * }$dadosItem
      * @return Item
      */
     private function transformarEmItem(array $dadosItem) : Item {
-        return new Item((int) $dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], (float) $dadosItem['valorPorHora'], $dadosItem['avarias'], $dadosItem['disponibilidade'], $dadosItem['tipo']);
+        return new Item((int) $dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], (float) $dadosItem['valorPorHora'], $dadosItem['avarias'], boolval($dadosItem['disponibilidade']), $dadosItem['tipo']);
     }   
 }
