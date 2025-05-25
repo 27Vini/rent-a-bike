@@ -102,6 +102,8 @@ class Devolucao implements \JsonSerializable{
             $horas = 1;
         }if ($horas >= $numeroDeHoras && $horas <= $numeroDeHoras + 0.25) {
             $horasCorridas = $numeroDeHoras;
+        }else if($horas < $numeroDeHoras){
+            $horasCorridas = floor($horas) == 0 ? 1 : floor($horas);
         } else {
             $horasCorridas = ceil($horas);
         }

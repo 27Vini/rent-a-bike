@@ -105,7 +105,10 @@ export class GestorDevolucao{
 
         if (horas >= this.locacaoEscolhida!.numeroDeHoras && horas <= this.locacaoEscolhida!.numeroDeHoras + 0.25) {
             this.horasCorridas = this.locacaoEscolhida!.numeroDeHoras;
-        }else {
+        }else if(horas < this.locacaoEscolhida!.numeroDeHoras){
+            this.horasCorridas = Math.floor(horas) == 0 ? 1 : Math.floor(horas);
+        }
+        else {
             this.horasCorridas = Math.ceil(horas);
         }
         return this.horasCorridas;
