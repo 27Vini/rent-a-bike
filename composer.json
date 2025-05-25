@@ -41,7 +41,7 @@
     },
     "scripts": {
         "dump": "composer dump-autoload",
-        "start": "php api/src/index.php",
+        "start": "php -S localhost:8000 -t api/src",
         "test": "vendor/bin/kahlan --spec=api/spec",
         "stan": "vendor/bin/phpstan analyse"
     }

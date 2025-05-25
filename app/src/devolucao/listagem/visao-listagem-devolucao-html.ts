@@ -1,5 +1,6 @@
 import { ControladoraListagemDevolucao } from "./controladora-listagem-devolucao.js";
 import { VisaoListagemDevolucao } from "./visao-listagem-devolucao.js";
+import { Money } from "ts-money";
 
 export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
 
@@ -45,7 +46,7 @@ export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
                 <td>${d.locacao.id}</td>
                 <td>${dataDevolucao.toLocaleString()}</td>
                 <td>${d.locacao.cliente.nome}</td>
-                <td>${d.valorPago}</td>
+                <td>R$${Money.fromDecimal(d.valorPago, 'BRL')}</td>
             </tr>
         `
     }

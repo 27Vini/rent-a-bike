@@ -14,7 +14,8 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
     public function coletarTodos(): array{
         try{
             $sql = "SELECT d.* FROM devolucao d
-                    JOIN locacao l on l.id=d.locacao_id";
+                    JOIN locacao l on l.id=d.locacao_id
+                    ORDER BY d.data_de_devolucao DESC";
             
             $ps = $this->executarComandoSql($sql);
             $dadosDevolucao = $ps->fetchAll();
