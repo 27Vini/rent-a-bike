@@ -6,6 +6,10 @@ class Cliente implements \JsonSerializable{
     private string $codigo;
     private string $cpf;
     private string $nome;
+	private string $telefone;
+	private string $email;
+	private string $endereco;
+	private DateTime $dataNascimento;
 
     private string $foto;
 	private const MIN_NOME = 2;
@@ -17,11 +21,12 @@ class Cliente implements \JsonSerializable{
 	private const TAM_CODIGO = 8;
 	private const MSG_CODIGO = "O código deve ter ".self::TAM_CODIGO." caracteres.";
 
-    public function __construct(int|string $id, string $codigo, string $cpf, string $nome, string $foto){
+    public function __construct(int|string $id, string $codigo, string $cpf, string $nome, string $foto, string $telefone){
 		$this->id = $id;
 		$this->codigo = $codigo;
 		$this->cpf = $cpf;
 		$this->nome = $nome;
+		$this->telefone = $telefone;
 		$this->foto = $foto;
 	}
 
@@ -65,6 +70,50 @@ class Cliente implements \JsonSerializable{
 		$this->foto = $foto;
 	}
 
+	public function setEmail(string $email): void {
+		$this->email = $email;
+	}
+
+	public function getEmail(): string {
+		return $this->email;
+	}
+
+	public function setTelefone(string $telefone): void {
+		$this->telefone = $telefone;
+	}
+
+	public function getTelefone(bool $formatado = false): string {
+		if($formatado){
+			$telFormatado = '';
+			if(mb_strlen($this->telefone) == 9){
+				$telFormatado = substr($this->telefone, 0, 5) . "-" . substr($this->telefone, 5, 4);
+			} else if(mb_strlen($this->telefone) == 11){
+				$ddd = "(" . substr($this->telefone, 0, 2) . ")";
+				$telefone = substr($this->telefone, 2, 5) . "-" . substr($this->telefone, 7, 4);
+				$telFormatado = $ddd.$telefone;
+			}
+
+			return $telFormatado;
+		}
+
+		return $this->telefone;
+	}
+
+	public function setDataNascimento(DateTime $dataNascimento): void {
+		$this->dataNascimento = $dataNascimento;
+	}
+
+	public function getDataNascimento(): DateTime {
+		return $this->dataNascimento;
+	}
+
+	public function setEndereco(string $endereco): void {
+		$this->endereco = $endereco;
+	}
+
+	public function getEndereco(): string {
+		return $this->endereco;
+	}
 
 	/**
 	 * Valida dados do cliente
@@ -95,12 +144,12 @@ class Cliente implements \JsonSerializable{
 	 */
 	public function jsonSerialize(): mixed {
         return [
-            'id' => $this->id,
-            'codigo' => $this->codigo,
-            'cpf' => $this->cpf,
-            'nome' => $this->nome,
-            'foto' => $this->foto
+            'id' 		=> $this->id,
+            'codigo' 	=> $this->codigo,
+            'cpf' 		=> $this->cpf,
+            'nome' 		=> $this->nome,
+            'foto' 		=> $this->foto,
+			'telefone' 	=> $this->getTelefone(true)
         ];
     }
-
 }

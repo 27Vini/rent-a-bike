@@ -14,11 +14,15 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements Reposi
      */
     public function adicionar(Cliente $cliente) : void{
         try{
-            $comando = "INSERT INTO cliente (codigo,nome,cpf,foto) VALUES (:codigo,:nome,:cpf,:foto)";
+            $comando = "INSERT INTO cliente (codigo,nome,cpf, data_nascimento, telefone, email, endereco, foto) VALUES (:codigo,:nome,:cpf, :nascimento, :telefone. :email, :endereco, :foto)";
             $this->executarComandoSql($comando, [
                 "nome"      => $cliente->getNome(), 
                 "codigo"    => $cliente->getCodigo(),
-                "cpf"       => $cliente->getCpf(), "foto" => $cliente->getFoto()
+                "cpf"       => $cliente->getCpf(), 
+                "foto"      => $cliente->getFoto(),
+                "nascimento"=> $cliente->getDataNascimento()->format("Y-m-d"),
+                "telefone"  => $cliente->getTelefone(),
+                "email"     => $cliente->getEmail()
             ]);
         
             $cliente->setId($this->ultimoIdAdicionado());
@@ -70,7 +74,7 @@ class RepositorioClienteEmBDR extends RepositorioGenericoEmBDR implements Reposi
      * @return Cliente
      */
     private function transformarEmCliente(array $dadosCliente) : Cliente{
-        return new Cliente(htmlspecialchars($dadosCliente['id']), htmlspecialchars($dadosCliente['codigo']), htmlspecialchars($dadosCliente['cpf']), htmlspecialchars($dadosCliente['nome']), htmlspecialchars($dadosCliente['foto']));
+        return new Cliente(htmlspecialchars($dadosCliente['id']), htmlspecialchars($dadosCliente['codigo']), htmlspecialchars($dadosCliente['cpf']), htmlspecialchars($dadosCliente['nome']), htmlspecialchars($dadosCliente['foto']), htmlspecialchars($dadosCliente['telefone']));
     }
     
 }

@@ -57,7 +57,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
      */
     public function coletarComParametros(array $parametros): array{
         try{
-            $sql = "SELECT l.id, l.entrada as entrada, l.numero_de_horas, l.desconto, l.valor_total, l.previsao_de_entrega, c.id as id_cliente, c.codigo as codigo_cliente, c.nome as nome_cliente, c.cpf, c.foto, f.id as id_funcionario, f.nome as nome_funcionario
+            $sql = "SELECT l.id, l.entrada as entrada, l.numero_de_horas, l.desconto, l.valor_total, l.previsao_de_entrega, c.id as id_cliente, c.codigo as codigo_cliente, c.nome as nome_cliente, c.cpf, c.foto, c.telefone, f.id as id_funcionario, f.nome as nome_funcionario
             FROM locacao l 
             JOIN cliente c ON l.cliente_id = c.id 
             JOIN funcionario f ON l.funcionario_id = f.id
@@ -91,10 +91,11 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
     public function coletarTodos() : array{
         try{
             $parametros = [];
-            $sql = "SELECT l.id, l.entrada as entrada, l.numero_de_horas, l.desconto, l.valor_total, l.previsao_de_entrega, c.id as id_cliente, c.codigo as codigo_cliente, c.nome as nome_cliente, c.cpf, c.foto, f.id as id_funcionario, f.nome as nome_funcionario
+            $sql = "SELECT l.id, l.entrada as entrada, l.numero_de_horas, l.desconto, l.valor_total, l.previsao_de_entrega, c.id as id_cliente, c.codigo as codigo_cliente, c.nome as nome_cliente, c.cpf, c.telefone, c.foto, f.id as id_funcionario, f.nome as nome_funcionario
             FROM locacao l 
             JOIN cliente c ON l.cliente_id = c.id 
-            JOIN funcionario f ON l.funcionario_id = f.id";
+            JOIN funcionario f ON l.funcionario_id = f.id
+            ORDER BY l.entrada DESC";
 
             $ps = $this->executarComandoSql($sql, $parametros);
             $dadosLocacoes = $ps->fetchAll();
@@ -116,7 +117,7 @@ class RepositorioLocacaoEmBDR extends RepositorioGenericoEmBDR implements Reposi
         $locacoes = [];
 
         foreach($dadosLocacoes as $dados){
-            $cliente = new Cliente($dados['id_cliente'], $dados['codigo_cliente'], $dados['cpf'], $dados['nome_cliente'], $dados['foto']);
+            $cliente = new Cliente($dados['id_cliente'], $dados['codigo_cliente'], $dados['cpf'], $dados['nome_cliente'], $dados['foto'], $dados['telefone']);
             $funcionario = new Funcionario((int) $dados['id_funcionario'], $dados['nome_funcionario']);
             $itensLocacao = $this->repositorioItemLocacao->coletarComIdLocacao((int) $dados['id']);
 

@@ -35,8 +35,8 @@ class GestorLocacao {
        try{
             $this->transacao->iniciar();
 
-            $cliente = $this->repositorioCliente->coletarComId((int)$dadosLocacao['cliente']);
-            $funcionario = $this->repositorioFuncionario->coletarComId((int)$dadosLocacao['funcionario']);
+            $cliente = $this->repositorioCliente->coletarComId(intval($dadosLocacao['cliente']));
+            $funcionario = $this->repositorioFuncionario->coletarComId(intval($dadosLocacao['funcionario']));
             
             $itensLocacao = [];
 

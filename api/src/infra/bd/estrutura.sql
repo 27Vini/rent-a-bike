@@ -7,6 +7,10 @@ CREATE TABLE IF NOT EXISTS cliente(
     codigo VARCHAR(255) NOT NULL , 
     nome VARCHAR(255) NOT NULL , 
     cpf VARCHAR(255) NOT NULL , 
+    data_nascimento DATE NOT NULL,
+    telefone VARCHAR(14) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
     foto VARCHAR(2083) NOT NULL
 );
 

@@ -1,8 +1,9 @@
 use g4;
 
-INSERT INTO cliente (codigo, nome, cpf, foto) VALUES
-('C001', 'João Silva', '12345678900', '/app/img/customer_person_people_man_user_client_1629.png'),
-('C002', 'Maria Oliveira', '98765432100', '/app/img/customer_person_people_woman_user_client_1631.png');
+INSERT INTO cliente (codigo, nome, cpf, data_nascimento, telefone, email, endereco, foto) VALUES
+('C0000001', 'João Silva', '12345678900', '1985-03-12', '11912345678', 'joao.silva@email.com', 'Rua das Flores, 123 - São Paulo/SP', '/app/img/customer_person_people_man_user_client_1629.png'),
+('C0000002', 'Maria Oliveira', '98765432100', '1990-07-25', '21998765432', 'maria.oliveira@email.com', 'Av. Atlântica, 456 - Rio de Janeiro/RJ', '/app/img/customer_person_people_woman_user_client_1631.png');
+
 
 INSERT INTO funcionario (nome) VALUES
 ('Carlos Mendes'),
@@ -10,18 +11,18 @@ INSERT INTO funcionario (nome) VALUES
 
 INSERT INTO item (codigo, descricao, modelo, fabricante, valorPorHora, avarias, disponibilidade, tipo) VALUES
 ('I0000001', 'Bicicleta Aro 29', 'MTB', 'Caloi', 15.00, 'Nenhuma', TRUE, 'bicicleta'),
-('I0000002', 'Bicicleta Urbana', 'City', 'Monark', 12.00, 'Risco no quadro', TRUE, 'bicicleta'),
+('I0000002', 'Bicicleta Urbana', 'City', 'Monark', 12.00, 'Risco no quadro', FALSE, 'bicicleta'),
 ('I0000003', 'Capacete', 'Standard', 'Pro Tork', 5.00, 'Nenhuma', TRUE, 'equipamento'),
 ('I0000004', 'Kit de Ferramentas', 'Toolbox X', 'Vonder', 8.00, 'Chave faltando', TRUE, 'equipamento'),
 ('I0000005', 'Bicicleta Elétrica', 'E-Bike Pro', 'Sense', 25.00, 'Bateria com desgaste', TRUE, 'bicicleta'),
 ('I0000006', 'Bicicleta Infantil', 'Kids 16', 'Houston', 10.00, 'Manoplas gastas', TRUE, 'bicicleta'),
 ('I0000007', 'Patinete Elétrico', 'Scooter X', 'Xiaomi', 20.00, 'Riscos na lataria', TRUE, 'equipamento'),
-('I0000008', 'Capacete Infantil', 'Mini', 'Pro Tork', 4.00, 'Correia frouxa', TRUE, 'equipamento'),
-('I0000009', 'Bomba de Ar', 'AirMax', 'Giyo', 3.00, 'Bico danificado', TRUE, 'equipamento'),
+('I0000008', 'Capacete Infantil', 'Mini', 'Pro Tork', 4.00, 'Correia frouxa', FALSE, 'equipamento'),
+('I0000009', 'Bomba de Ar', 'AirMax', 'Giyo', 3.00, 'Bico danificado', FALSE, 'equipamento'),
 ('I0000010', 'Trava de Segurança', 'U-Lock', 'Kryptonite', 2.00, 'Chave reserva ausente', TRUE, 'equipamento'),
 ('I0000011', 'Luz Traseira LED', 'FlashBack', 'Cateye', 1.50, 'Sem avarias', TRUE, 'equipamento'),
 ('I0000012', 'Bicicleta Speed', 'RaceX', 'Specialized', 22.00, 'Aro levemente empenado', TRUE, 'bicicleta'),
-('I0000013', 'Bicicleta Dobrável', 'Compact', 'Dahon', 18.00, 'Dobradiça com folga', TRUE, 'bicicleta'),
+('I0000013', 'Bicicleta Dobrável', 'Compact', 'Dahon', 18.00, 'Dobradiça com folga', FALSE, 'bicicleta'),
 ('I0000014', 'Suporte de Celular', 'BikeClip', 'Atrio', 1.00, 'Arranhado', TRUE, 'equipamento');
 
 INSERT INTO bicicleta (idItem, numeroSeguro) VALUES
@@ -44,8 +45,8 @@ INSERT INTO item_locacao (item_id, locacao_id, preco_locacao, subtotal) VALUES
 (3, 2, 5.00, 10.00),  -- 2 horas
 (4, 2, 8.00, 16.00),
 (2, 3, 12.00, 36.00),  -- 3 horas
-(3, 3, 5.00, 15.00),   -- 3 horas
-(3, 4, 15.00, 30.00),
+(8, 3, 5.00, 15.00),   -- 3 horas
+(9, 4, 15.00, 30.00),
 (13, 5, 12.00, 36.00);
 
 INSERT INTO devolucao (locacao_id, data_de_devolucao, valor_pago) VALUES

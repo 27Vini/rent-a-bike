@@ -16,7 +16,7 @@ test.describe('Cadastro de locações', () => {
     });
 
     test('cadastro realizado com sucesso', async () => {
-        await tela.preencherFormCadastro('12345678900', 2, 'I0000009');
+        await tela.preencherFormCadastro('12345678900', 2, 'I0000010');
         await tela.esperarResposta('/itens')
         await tela.clicar(sel.botaoCadastrar);
         await tela.esperarResposta('/locacoes')
@@ -113,9 +113,9 @@ test.describe('Cadastro de locações', () => {
         await tela.preencherCampo(sel.inputCodigoItem, 'I0000001');
         await tela.clicar(sel.botaoBuscarItem);
 
-        await tela.preencherCampo(sel.inputCodigoItem, 'I0000008');
+        await tela.preencherCampo(sel.inputCodigoItem, 'I0000014');
         await tela.clicar(sel.botaoBuscarItem);
 
-        await tela.encontrarElementoNaTela(sel.campoValorFinal, '38.00');
+        await tela.encontrarElementoNaTela(sel.campoValorFinal, '32.00');
     });
 });

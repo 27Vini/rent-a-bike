@@ -29,6 +29,7 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
                 <td>${e.horas}</td>
                 <td>${previsaoEntrega.toLocaleString()}</td>
                 <td>${e.cliente.nome}</td>
+                <td>${e.cliente.telefone}</td>
             </tr>
         `
     }

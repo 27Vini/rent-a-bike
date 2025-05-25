@@ -9,7 +9,7 @@ describe("Devolução", function (){
         $this->devolucao = null;
         $item = new Item(1,'','','','', 2,'',true,'');
         $itensLocacao = [new ItemLocacao(1, $item, 20.35), new ItemLocacao(1, $item, 30.50)];
-        $this->locacao = new Locacao(1, $itensLocacao , new Cliente(1,'','','',4), new Funcionario(1,''), new DateTime(), 4);
+        $this->locacao = new Locacao(1, $itensLocacao , new Cliente(1,'','','', '',4), new Funcionario(1,''), new DateTime(), 4);
     });
 
     describe('Erros de validação', function (){

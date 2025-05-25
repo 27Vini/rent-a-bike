@@ -9,7 +9,7 @@ describe('Locações', function(){
         beforeEach(function(){
             $this->item = new Item(2, 'I0000009', 'Item de teste', 'Modelo de teste', 'Fabricante', 20.00, '', true, 'Equipamento');
             $this->itemLocacao = new ItemLocacao(6, $this->item, 20.00);
-            $this->cliente = new Cliente(2, 'C00000010', '98765432100', 'Maria da Silva', '');
+            $this->cliente = new Cliente(2, 'C00000010', '98765432100', 'Maria da Silva', '', '22999887766');
             $this->funcionario = new Funcionario(2, 'Fulano de Tal');
         });
 
@@ -53,7 +53,7 @@ describe('Locações', function(){
             $this->item = new Item(2, 'I0000009', 'Item de teste', 'Modelo de teste', 'Fabricante', 20.00, '', true, 'Equipamento');
             $this->itemLocacao = new ItemLocacao(6, $this->item, 20.00);
             $this->itemLocacao->calculaSubtotal($numeroDeHoras);
-            $this->cliente = new Cliente(2, 'C00000010', '98765432100', 'Maria da Silva', '');
+            $this->cliente = new Cliente(2, 'C00000010', '98765432100', 'Maria da Silva', '', '11988776655');
             $this->funcionario = new Funcionario(2, 'Fulano de Tal');
             
             $this->locacao = new Locacao(1, [$this->itemLocacao], $this->cliente, $this->funcionario, new DateTime(), $numeroDeHoras);
