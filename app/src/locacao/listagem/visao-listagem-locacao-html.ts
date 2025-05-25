@@ -20,12 +20,14 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
     }
 
     desenharLinhaLocacao(e){
+        const entrada = new Date(e.entrada);
+        const previsaoEntrega = new Date(e.previsaoDeEntrega);
         return `
             <tr>
                 <td>${e.id}</td>
-                <td>${e.entrada}</td>
+                <td>${entrada.toLocaleString()}</td>
                 <td>${e.horas}</td>
-                <td>${e.previsaoDeEntrega}</td>
+                <td>${previsaoEntrega.toLocaleString()}</td>
                 <td>${e.cliente.nome}</td>
             </tr>
         `

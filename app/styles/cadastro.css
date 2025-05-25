@@ -33,7 +33,7 @@ input, select{
     background-color: #e7e7e7;
     margin: 0;
     position: relative;
-    top: 1.5px;
+    top: 0.5px;
 }
 
 #lista-itens, #lista-clientes{

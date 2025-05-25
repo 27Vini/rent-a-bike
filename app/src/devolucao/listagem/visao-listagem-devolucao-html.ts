@@ -38,11 +38,12 @@ export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
     }
 
     desenharDevolucao(d){
+        const dataDevolucao = new Date(d.dataDeDevolucao);
         return `
             <tr>
                 <td>${d.id}</td>
                 <td>${d.locacao.id}</td>
-                <td>${d.dataDeDevolucao}</td>
+                <td>${dataDevolucao.toLocaleString()}</td>
                 <td>${d.locacao.cliente.nome}</td>
                 <td>${d.valorPago}</td>
             </tr>
