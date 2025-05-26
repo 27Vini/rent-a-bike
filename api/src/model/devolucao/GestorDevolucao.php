@@ -1,7 +1,7 @@
 <?php
 
 class GestorDevolucao{
-    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private Transacao $transacao){
+    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario ,private Transacao $transacao){
 
     }
 
@@ -22,8 +22,12 @@ class GestorDevolucao{
             if($locacao == null){
                 throw new DominioException("Locação não encontrada com id " . $locacaoId);
             }
+            $funcionario = $this->repositorioFuncionario->coletarComId(intval($dados['funcionario']));
+            if($funcionario == null){
+                throw new DominioException("Funcionário não encontrado com id " . $funcionario);
+            }
     
-            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString);
+            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario);
         
     
             $this->repositorioDevolucao->adicionar($devolucao);
@@ -50,12 +54,13 @@ class GestorDevolucao{
      * Instaciar devolução.
      * @throws DominioException
      * @param Locacao $locacao
+     * @param Funcionario $funcionario
      * @param string $dataDeDevolucaoString
      * @return Devolucao
      */
-    private function instanciarDevolucao(Locacao $locacao, string $dataDeDevolucaoString): Devolucao{
+    private function instanciarDevolucao(Locacao $locacao, string $dataDeDevolucaoString, Funcionario $funcionario): Devolucao{
         $dataDeDevolucao = $this->transformarData($dataDeDevolucaoString);
-        $devolucao = new Devolucao('1', $locacao, $dataDeDevolucao);
+        $devolucao = new Devolucao('1', $locacao, $dataDeDevolucao, $funcionario);
 
         $valorASerPago = $devolucao->calcularValorASerPago();
     

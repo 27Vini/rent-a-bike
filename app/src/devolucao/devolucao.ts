@@ -4,7 +4,8 @@ export class Devolucao {
         public readonly id : number,
         private dataDeDevolucao : Date | undefined,
         public readonly valorPago : number,
-        public readonly locacao : string | undefined | number
+        public readonly locacao : string | undefined | number,
+        public readonly funcionario : number
     ){       
     }
 
@@ -18,6 +19,9 @@ export class Devolucao {
         }
         if(this.locacao == undefined){
             problemas.push("Uma locação deve ser informada.");
+        }
+        if(this.funcionario <= 0){
+            problemas.push("Um funcionário deve ser informado.");
         }
         if(this.dataDeDevolucao == undefined){
             problemas.push("Uma data de devolução deve ser informada.");

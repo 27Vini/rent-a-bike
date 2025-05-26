@@ -2,7 +2,7 @@
 
 class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements RepositorioDevolucao{
 
-    public function __construct(PDO $pdo, private RepositorioLocacao $repositorioLocacao){
+    public function __construct(PDO $pdo, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario){
         parent::__construct($pdo);
     }
 
@@ -41,9 +41,9 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
      */
     public function adicionar(Devolucao $devolucao) : void{
         try{
-            $comando = "INSERT INTO devolucao (locacao_id,data_de_devolucao,valor_pago) VALUES (:locacao_id,:data_de_devolucao,:valor_pago)";
+            $comando = "INSERT INTO devolucao (locacao_id,data_de_devolucao,valor_pago,funcionario_id) VALUES (:locacao_id,:data_de_devolucao,:valor_pago, :funcionario_id)";
             $this->executarComandoSql($comando, ["locacao_id" => $devolucao->getLocacao()->getId(), "data_de_devolucao" => $devolucao->getDataDeDevolucao()->format('Y-m-d H:i:s'),
-                "valor_pago" => $devolucao->getValorPago()
+                "valor_pago" => $devolucao->getValorPago(), "funcionario_id" => $devolucao->getFuncionario()->getId()
             ]);
         
             $devolucao->setId($this->ultimoIdAdicionado());
@@ -90,7 +90,9 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
     private function transformarEmDevolucao(array $dadosDevolucao, RepositorioLocacao $repositorioLocacao){
         try{
             $locacao = $repositorioLocacao->coletarComParametros(['id' => $dadosDevolucao['locacao_id']]);
-            $devolucao = new Devolucao($dadosDevolucao['id'], $locacao[0], new DateTime($dadosDevolucao['data_de_devolucao']));
+            $funcionario = $this->repositorioFuncionario->coletarComId(intval($dadosDevolucao['funcionario_id']));
+
+            $devolucao = new Devolucao($dadosDevolucao['id'], $locacao[0], new DateTime($dadosDevolucao['data_de_devolucao']), $funcionario);
             $devolucao->setValorPago((float) $dadosDevolucao['valor_pago']);
 
             return $devolucao;

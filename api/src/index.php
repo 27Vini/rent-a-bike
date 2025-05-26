@@ -27,9 +27,10 @@ try {
 
     $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
     $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo, $repositorioItemLocacao);
+    $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     $transacao = new TransacaoComPDO($pdo);
-    $gestorLocacao = new GestorLocacao($repositorioLocacao, new RepositorioClienteEmBDR($pdo), new RepositorioFuncionarioEmBDR($pdo), $transacao);
-    $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao), $repositorioLocacao, $transacao);
+    $gestorLocacao = new GestorLocacao($repositorioLocacao, new RepositorioClienteEmBDR($pdo), $repositorioFuncionario , $transacao);
+    $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao, $repositorioFuncionario), $repositorioLocacao, $repositorioFuncionario, $transacao);
 } catch ( PDOException $e ) {
     http_response_code( 500 );
     die( 'Erro ao criar o banco de dados.' );

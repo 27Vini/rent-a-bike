@@ -71,7 +71,9 @@ CREATE TABLE IF NOT EXISTS item_locacao(
 CREATE TABLE IF NOT EXISTS devolucao(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     locacao_id INT NOT NULL,
+    funcionario_id INT NOT NULL,
     data_de_devolucao DATETIME NOT NULL,
     valor_pago DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY(locacao_id) REFERENCES locacao(id)
+    FOREIGN KEY(locacao_id) REFERENCES locacao(id),
+    FOREIGN KEY(funcionario_id) REFERENCES funcionario(id)
 );

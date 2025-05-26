@@ -8,19 +8,20 @@ describe('Gestor Devolução', function(){
 
         $repoItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
         $repoLocacao = new RepositorioLocacaoEmBDR($pdo, $repoItemLocacao);
-        $repo = new RepositorioDevolucaoEmBDR( $pdo, $repoLocacao);
+        $repoFuncionario = new RepositorioFuncionarioEmBDR($pdo);
+        $repo = new RepositorioDevolucaoEmBDR( $pdo, $repoLocacao, $repoFuncionario);
         $transacao = new TransacaoComPDO($pdo);
-        $this->gestor = new GestorDevolucao($repo, $repoLocacao, $transacao);
+        $this->gestor = new GestorDevolucao($repo, $repoLocacao,$repoFuncionario ,$transacao);
     });
 
     it("Cadastra uma devolução válida", function(){
-        $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3']);
+        $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3', "funcionario" => 1]);
         expect(1)->toBe(1);
     });
 
     it("Cadastrar devolução de uma locação já devolvida deve retornar erro", function(){
         expect(function (){
-            $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3']);
+            $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3', "funcionario" => 1]);
         })->toThrow(new DominioException());
     });
 

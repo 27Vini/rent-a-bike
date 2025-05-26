@@ -64,7 +64,7 @@ export class GestorDevolucao{
 
     private criarDevolucao(dataDeDevolucao, valorPago, idFuncionario) : Devolucao{
         const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
-        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id);
+        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, idFuncionario);
         const problemas : string [] = devolucao.validar();
         if(problemas.length > 0){
             throw ErrorDominio.comProblemas(problemas);

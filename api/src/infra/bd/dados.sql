@@ -49,6 +49,6 @@ INSERT INTO item_locacao (item_id, locacao_id, preco_locacao, subtotal) VALUES
 (9, 4, 15.00, 30.00),
 (13, 5, 12.00, 36.00);
 
-INSERT INTO devolucao (locacao_id, data_de_devolucao, valor_pago) VALUES
-(1, '2025-05-18 14:00:00', 60.00),
-(2, '2025-05-18 14:05:00', 21.00);
+INSERT INTO devolucao (locacao_id, data_de_devolucao, valor_pago, funcionario_id) VALUES
+(1, '2025-05-18 14:00:00', 60.00, 1),
+(2, '2025-05-18 14:05:00', 21.00, 1);
