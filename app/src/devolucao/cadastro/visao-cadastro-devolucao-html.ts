@@ -10,12 +10,27 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     iniciar(){
+        document.addEventListener('DOMContentLoaded', this.preencherSelectFuncionario.bind(this));
+
         document.querySelector(sel.pesquisarLocacao)?.addEventListener('click', this.controladora.pesquisarLocacao.bind(this.controladora));
         document.querySelector(sel.devolverBtn)?.addEventListener('click', this.controladora.enviarDados.bind(this.controladora));
         document.querySelector(sel.selectLocacao)?.addEventListener('change', this.controladora.procurarLocacaoDoSelecionada.bind(this.controladora));
         document.querySelector(sel.devolucao)?.addEventListener('input', this.bloquearInputLocacao.bind(this));
 
         this.bloquearInputLocacao();
+    }
+
+    private async preencherSelectFuncionario(){
+        const funcionarios = await this.controladora.coletarFuncionarios();
+        const select = document.querySelector(sel.selectFuncionarios);
+
+        select!.innerHTML = funcionarios.map(f =>
+            this.transformarEmOption({value:f.id, option:f.nome})
+        ).join('');
+    }
+
+    private transformarEmOption({value, option}) {
+        return `<option value=${value}>${option}</option>`
     }
 
     bloquearInputLocacao(): void {
@@ -53,6 +68,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
 
     coletarInputLocacao() {
         return document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value;
+    }
+
+    coletarIdFuncionario() {
+        return document.querySelector<HTMLInputElement>(sel.selectFuncionarios)!.value;
     }
 
     coletarValorFinal() : string | null{

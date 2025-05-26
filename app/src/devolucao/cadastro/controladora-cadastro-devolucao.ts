@@ -13,6 +13,18 @@ export class ControladoraCadastroDevolucao {
         this.gestor = new GestorDevolucao()
     }
 
+    async coletarFuncionarios(){
+        try{
+            const funcionarios = this.gestor.coletarFuncionariosCadastrados();
+            return funcionarios;
+        }catch(erro){
+            if(erro instanceof ErrorDominio)
+                this.visao.exibirMensagens(erro.getProblemas(), true);
+            else 
+                this.visao.exibirMensagens([erro.message], true);
+        }
+    }
+
     async pesquisarLocacao(){
         const pesquisa = this.visao.coletarInputLocacao();
         try{
@@ -49,7 +61,8 @@ export class ControladoraCadastroDevolucao {
     async enviarDados(){
         try{
             const valorFinal = this.visao.coletarValorFinal();
-            await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal);
+            const idFuncionario = this.visao.coletarIdFuncionario();
+            await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal, idFuncionario);
             this.visao.limparForm();
             this.visao.exibirMensagens(['Devolvido com sucesso.'], false);
         }catch( error ){

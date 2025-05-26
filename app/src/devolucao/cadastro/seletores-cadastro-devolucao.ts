@@ -2,6 +2,7 @@ export const sel = {
     locacaoInput : "#locacao",
     pesquisarLocacao : "#pesquisar-locacao",
     selectLocacao : "#locacaoId",
+    selectFuncionarios : "#funcionario",
     devolucao : "#devolucao",
     tbody : "tbody",
     valorTotal : "#valor-total",

@@ -24,6 +24,16 @@ export class GestorDevolucao{
         return retorno.data;
     }
 
+    async coletarFuncionariosCadastrados(){
+        const response = await fetch(API + "funcionarios");
+        const retorno = await response.json();
+
+        if(!retorno.success)
+            throw ErrorDominio.comProblemas(["Erro ao obter funcionários."+response.status]);
+
+        return retorno.data;
+    }
+
     async pesquisarLocacao(pesquisa : string) : Promise<any>{
         if(! /^\d+$/.test(pesquisa)){
             throw ErrorDominio.comProblemas([ "O campo de locação deve estar preenchido com apenas números." ] )
@@ -52,7 +62,7 @@ export class GestorDevolucao{
         return locacoes.data;
     }
 
-    private criarDevolucao(dataDeDevolucao, valorPago) : Devolucao{
+    private criarDevolucao(dataDeDevolucao, valorPago, idFuncionario) : Devolucao{
         const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
         const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id);
         const problemas : string [] = devolucao.validar();
@@ -64,8 +74,8 @@ export class GestorDevolucao{
         return devolucao
     }
 
-    async salvarDevolucao(dataDevolucao, valorPago){
-        const devolucao = this.criarDevolucao(dataDevolucao, valorPago);
+    async salvarDevolucao(dataDevolucao, valorPago, idFuncionario){
+        const devolucao = this.criarDevolucao(dataDevolucao, valorPago, idFuncionario);
         const response = await fetch( API + 'devolucoes', {method : 'POST', headers : {'Content-Type': 'application/json'}, body : JSON.stringify(devolucao)})
 
         const retorno = await response.json();
