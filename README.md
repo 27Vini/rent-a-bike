@@ -6,18 +6,18 @@
 
 ## Comandos
 É preciso ligar o apache e mariaDB.
-- **Preparação de ambiente**
---pnpm install
--- composer install
--- pnpm db
+- **Preparação de ambiente** 
+    - pnpm install
+    - composer install
+    - pnpm db
 - **Executar o código** -  na raiz do projeto
--- composer dump
--- pnpm start
--- composer start
+    - composer dump
+    - pnpm start
+    - composer start
 - **Rodar testes** - na raiz do projeto
--- pnpm e2e (ponta a ponta)
--- pnpm test (unitários front)
--- composer test (unitários back)
+    - pnpm e2e (ponta a ponta)
+    - pnpm test (unitários front)
+    - composer test (unitários back)
 
 ## Referências
 https://www.slimframework.com/docs/v4/ - **Documentação Slim**
