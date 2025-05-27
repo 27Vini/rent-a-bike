@@ -61,6 +61,7 @@ input, select{
     text-decoration: none;
     width: 20%;
     flex-direction: column;
+    margin-right: 20px;
 }
 
 .cadastrar{

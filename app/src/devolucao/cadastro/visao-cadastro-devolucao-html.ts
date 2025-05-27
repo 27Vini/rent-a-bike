@@ -128,7 +128,8 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLOutputElement>(sel.selectLocacao)!.hidden = true;
         const div = document.querySelector<HTMLOutputElement>(sel.locacaoOutput)
         div?.removeAttribute('hidden')
-        const apenasData = locacao.previsaoDeEntrega.substring(0, 10);
+        const data = (new Date(locacao.previsaoDeEntrega)).toLocaleString();
+        const apenasData = data.substring(0, 10);
         div!.innerText = `Locação de valor R$${locacao.valorTotal} para entregar ${apenasData}`
         div!.dataset.id = String(locacao.id)
         this.desenharTabela(locacao);

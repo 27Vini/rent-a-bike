@@ -146,7 +146,7 @@ export class GestorLocacao{
     }
     
     async coletarClienteComCodigoOuCpf(codigoCpf:string){
-        if(! /^\d+$/.test(codigoCpf)){
+        if(/[^a-zA-Z0-9]/g.test(codigoCpf)){
             throw ErrorDominio.comProblemas(["O campo de cliente não deve conter caracteres especiais."]);
         }
 
