@@ -45,6 +45,18 @@ describe("Devolução", function (){
             expect($horas)->toBe(3);
         });
 
+        it("Calcula horas corridas dentro da tolerância", function(){
+            $this->devolucao = new Devolucao(1, $this->locacao, (new DateTime())->add(new DateInterval('PT4H14M')), $this->funcionario);
+            $horas = $this->devolucao->calcularHorasCorridas();
+            expect($horas)->toBe(4);
+        });
+
+        it("Ao passar da tolerância aas horas devem ser arredondas pra cima", function(){
+            $this->devolucao = new Devolucao(1, $this->locacao, (new DateTime())->add(new DateInterval('PT4H16M')), $this->funcionario);
+            $horas = $this->devolucao->calcularHorasCorridas();
+            expect($horas)->toBe(5);
+        });
+
         it('Calcula desconto corretamente', function(){
             $this->devolucao = new Devolucao(1, $this->locacao, (new DateTime())->add(new DateInterval('PT3H')), $this->funcionario);
             $desconto = $this->devolucao->calculaDesconto(152.50, 4);

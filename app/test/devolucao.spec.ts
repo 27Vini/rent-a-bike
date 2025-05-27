@@ -7,7 +7,7 @@ import { Locacao } from '../src/locacao/locacao.js';
 
 describe("Devolução", () => {
     it('Valida dado corretamente', async () => {
-        const devolucao: Devolucao = new Devolucao(1,new Date(), 0, 1);
+        const devolucao: Devolucao = new Devolucao(1,new Date(), 0, 1, 1);
         const problemas = devolucao.validar();
         expect(problemas.length).toBe(1);
     })
