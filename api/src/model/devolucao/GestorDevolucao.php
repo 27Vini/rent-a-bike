@@ -52,7 +52,7 @@ class GestorDevolucao{
 
     /**
      * Coleta devoluções para preencher gráfico
-     * @param array $dados
+     * @param array<string, string> $dados
      * @throws \DominioException
      * @return DevolucaoGraficoDTO[]
      */
@@ -65,16 +65,19 @@ class GestorDevolucao{
         if($dataFinal === ''){
             $dataFinal = date('Y-m-t');
         }
-        if($dataInicial > new DateTime()){
-            throw new DominioException("A data inicial não pode ser maior que a atual.");
-        }
 
-        $dataInicial = (new DateTime($dataInicial))->format('Y-m-d H:i:s');
-        $dataFinal = (new DateTime($dataFinal))->format('Y-m-d H:i:s');
-        error_log($dataInicial);
-        error_log($dataFinal);
+        $dataInicial = new DateTime($dataInicial);
+        $dataFinal = new DateTime($dataFinal);
+        
+        if($dataInicial > new DateTime()){
+            throw new DominioException("A data inicial não pode ser maior que a data atual.");
+        }
+        if($dataFinal < $dataInicial){
+            throw new DominioException("A data final não pode ser menor que a data inicial.");
+        }
+        
         try{
-            return $this->repositorioDevolucao->coletarDevolucoesPorData($dataInicial, $dataFinal);
+            return $this->repositorioDevolucao->coletarDevolucoesPorData($dataInicial->format('Y-m-d H:i:s'), $dataFinal->format('Y-m-d H:i:s'));
         }catch(Exception $e){
             $this->transacao->desfazer();
             throw $e;

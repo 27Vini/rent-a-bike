@@ -5,7 +5,7 @@ class DevolucaoGraficoDTO implements JsonSerializable{
 
     /**
       * Serializa em JSON para manuseio da API
-      * @return array{dataDeDevolucao: string, id: int|string, locacao: Locacao|null, funcionario: Funcionario | null, valorPago: float}
+      * @return array{dataLocacao: string, totalPagoDevolucao: float}
       */
      public function jsonSerialize(): mixed {
         return [
