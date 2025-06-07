@@ -33,6 +33,18 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         return Number(input.value);
     }
 
+    coletarCliente(){
+        return document.querySelector<HTMLInputElement>(sel.inputCliente)!.value;
+    }
+
+    coletarCodigoItem(){
+        return document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.value;
+    }
+
+    coletarCodigoItemASerRemovido(){
+        return this.coletarCodigoItemASerRemovido;
+    }
+
     private cadastrar(){
         const botao = document.querySelector<HTMLButtonElement>(sel.botaoCadastrar)!;
         botao.disabled = true;
@@ -54,7 +66,10 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
 
     /** SELECT DE FUNCIONÁRIOS */
     private async preencherSelectFuncionario(){
-        const funcionarios = await this.controladora.coletarFuncionarios();
+        await this.controladora.coletarFuncionarios();
+    }
+
+    public exibirFuncionarios(funcionarios) {
         const select = document.querySelector(sel.selectFuncionario);
 
         select!.innerHTML = funcionarios.map(f =>
@@ -68,12 +83,10 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
 
     /** PESQUISA DE CLIENTES */
     private async pesquisarCliente(){
-        const codigoCpf = document.querySelector<HTMLInputElement>(sel.inputCliente)!.value;
-        const cliente = await this.controladora.coletarClienteComCodigoOuCpf(codigoCpf);
-        this.exibirCliente({id:cliente.id, nome:cliente.nome, foto:cliente.foto});
+        await this.controladora.coletarClienteComCodigoOuCpf();
     }
 
-    private exibirCliente({id, nome, foto}){
+    public exibirCliente({id, nome, foto}){
         const inputCliente = document.querySelector<HTMLInputElement>(sel.inputCliente)!;
         inputCliente.dataset.id = id;
 
@@ -91,8 +104,7 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
 
     /** PESQUISA DE ITEM */
     private async pesquisarItem(){
-        const codigo = document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.value;
-        await this.controladora.coletarItemComCodigo(codigo)
+        await this.controladora.coletarItemComCodigo()
     }
 
     private removerItem(e){

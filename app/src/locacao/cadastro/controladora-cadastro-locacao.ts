@@ -29,8 +29,9 @@ export class ControladoraCadastroLocacao{
 
     async coletarFuncionarios(){
         try{
-            const funcionarios = this.gestor.coletarFuncionariosCadastrados();
-            return funcionarios;
+            const funcionarios = await this.gestor.coletarFuncionariosCadastrados();
+
+            this.visao.exibirFuncionarios(funcionarios);
         }catch(erro){
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);
@@ -39,10 +40,12 @@ export class ControladoraCadastroLocacao{
         }
     }
 
-    async coletarClienteComCodigoOuCpf(codigoCpf:string){
+    async coletarClienteComCodigoOuCpf(){
         try{
+            const codigoCpf = this.visao.coletarCliente();
             const cliente = await this.gestor.coletarClienteComCodigoOuCpf(codigoCpf);
-            return cliente;
+
+            this.visao.exibirCliente({id:cliente.id, nome:cliente.nome, foto:cliente.foto});
         }catch(erro){
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);
@@ -51,11 +54,11 @@ export class ControladoraCadastroLocacao{
         }
     }
 
-    async coletarItemComCodigo(codigo:string) {
+    async coletarItemComCodigo() {
         try{
+            const codigo = this.visao.coletarCodigoItem();
             const item = await this.gestor.coletarItemComCodigo(codigo);
             this.visao.exibirItem({codigo:item.codigo, descricao:item.descricao, disponibilidade:item.disponibilidade, avarias:item.avarias, valorPorHora:item.valorPorHora});
-
         }catch(erro){
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);

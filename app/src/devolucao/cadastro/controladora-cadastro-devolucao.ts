@@ -15,8 +15,8 @@ export class ControladoraCadastroDevolucao {
 
     async coletarFuncionarios(){
         try{
-            const funcionarios = this.gestor.coletarFuncionariosCadastrados();
-            return funcionarios;
+            const funcionarios = await this.gestor.coletarFuncionariosCadastrados();
+            this.visao.exibirFuncionarios(funcionarios);
         }catch(erro){
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);

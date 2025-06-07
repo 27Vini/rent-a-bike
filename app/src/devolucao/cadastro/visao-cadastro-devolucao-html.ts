@@ -21,7 +21,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     private async preencherSelectFuncionario(){
-        const funcionarios = await this.controladora.coletarFuncionarios();
+        await this.controladora.coletarFuncionarios();
+    }
+
+    public exibirFuncionarios(funcionarios) {
         const select = document.querySelector(sel.selectFuncionarios);
 
         select!.innerHTML = funcionarios.map(f =>
