@@ -1,0 +1,77 @@
+import { ControladoraRelatorioDevolucao } from "./controladora-relatorio-devolucao";
+import { VisaoRelatorioDevolucao } from "./visao-relatorio-devolucao";
+import { sel } from './sel-relatorio-devolucao';
+import {Chart,BarController,BarElement,CategoryScale,LinearScale,Tooltip,Legend} from 'chart.js';
+Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+
+class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
+    private controladora : ControladoraRelatorioDevolucao;
+    private grafico: Chart | null = null;
+
+    constructor(){
+        this.controladora = new ControladoraRelatorioDevolucao(this);
+    }
+
+    iniciar(){
+        document.querySelector(sel.enviarBtn)?.addEventListener("click", this.controladora.gerarRelatorio.bind(this.controladora));
+    }
+
+    coletarDataInicial(): string {
+        return document.querySelector<HTMLInputElement>(sel.dataInicial)!.value
+    }
+
+    coletarDataFinal(): string {
+        return document.querySelector<HTMLInputElement>(sel.dataFinal)!.value
+    }
+
+    gerarGrafico(devolucoes) {
+        const eixoX = [];
+        const eixoY = [];
+        const cores = ["green","blue","orange","brown"];
+        for(const devolucao of devolucoes){
+            eixoX.push(devolucao.dataLocacao);
+            eixoY.push(devolucao.totalPagoDevolucao);
+        }
+
+        if(this.grafico) {
+            this.grafico.destroy();
+        }   
+
+        const div = document.querySelector<HTMLCanvasElement>(sel.graficoOutput)!;
+        this.grafico = new Chart(div, {
+        type: 'bar',
+        data: {
+            labels: eixoX,
+            datasets: [{
+            label : "Valor da Devolução",
+            backgroundColor: cores,
+            data: eixoY,
+            barPercentage: 0.4,
+            categoryPercentage: 0.4 
+            }]
+        }
+        });
+    }
+
+    exibirMensagens(mensagens: string[], erro:boolean) {
+        const classErro = "alert";
+        const classSucesso = "success";
+
+        const output = document.querySelector<HTMLOutputElement>(sel.erroOutput)!;
+        if(erro == true){
+            output.classList.add(classErro);
+        }else{
+            output.classList.add(classSucesso);
+        }
+
+        output.innerHTML = mensagens.join('\n');        
+        output.removeAttribute('hidden');
+
+        setTimeout(() => {
+            output.setAttribute('hidden', '');
+        }, 5000);    
+    }
+}
+
+const visao = new VisaoRelatorioDevolucaoHTML();
+visao.iniciar();

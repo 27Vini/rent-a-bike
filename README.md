@@ -30,4 +30,6 @@ https://br.freepik.com/fotos-gratis/ciclismo-de-lazer-passeios-a-ceu-negro_10881
 
 https://phpstan.org/user-guide/getting-started - **Stan**
 
+https://www.chartjs.org/docs/latest/ - **ChartJS**
+
 Observações: A estilização CSS não foi realizada com frameworks e contamos com um auxílio básico do ChatGPT para desenvolver as etapas iniciais da interface, após isso, a membro do grupo refinou a estilização.

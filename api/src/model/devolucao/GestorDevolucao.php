@@ -51,6 +51,37 @@ class GestorDevolucao{
     }
 
     /**
+     * Coleta devoluções para preencher gráfico
+     * @param array $dados
+     * @throws \DominioException
+     * @return DevolucaoGraficoDTO[]
+     */
+    public function coletarDevolucoesParaGrafico(array $dados): array{
+        $dataInicial = htmlspecialchars($dados["dataInicial"] ?? "");
+        $dataFinal = htmlspecialchars($dados["dataFinal"] ?? "");
+        if($dataInicial === ''){
+            $dataInicial = date('Y-m-01');
+        }
+        if($dataFinal === ''){
+            $dataFinal = date('Y-m-t');
+        }
+        if($dataInicial > new DateTime()){
+            throw new DominioException("A data inicial não pode ser maior que a atual.");
+        }
+
+        $dataInicial = (new DateTime($dataInicial))->format('Y-m-d H:i:s');
+        $dataFinal = (new DateTime($dataFinal))->format('Y-m-d H:i:s');
+        error_log($dataInicial);
+        error_log($dataFinal);
+        try{
+            return $this->repositorioDevolucao->coletarDevolucoesPorData($dataInicial, $dataFinal);
+        }catch(Exception $e){
+            $this->transacao->desfazer();
+            throw $e;
+        }
+    }
+
+    /**
      * Instaciar devolução.
      * @throws DominioException
      * @param Locacao $locacao

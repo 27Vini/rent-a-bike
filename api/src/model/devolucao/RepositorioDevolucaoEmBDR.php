@@ -32,6 +32,25 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
 
     }
 
+    public function coletarDevolucoesPorData(string $dataInicial, string $dataFinal): array{
+        try{
+            $sql = "SELECT d.valor_pago as valor_pago, l.entrada as entrada FROM devolucao d
+                    JOIN locacao l on l.id = d.locacao_id
+                    WHERE l.entrada >= :dataInicial AND l.entrada <= :dataFinal";
+
+            $ps = $this->executarComandoSql($sql, ['dataInicial' => $dataInicial, "dataFinal" => $dataFinal]);
+            $dadosDevolucao = $ps->fetchAll();
+
+            $devolucoes = [];
+            foreach($dadosDevolucao as $dado){
+                $devolucoes[] = new DevolucaoGraficoDTO(new DateTime($dado["entrada"]), (float) $dado['valor_pago']);
+            }
+            return $devolucoes;
+        }catch(PDOException $e){
+            throw new RepositorioException("Erro ao coletar devoluções filtradas. ", $e->getCode());
+        }
+    }
+
     /**
      * Adiciona devolução ao banco
      * @param Devolucao $devolucao

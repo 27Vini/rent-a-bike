@@ -6,6 +6,7 @@ import { ErrorDominio } from '../../infra/ErrorDominio.js';
 import { ServicoDevolucao } from './servico-devolucao.js';
 import { ItemLocacao } from '../item/item-locacao.js';
 import {toZonedTime } from 'date-fns-tz';
+import { DevolucaoGrafico } from './relatorio/DevolucaoGrafico.js'
 
 export class GestorDevolucao{
 
@@ -21,6 +22,19 @@ export class GestorDevolucao{
             throw ErrorDominio.comProblemas([retorno.message]);
         }
 
+        return retorno.data;
+    }
+
+    async coletarDevolucoesGrafico(dataInicial: string, dataFinal: string) : Promise<DevolucaoGrafico[]>{
+        const reponse = await fetch(API + `devolucoes?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
+        const retorno = await reponse.json();
+
+        if(!retorno.success){
+            throw ErrorDominio.comProblemas([retorno.message]);
+        }
+        if(retorno.data.length == 0){
+            throw ErrorDominio.comProblemas(['Não há dados para essas datas.']);
+        }
         return retorno.data;
     }
 

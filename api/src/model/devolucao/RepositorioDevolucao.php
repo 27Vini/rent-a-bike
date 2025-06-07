@@ -25,4 +25,12 @@ interface RepositorioDevolucao{
      * @throws RepositorioException
      */
     public function coletarTodos():array;
+
+    /**
+     * Coleta dados para o gráfico de valor por data de locação
+     * @param string $dataInicial
+     * @param string $dataFinal
+     * @return array<DevolucaoGraficoDTO>
+     */
+    public function coletarDevolucoesPorData(string $dataInicial, string $dataFinal) : array;
 }

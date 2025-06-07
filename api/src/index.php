@@ -102,7 +102,7 @@ $app->post('/locacoes', callable: function(Request $request, Response $response)
             'message' => 'Locação cadastrada com sucesso!'
         ]));
     }catch(RepositorioException $e){
-        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false, 
             'message' => 'Erro interno do servidor:'.$e->getMessage()
@@ -127,7 +127,12 @@ $app->post('/locacoes', callable: function(Request $request, Response $response)
 
 $app->get('/devolucoes', callable:function(Request $request, Response $response) use($gestorDevolucao){
     try{
-        $devolucoes = $gestorDevolucao->coletarDevolucoes();
+        $dados = $request->getQueryParams();
+        if(isset($dados['dataInicial']) && isset($dados['dataFinal'])){
+            $devolucoes = $gestorDevolucao->coletarDevolucoesParaGrafico($dados);
+        }else{
+            $devolucoes = $gestorDevolucao->coletarDevolucoes();
+        }
         $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => true,
@@ -208,7 +213,7 @@ $app->get('/funcionarios', callable:function(Request $request, Response $respons
             'data' => $funcionarios
         ]));
     }catch(DominioException $e){
-        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false, 
             'message' => 'Erro interno do servidor:'.$e->getMessage()
@@ -237,7 +242,7 @@ $app->get('/clientes', callable:function(Request $request, Response $response) u
             'data'    => $cliente
         ]));
     } catch(DominioException $e){
-        $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false,
             'message' => $e->getMessage()
@@ -271,7 +276,7 @@ $app->get('/itens', callable:function(Request $request, Response $response) use(
             'data'    => $item
         ]));
     }catch(DominioException $e){
-        $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false,
             'message' => $e->getMessage()

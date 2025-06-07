@@ -11,11 +11,10 @@ export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
     }
 
     iniciar(){
-        document.addEventListener('DOMContentLoaded', this.listarDevolucoes.bind(this) )
+        document.addEventListener('DOMContentLoaded', this.controladora.listar.bind(this.controladora) )
     }
 
-    async listarDevolucoes(){
-        const devolucoes = await this.controladora.obterDevolucoes()
+    async desenharDevolucoes(devolucoes){
         document.querySelector('tbody')!.innerHTML = devolucoes.map(e => this.desenharDevolucao(e)).join('')
     }
 
