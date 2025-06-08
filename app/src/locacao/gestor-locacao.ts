@@ -130,6 +130,22 @@ export class GestorLocacao{
         return retorno.data;
     }
 
+    async obterItensParaRelatorio(dataInicial:string, dataFinal:string){
+        const url = `itens?dataInicial=${dataInicial}&dataFinal=${dataFinal}`;
+        const response = await fetch(API + url)
+        const retorno = await response.json();
+
+        if(!retorno.success){
+            throw ErrorDominio.comProblemas(["Erro ao obter dados do relatório."]);
+        }
+
+        if(retorno.data.length == 0){
+            throw ErrorDominio.comProblemas(["Nenhum dado encontrado."]);
+        }
+
+        return retorno.data;
+    }
+
     removerItemComCodigo(codigo:string){
         const posicao = this.itens.findIndex(e => e.item.codigo == codigo);
         this.itens.splice(posicao, 1);

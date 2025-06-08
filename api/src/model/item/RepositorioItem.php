@@ -25,6 +25,16 @@ interface RepositorioItem{
     public function coletarComCodigo(string $codigo) : Item;
 
     /**
+     * Coleta dados dos itens para o relatório
+     * @param string $dataInicial
+     * @param string $dataFinal
+     * @return array{itens:list<array{descricao:string,qtdVezesAlugado:string}>,totalLocacoes:string}     
+     * @throws DominioException
+     * @throws RepositorioException
+     */
+    public function coletarDadosParaRelatorio(string $dataInicial, string $dataFinal) : array;
+
+    /**
      * Altera a disponibilidade do item salvo 
      * @param Item $item
      * @return void

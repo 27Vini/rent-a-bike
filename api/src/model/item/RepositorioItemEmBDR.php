@@ -82,6 +82,52 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
     }
 
     /**
+     * Coleta dados dos itens para o relatório
+     * @param string $dataInicial
+     * @param string $dataFinal
+     * @return array{itens:list<array{descricao:string,qtdVezesAlugado:string}>,totalLocacoes:string}     
+     * @throws DominioException
+     * @throws RepositorioException
+     */
+    public function coletarDadosParaRelatorio(string $dataInicial, string $dataFinal) : array {
+        try{
+            $dadosItensRelatorio = [];
+
+            $comando = "SELECT i.descricao as descricao, COUNT(il.id) as qtdVezesAlugado
+                        FROM item_locacao il 
+                        JOIN item i ON il.item_id = i.id
+                        JOIN locacao l ON il.locacao_id = l.id
+                        WHERE l.entrada >= :dataInicial AND l.entrada <= :dataFinal
+                        GROUP BY i.id 
+                        ORDER BY qtdVezesAlugado DESC, i.descricao ASC
+                    ";
+            $ps = $this->executarComandoSql($comando, ["dataInicial" => $dataInicial, "dataFinal" => $dataFinal]);
+
+            if($ps->rowCount() == 0)
+                throw new DominioException('Dados não encontrados.');
+
+            /** @var list<array{descricao:string,qtdVezesAlugado:string}> $dadosItens */
+            $dadosItens = $ps->fetchAll();
+
+
+            $comando = "SELECT count(id) as qtdTotalLocacoes FROM locacao l WHERE l.entrada >= :dataInicial AND l.entrada <= :dataFinal";
+            $ps = $this->executarComandoSql($comando, ["dataInicial" => $dataInicial, "dataFinal" => $dataFinal]);
+            $totalLocacoes = $ps->fetch();
+
+            $dadosItensRelatorio = [
+                "itens"         => $dadosItens,
+                "totalLocacoes" => $totalLocacoes['qtdTotalLocacoes']
+            ];
+
+            return $dadosItensRelatorio;
+        }catch(DominioException $e){
+            throw $e;
+        }catch(Exception $e){
+            throw new RepositorioException("Erro ao obter itens para o relatório.", $e->getCode());
+        }
+    }
+
+    /**
      * Altera a disponibilidade do item salvo 
      * @param Item $item
      * @return void

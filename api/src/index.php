@@ -267,13 +267,17 @@ $app->get('/clientes', callable:function(Request $request, Response $response) u
 
 $app->get('/itens', callable:function(Request $request, Response $response) use($pdo){
     try{
-        $parametro = $request->getQueryParams();
-
         $gestorItem = new GestorItem(new RepositorioItemEmBDR($pdo));
-        $item = $gestorItem->coletarComCodigo($parametro['codigo']);
+        $parametros = $request->getQueryParams();
+        if(isset($parametros['dataInicial']) && isset($parametros['dataFinal'])){
+            $resultado = $gestorItem->coletarItensParaRelatorio($parametros);
+        } else {
+            $resultado = $gestorItem->coletarComCodigo($parametros['codigo']);
+        }
+
         $response->getBody()->write(json_encode([
             'success' => true,
-            'data'    => $item
+            'data'    => $resultado
         ]));
     }catch(DominioException $e){
         $response->withStatus(400)->withHeader('Content-Type', 'application/json');
