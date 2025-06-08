@@ -136,11 +136,11 @@ export class GestorLocacao{
         const retorno = await response.json();
 
         if(!retorno.success){
-            throw ErrorDominio.comProblemas(["Erro ao obter dados do relatório."]);
+            throw ErrorDominio.comProblemas([retorno.message]);
         }
 
         if(retorno.data.length == 0){
-            throw ErrorDominio.comProblemas(["Nenhum dado encontrado."]);
+            throw ErrorDominio.comProblemas(["Dados não encontrados."]);
         }
 
         return retorno.data;

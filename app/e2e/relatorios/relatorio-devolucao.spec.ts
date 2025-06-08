@@ -1,5 +1,5 @@
 import {test} from "@playwright/test";
-import { TelaRelatorioDevolucao } from "./TelaRelatorioDevolucao";
+import { TelaRelatorioDevolucao } from "./tela-relatorio-devolucao";
 import { sel } from "../../src/devolucao/relatorio/sel-relatorio-devolucao";
 
 

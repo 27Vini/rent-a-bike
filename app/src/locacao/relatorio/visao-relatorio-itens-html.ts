@@ -14,7 +14,7 @@ export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
     }
 
     iniciar(){
-        document.querySelector(seletores.enviarBtn)?.addEventListener("click", this.controladora.obterItensParaRelatorio.bind(this.controladora));
+        document.querySelector(seletores.botaoGerar)?.addEventListener("click", this.controladora.obterItensParaRelatorio.bind(this.controladora));
     }
 
     coletarDataInicial(): string {

@@ -32,7 +32,7 @@ class GestorItem{
         if($dataInicial > new DateTime())
             throw new DominioException("Data inicial não deve ser maior do que a data atual");
         if($dataFinal < $dataInicial)
-            throw new DominioException("Data final não deve ser menor do que a data inicila");
+            throw new DominioException("Data final não deve ser menor do que a data inicial");
 
         try{
             $dataInicialString = $dataInicial->format("Y-m-d H:i:s");
