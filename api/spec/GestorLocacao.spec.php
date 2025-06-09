@@ -15,7 +15,7 @@ describe('Gestor de locações', function(){
     });
 
     it('locação salva corretamente', function(){
-        $item = new Item(2, 'I0000009', 'Item de teste', 'Modelo de teste', 'Fabricante', 20.00, '', true, 'equipamento');
+        $item = new Item(2, 'I0000009', 'Item de teste', 'Modelo de teste', 'Fabricante', 20.00, true, 'equipamento');
         $itemLocacao = new ItemLocacao(6, $item, 20.00);
         $itemLocacao->calculaSubtotal(2);
         

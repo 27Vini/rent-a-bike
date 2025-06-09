@@ -14,7 +14,6 @@ export class Item {
     public readonly modelo: string,
     public readonly fabricante: string,
     public readonly valorPorHora: number,
-    public readonly avarias: string,
     public readonly disponibilidade: boolean,
     public readonly tipo: string
   ) {}

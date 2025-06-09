@@ -6,7 +6,7 @@ export interface VisaoCadastroLocacao{
 
     exibirFuncionarios(funcionarios);
     exibirCliente({id, nome, foto});
-    exibirItem({codigo, descricao, disponibilidade, avarias, valorPorHora});
+    exibirItem({codigo, descricao, disponibilidade, valorPorHora});
     construirTabela({itens, valores});
     exibirDataHoraEntrega(entrega:Date);
     exibirMensagens(mensagens : string[], erro:boolean);

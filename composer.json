@@ -12,6 +12,7 @@
                     "api/src/model/cliente/", 
                     "api/src/model/devolucao/", 
                     "api/src/model/funcionario/", 
+                    "api/src/model/avaria/", 
                     "api/src/model/item/", 
                     "api/src/model/locacao/",
                     "api/src/infra/",

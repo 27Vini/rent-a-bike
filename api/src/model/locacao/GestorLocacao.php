@@ -18,7 +18,6 @@ class GestorLocacao {
      *       modelo: string,
      *       fabricante: string,
      *       valorPorHora: float,
-     *       avarias: string,
      *       disponibilidade: bool,
      *       tipo: string
      *     },
@@ -75,7 +74,6 @@ class GestorLocacao {
      *          modelo:string,
      *          fabricante:string,
      *          valorPorHora:float|int,
-     *          avarias:string,
      *          disponibilidade:int|bool,
      *          tipo:string
      * } $dadosItem
@@ -83,7 +81,7 @@ class GestorLocacao {
      * @throws DominioException
      */
     private function transformarEmItem(array $dadosItem) : Item {
-        $item = new Item(intval($dadosItem['id']), $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], floatval($dadosItem['valorPorHora']), $dadosItem['avarias'], boolval($dadosItem['disponibilidade']), $dadosItem['tipo']);
+        $item = new Item(intval($dadosItem['id']), $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], floatval($dadosItem['valorPorHora']), boolval($dadosItem['disponibilidade']), $dadosItem['tipo']);
 
         $problemas = $item->validar();
         if(count($problemas) > 0){

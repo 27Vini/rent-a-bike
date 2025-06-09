@@ -15,18 +15,16 @@ class Item implements \JsonSerializable{
     private string $modelo;
     private string $fabricante;
     private float  $valorPorHora;
-    private string $avarias;
     private bool   $disponibilidade;
     private string $tipo;
 
-    public function  __construct(int | null $id, string $codigo, string $descricao, string $modelo, string $fabricante, float $valorPorHora, string $avarias, bool $disponibilidade, string $tipo){
+    public function  __construct(int | null $id, string $codigo, string $descricao, string $modelo, string $fabricante, float $valorPorHora, bool $disponibilidade, string $tipo){
         $this->id = $id;
         $this->codigo = $codigo;
         $this->descricao = $descricao;
         $this->modelo = $modelo;
         $this->fabricante = $fabricante;
         $this->valorPorHora = $valorPorHora;
-        $this->avarias = $avarias;
         $this->disponibilidade = $disponibilidade;
         $this->tipo = $tipo;
     }
@@ -77,14 +75,6 @@ class Item implements \JsonSerializable{
 
     public function getValorPorHora(): float {
         return $this->valorPorHora;
-    }
-
-    public function setAvarias(string $avarias): void {
-        $this->avarias = $avarias;
-    }
-
-    public function getAvarias(): string {
-        return $this->avarias;
     }
 
     public function setDisponibilidade(bool $disponibilidade): void {
@@ -140,7 +130,7 @@ class Item implements \JsonSerializable{
 
     /**
      * Serializa item para manuseio da API.
-     * @return array{avarias: string, codigo: string, descricao: string, disponibilidade: bool, fabricante: string, id: int, modelo: string, tipo: string, valorPorHora: float}
+     * @return array{codigo: string, descricao: string, disponibilidade: bool, fabricante: string, id: int, modelo: string, tipo: string, valorPorHora: float}
      */
     public function jsonSerialize(): mixed {
         return [
@@ -150,7 +140,6 @@ class Item implements \JsonSerializable{
             'modelo'            => $this->modelo,
             'fabricante'        => $this->fabricante,
             'valorPorHora'      => $this->valorPorHora,
-            'avarias'           => $this->avarias,
             'disponibilidade'   => $this->disponibilidade,
             'tipo'              => $this->tipo
         ];

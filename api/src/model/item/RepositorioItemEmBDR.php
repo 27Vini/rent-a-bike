@@ -13,7 +13,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      */
     public function adicionar(Item $item) : void{
         try{
-            $comando = "INSERT INTO item (codigo, descricao, modelo, fabricante, valorPorHora, avarias, disponibilidade, tipo) VALUES (:codigo, :descricao, :modelo, :fabricante, :valorPorHora, :avarias, :disponibilidade, :tipo)";
+            $comando = "INSERT INTO item (codigo, descricao, modelo, fabricante, valorPorHora, disponibilidade, tipo) VALUES (:codigo, :descricao, :modelo, :fabricante, :valorPorHora, :disponibilidade, :tipo)";
 
             $parametros = [
                 "codigo"            => $item->getCodigo(),
@@ -21,7 +21,6 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
                 "modelo"            => $item->getModelo(),
                 "fabricante"        => $item->getFabricante(),
                 "valorPorHora"      => $item->getValorPorHora(),
-                "avarias"           => $item->getAvarias(),
                 "disponibilidade"   => $item->getDisponibilidade(),
                 "tipo"              => $item->getTipo()
             ];
@@ -156,13 +155,12 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      *      modelo:string,
      *      fabricante:string,
      *      valorPorHora:float,
-     *      avarias:string,
      *      disponibilidade:int|bool,
      *      tipo:string
      * }$dadosItem
      * @return Item
      */
     private function transformarEmItem(array $dadosItem) : Item {
-        return new Item((int) $dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], (float) $dadosItem['valorPorHora'], $dadosItem['avarias'], boolval($dadosItem['disponibilidade']), $dadosItem['tipo']);
+        return new Item((int) $dadosItem['id'], $dadosItem['codigo'], $dadosItem['descricao'], $dadosItem['modelo'], $dadosItem['fabricante'], (float) $dadosItem['valorPorHora'], boolval($dadosItem['disponibilidade']), $dadosItem['tipo']);
     }   
 }

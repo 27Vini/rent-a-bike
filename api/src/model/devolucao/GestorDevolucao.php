@@ -24,7 +24,7 @@ class GestorDevolucao{
             }
             $funcionario = $this->repositorioFuncionario->coletarComId(intval($dados['funcionario']));
             if($funcionario == null){
-                throw new DominioException("Funcionário não encontrado com id " . $funcionario);
+                throw new DominioException("Funcionário não encontrado com id " . intval($dados['funcionario']));
             }
     
             $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario);

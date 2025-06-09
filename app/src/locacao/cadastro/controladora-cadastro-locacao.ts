@@ -58,7 +58,7 @@ export class ControladoraCadastroLocacao{
         try{
             const codigo = this.visao.coletarCodigoItem();
             const item = await this.gestor.coletarItemComCodigo(codigo);
-            this.visao.exibirItem({codigo:item.codigo, descricao:item.descricao, disponibilidade:item.disponibilidade, avarias:item.avarias, valorPorHora:item.valorPorHora});
+            this.visao.exibirItem({codigo:item.codigo, descricao:item.descricao, disponibilidade:item.disponibilidade, valorPorHora:item.valorPorHora});
         }catch(erro){
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);

@@ -118,16 +118,15 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         linha.remove();
     }
 
-    exibirItem({descricao, disponibilidade, avarias, valorPorHora}){
+    exibirItem({descricao, disponibilidade, valorPorHora}){
         const ul = document.querySelector(sel.listaItem);
         ul!.innerHTML = '';
 
         let disponivel = disponibilidade ? 'disponível' : 'indisponível';
-        let condicao = avarias == '' ? '' : `- ${avarias}`;
         let valorItem = Money.fromDecimal(valorPorHora, 'BRL');
 
         const li = document.createElement('li');
-        li.innerHTML = `${descricao} - R$${valorItem}/h ${condicao} - <strong>${disponivel}</strong>`
+        li.innerHTML = `${descricao} - R$${valorItem}/h - <strong>${disponivel}</strong>`
 
         ul!.appendChild(li);
         ul!.removeAttribute("hidden");

@@ -23,7 +23,6 @@ export class GestorLocacao{
             objItem.modelo,
             objItem.fabricante,
             objItem.valorPorHora,
-            objItem.avarias,
             objItem.disponibilidade,
             objItem.tipo
         );

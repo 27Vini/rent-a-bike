@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS item(
     modelo VARCHAR(255) NOT NULL , 
     fabricante VARCHAR(255) NOT NULL , 
     valorPorHora DECIMAL NOT NULL , 
-    avarias VARCHAR(255) NOT NULL , 
     disponibilidade BOOLEAN NOT NULL DEFAULT TRUE , 
     tipo VARCHAR(60) NOT NULL 
 );
@@ -76,4 +75,17 @@ CREATE TABLE IF NOT EXISTS devolucao(
     valor_pago DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY(locacao_id) REFERENCES locacao(id),
     FOREIGN KEY(funcionario_id) REFERENCES funcionario(id)
+);
+
+
+CREATE TABLE IF NOT EXISTS avaria (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    lancamento DATETIME NOT NULL,
+    descricao VARCHAR(90) NOT NULL,
+    foto VARCHAR(2083) NOT NULL,
+    valor DECIMAL(10,2) NOT NULL,
+    funcionario_id INT NOT NULL,
+    item_id INT NOT NULL,
+    FOREIGN KEY (avaliador_id) REFERENCES funcionario(id),
+    FOREIGN KEY (item_id) REFERENCES item(id)
 );

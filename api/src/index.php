@@ -15,6 +15,7 @@ $app = AppFactory::create();
 $pdo = null;
 $gestorDevolucao = null;
 $gestorLocacao = null;
+$gestorAvaria = null;
 try {
     $pdo = new PDO(
         'mysql:dbname=g4;host=localhost;charset=utf8',
@@ -26,11 +27,14 @@ try {
     );
 
     $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
+    $repositorioItem = new RepositorioItemEmBDR($pdo);
     $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo, $repositorioItemLocacao);
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
+    $repositorioAvaria = new RepositorioAvariaEmBDR($pdo, $repositorioItem, $repositorioFuncionario);
     $transacao = new TransacaoComPDO($pdo);
     $gestorLocacao = new GestorLocacao($repositorioLocacao, new RepositorioClienteEmBDR($pdo), $repositorioFuncionario , $transacao);
     $gestorDevolucao = new GestorDevolucao(new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao, $repositorioFuncionario), $repositorioLocacao, $repositorioFuncionario, $transacao);
+    $gestorAvaria = new GestorAvaria($repositorioAvaria, $repositorioItem, $repositorioFuncionario, $transacao);
 } catch ( PDOException $e ) {
     http_response_code( 500 );
     die( 'Erro ao criar o banco de dados.' );
@@ -301,6 +305,77 @@ $app->get('/itens', callable:function(Request $request, Response $response) use(
     finally{
         return $response;
     }
+});
+
+
+$app->get('/avarias', callable:function(Request $request, Response $response) use($gestorAvaria){
+    try{
+        $avarias = $gestorAvaria->coletarAvarias();
+
+        $response->getBody()->write(json_encode([
+            'success' => true,
+            'data'    => $avarias
+        ]));
+    } catch(DominioException $e){
+        $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+    }catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => $e->getMessage()
+        ]));
+    }catch(Exception $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false, 
+            'message' => 'Erro interno do servidor.'
+        ]));
+    }
+    finally{
+        return $response;
+    }
+});
+
+$app->post('/avarias', callable: function(Request $request, Response $response) use ($gestorAvaria){
+    $jsonBody = $request->getBody()->getContents();
+    $dados = json_decode($jsonBody, true);
+    try{
+        $gestorAvaria->salvarAvaria($dados);
+      
+        $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => true
+        ]));
+
+    }catch(DominioException $e){
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(Exception $e) {
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Erro interno do servidor: ' . $e->getMessage()
+        ])); 
+    }
+    finally{
+        return $response;
+    }
+
 });
 
 $app->run();
