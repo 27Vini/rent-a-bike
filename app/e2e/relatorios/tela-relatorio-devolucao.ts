@@ -25,8 +25,8 @@ export class TelaRelatorioDevolucao{
     }
 
     async preencherDados(dados : {dataInicial : Date, dataFinal : Date}){
-        const dataInicialString = this.gerarDataEHoraFormatada(dados.dataInicial);
-        const dataFinalString = this.gerarDataEHoraFormatada(dados.dataFinal);
+        const dataInicialString = this.gerarDataFormatada(dados.dataInicial);
+        const dataFinalString = this.gerarDataFormatada(dados.dataFinal);
 
         await this.page.fill(sel.dataInicial, dataInicialString);
         await this.page.fill(sel.dataFinal, dataFinalString);
@@ -46,9 +46,9 @@ export class TelaRelatorioDevolucao{
         expect(existeGraficoDesenhado).toBe(true);
     }
 
-    private gerarDataEHoraFormatada(data : Date): string{
+    private gerarDataFormatada(data : Date): string{
         data.setHours(data.getHours() - 3);
-        return data.toISOString().slice(0, 16);
+        return data.toISOString().slice(0, 10);
     }
 
 }

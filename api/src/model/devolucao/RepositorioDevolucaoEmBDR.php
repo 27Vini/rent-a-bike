@@ -34,9 +34,11 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
 
     public function coletarDevolucoesPorData(string $dataInicial, string $dataFinal): array{
         try{
-            $sql = "SELECT d.valor_pago as valor_pago, l.entrada as entrada FROM devolucao d
+            $sql = "SELECT SUM(d.valor_pago) as valor_pago, DATE(l.entrada) as entrada FROM devolucao d
                     JOIN locacao l on l.id = d.locacao_id
-                    WHERE l.entrada >= :dataInicial AND l.entrada <= :dataFinal";
+                    WHERE DATE(l.entrada) >= :dataInicial AND DATE(l.entrada) <= :dataFinal
+                    GROUP BY DATE(l.entrada)
+                    ";
 
             $ps = $this->executarComandoSql($sql, ['dataInicial' => $dataInicial, "dataFinal" => $dataFinal]);
             $dadosDevolucao = $ps->fetchAll();

@@ -29,7 +29,10 @@ class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
         const eixoY = [];
         const cores = ["green","blue","orange","brown"];
         for(const devolucao of devolucoes){
-            eixoX.push(devolucao.dataLocacao);
+            const partes = devolucao.dataLocacao.split("-");
+            const dataNoFormatoBrasileiro = `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+            eixoX.push(dataNoFormatoBrasileiro);
             eixoY.push(devolucao.totalPagoDevolucao);
         }
 
@@ -49,6 +52,23 @@ class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
             barPercentage: 0.4,
             categoryPercentage: 0.4 
             }]
+        },
+        options: {
+            scales: {
+            x: {
+                title: {
+                display: true,
+                text: 'Data da Locação'
+                }
+            },
+            y: {
+                title: {
+                display: true,
+                text: 'Total Pago na Devolução (R$)'
+                },
+                beginAtZero: true
+            }
+            }
         }
         });
     }

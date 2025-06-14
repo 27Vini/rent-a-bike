@@ -53,7 +53,7 @@ describe('Gestor Devolução', function(){
             $parametros["dataFinal"] = "2025-05-30T11:54";
 
             $devolucoes = $this->gestor->coletarDevolucoesParaGrafico($parametros);
-            expect(count($devolucoes))->toBe(3);
+            expect(count($devolucoes))->toBe(2);
         });
 
         it("Data final menor que a inicial deve retornar erro", function(){

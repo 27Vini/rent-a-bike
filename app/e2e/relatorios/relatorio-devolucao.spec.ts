@@ -31,7 +31,7 @@ test.describe('Relatório de devoluções por data de locação', async () => {
 
     test('Pesquisar com data final menor que a inicial deve retornar mensagem de erro.', async () => {
         const dataFinal = new Date();
-        dataFinal.setHours(dataFinal.getDay() - 3);
+        dataFinal.setDate(dataFinal.getDate() - 3);
         await tela.preencherDados({dataInicial : new Date(), dataFinal : dataFinal});
         await tela.clicar(sel.enviarBtn);
         await tela.esperarResposta("/devolucoes")
@@ -40,7 +40,7 @@ test.describe('Relatório de devoluções por data de locação', async () => {
 
     test('Pesquisar data inicial posterior a atual deve retornar mensagem de erro', async () => {
         const dataInicial = new Date();
-        dataInicial.setHours(dataInicial.getHours() + 5);
+        dataInicial.setDate(dataInicial.getDate() + 5);
         await tela.preencherDados({dataInicial : dataInicial, dataFinal : new Date()});
         await tela.clicar(sel.enviarBtn);
         await tela.esperarResposta("/devolucoes")
