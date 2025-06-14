@@ -1,0 +1,1 @@
+export const APP = "http://localhost:5173/"

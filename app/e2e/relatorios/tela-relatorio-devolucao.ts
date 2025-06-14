@@ -1,12 +1,13 @@
 import { Page, expect } from "@playwright/test";
 import { sel } from "../../src/devolucao/relatorio/sel-relatorio-devolucao";
+import { APP } from "../../infra/app";
 
 export class TelaRelatorioDevolucao{
     
     constructor(private page : Page){}
 
     async abrir(){
-        await this.page.goto("http://localhost:5173/app/pages/grafico-devolucoes.html");
+        await this.page.goto(APP + "app/pages/grafico-devolucoes.html");
     }
 
     async clicar(seletor : string){

@@ -1,11 +1,11 @@
 import{expect, Page} from '@playwright/test';
 import{seletores} from '../../src/locacao/relatorio/seletores-relatorio-itens'
-
+import { APP } from '../../infra/app';
 export class TelaRelatorioItens{
     constructor(private page:Page){}
 
     async abrir(){
-        await this.page.goto("http://localhost:5173/app/pages/relatorio-itens-locacoes.html");
+        await this.page.goto(APP + "app/pages/relatorio-itens-locacoes.html");
     }
 
     async clicar(elemento:string){

@@ -1,10 +1,11 @@
 import{expect, Page} from '@playwright/test';
+import {APP} from '../../infra/app';
 
 export class TelaLocacoes {
     constructor(private page:Page){}
 
     async abrir(){
-        await this.page.goto('http://localhost:5173');
+        await this.page.goto(APP);
     }
 
     async irPara(seletor){
