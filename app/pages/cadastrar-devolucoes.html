@@ -51,20 +51,43 @@
             <th>Código</th>
             <th>Descrição</th>
             <th>Subtotal</th>
+            <th></th>
         </thead>
         <tbody></tbody>
         <tfoot>
             <tr>
-                <td colspan="3"><img src="../styles/images/total.png" class="icon"/> Valor Total: R$<span id="valor-total"></span></td>
+                <td colspan="4"><img src="../styles/images/total.png" class="icon"/> Valor Total: R$<span id="valor-total"></span></td>
             </tr>
             <tr>
-                <td colspan="3"><img src="../styles/images/desconto.png" class="icon"/> Desconto: R$<span id="desconto"></span></td>
+                <td colspan="4"><img src="../styles/images/desconto.png" class="icon"/> Desconto: R$<span id="desconto"></span></td>
             </tr>
             <tr>
-                <td colspan="3"><img src="../styles/images/final.png" class="icon"/> Valor Final: R$<span id="valor-final"></span></td>
+                <td colspan="5"><img src="../styles/images/final.png" class="icon"/> Multas: R$<span id="valor-multas"></span></td>
+            </tr>
+            <tr>
+                <td colspan="5"><img src="../styles/images/final.png" class="icon"/> Valor Final: R$<span id="valor-final"></span></td>
             </tr>
         </tfoot>
     </table>
+
+    <dialog id="registro-avarias">
+        <h1>Registro de Avarias #<span id="item"></span></h1>
+
+        <hr>
+        <div class="bloco-avaria">
+            <div class="group-funcionario">
+                <label for="funcionario-avaria">Funcionario:</label>
+                <select id="funcionario-avaria" name="funcionario-avaria"></select>
+            </div>
+            <label for="descricao-avaria">Descrição:</label>
+            <input type="text" id="descricao-avaria">
+            <label for="foto-avaria">Imagem:</label>
+            <input type="file" id="foto-avaria" accept=".jpg, .jpeg">
+            <label for="valor">Valor a Cobrar (R$):</label>
+            <input type="number" id="valor">
+            <button id="cadastrar-avaria">Cadastrar</button>
+        </div>
+    </dialog>
     
     <button id="devolver">Devolver</button>
 

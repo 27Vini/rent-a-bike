@@ -86,6 +86,8 @@ CREATE TABLE IF NOT EXISTS avaria (
     valor DECIMAL(10,2) NOT NULL,
     funcionario_id INT NOT NULL,
     item_id INT NOT NULL,
+    devolucao_id INT NOT NULL,
     FOREIGN KEY (funcionario_id) REFERENCES funcionario(id),
-    FOREIGN KEY (item_id) REFERENCES item(id)
+    FOREIGN KEY (item_id) REFERENCES item(id),
+    FOREIGN KEY (devolucao_id) REFERENCES devolucao(id)
 );

@@ -89,9 +89,9 @@ INSERT INTO devolucao (locacao_id, data_de_devolucao, valor_pago, funcionario_id
 (2, '2025-05-18 14:05:00', 21.00, 1);
 
 
-INSERT INTO avaria (lancamento, descricao, foto, valor, funcionario_id, item_id) VALUES
-('2025-06-01 10:30:00', 'Risco no quadro da bicicleta', 'api/src/model/avaria/fotos/1.jpg', 150.00, 1, 1),
-('2025-06-02 14:45:00', 'Trava de segurança quebrada', 'api/src/model/avaria/fotos/2.jpg', 80.00, 2, 10),
-('2025-06-03 09:00:00', 'Capacete amassado', 'api/src/model/avaria/fotos/3.jpg', 40.00, 3, 3),
-('2025-06-04 16:15:00', 'Lanterna LED com defeito', 'api/src/model/avaria/fotos/4.jpg', 25.00, 2, 19),
-('2025-06-05 11:10:00', 'Aro torto após devolução', 'api/src/model/avaria/fotos/5.jpg', 120.00, 4, 5);
+INSERT INTO avaria (lancamento, descricao, foto, valor, funcionario_id, item_id, devolucao_id) VALUES
+('2025-06-01 10:30:00', 'Risco no quadro da bicicleta', 'api/src/model/avaria/fotos/1.jpg', 150.00, 1, 1, 1),
+('2025-06-02 14:45:00', 'Trava de segurança quebrada', 'api/src/model/avaria/fotos/2.jpg', 80.00, 2, 10, 2),
+('2025-06-03 09:00:00', 'Capacete amassado', 'api/src/model/avaria/fotos/3.jpg', 40.00, 3, 3, 1),
+('2025-06-04 16:15:00', 'Lanterna LED com defeito', 'api/src/model/avaria/fotos/4.jpg', 25.00, 2, 19, 2),
+('2025-06-05 11:10:00', 'Aro torto após devolução', 'api/src/model/avaria/fotos/5.jpg', 120.00, 4, 5, 2);

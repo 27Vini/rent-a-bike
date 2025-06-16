@@ -1,26 +1,51 @@
 <?php
-
+use Slim\Psr7\UploadedFile as UploadedFile;
 class GestorAvaria{
 
-    public function __construct(private RepositorioAvaria $repositorioAvaria, private RepositorioItem $repositorioItem, private RepositorioFuncionario $repositorioFuncionario ,private Transacao $transacao){
+    public function __construct(private RepositorioAvaria $repositorioAvaria, private RepositorioItem $repositorioItem, private RepositorioFuncionario $repositorioFuncionario){
 
+    }
+
+    /** Salva mais de uma avaria por vez 
+     * @param array<int,array{
+     *          dataHora:string,
+     *          item:string,
+     *          funcionario:string,
+     *          descricao:string,
+     *          valor:string
+     * }> $dadosAvarias
+     * @param array<string|int,array<string,UploadedFile>> $imagens
+     * @param string|int $idDevolucao
+    */
+    public function salvarAvarias(array $dadosAvarias, array $imagens, string|int $idDevolucao) : void {
+        foreach($dadosAvarias as $key => $dadosAvaria){
+            $imagem = $imagens[$key];
+            $this->salvarAvaria($dadosAvaria, $imagem, $idDevolucao);
+        }
     }
 
     /**
      * Salva uma avaria
-     * @param array<string,string> $dados
+     * @param array{
+     *          dataHora:string,
+     *          item:string,
+     *          funcionario:string,
+     *          descricao:string,
+     *          valor:string
+     * } $dados
+     * @param array<string,UploadedFile> $imagem
      * @return void
      */
-    public function salvarAvaria(array $dados): void{
-        $lancamentoString = htmlspecialchars($dados["lancamento"] ?? '');
-        $itemId = htmlspecialchars( $dados["item"] ?? '');
-        $funcionarioId = htmlspecialchars($dados['funcionario'] ?? '');
-        $descricao =  htmlspecialchars($dados['descricao'] ?? '');
-        $foto = htmlspecialchars($dados['foto'] ?? '');
-        $valor = htmlspecialchars($dados['valor'] ?? '');
-
+    public function salvarAvaria($dados, array $imagem, string|int $idDevolucao): void{
+        $lancamentoString = htmlspecialchars((string)$dados["dataHora"]);
+        $itemId = htmlspecialchars((string)$dados["item"]);
+        $funcionarioId = htmlspecialchars((string)$dados['funcionario']);
+        $descricao =  htmlspecialchars((string)$dados['descricao']);
+        $valor = htmlspecialchars((string)$dados['valor']);
+        $foto = '';
+        
         try{
-            $this->transacao->iniciar();
+            //$this->transacao->iniciar();
             $funcionario = $this->repositorioFuncionario->coletarComId(intval($funcionarioId));
             if($funcionario == null){
                 throw new DominioException("Funcionário não encontrado com id " . $funcionarioId);
@@ -31,13 +56,39 @@ class GestorAvaria{
             }
     
             $avaria = $this->instanciarAvaria($funcionario, $item, $lancamentoString, $descricao, $foto, $valor);
-        
-    
-            $this->repositorioAvaria->adicionar($avaria);
-            $this->transacao->finalizar();
+            
+            $this->repositorioAvaria->adicionar($avaria, $idDevolucao);
+            if(!empty($imagem)){
+                $this->salvarImagem($imagem['imagem'], $avaria->getId());
+            }
+
+            //$this->transacao->finalizar();
         } catch(Exception $e){
-            $this->transacao->desfazer();
+            //$this->transacao->desfazer();
             throw $e;
+        }
+    }
+
+    /**
+     * Salva imagem da avaria no servidor
+     * @param UploadedFile $imagemAvaria
+     * @param string|int $idAvaria
+     * @return void
+     */
+    private function salvarImagem(UploadedFile $imagemAvaria, string|int $idAvaria) : void{
+        try{
+            $caminhoDestino = __DIR__ . "/fotos/";
+            $extensao = pathinfo($imagemAvaria->getClientFilename(), PATHINFO_EXTENSION);
+
+            if(!is_dir($caminhoDestino))
+                mkdir($caminhoDestino);
+
+            $nomeImagem = $idAvaria . "." . $extensao;
+            $imagemAvaria->moveTo($caminhoDestino . $nomeImagem);
+
+            $this->repositorioAvaria->salvarCaminhoImagem($caminhoDestino . $nomeImagem, $idAvaria);
+        } catch (Exception $e){
+            throw new RepositorioException("Erro ao salvar imagem da avaria.");
         }
     }
 

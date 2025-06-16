@@ -9,5 +9,6 @@ export interface VisaoCadastroDevolucao{
     coletarSubtotais() : number[];
     coletarValorFinal() : string | null;
     limparForm() : void;
-    preencherValores({valorTotal, desconto, valorFinal})
+    preencherValores({valorTotal, desconto, valorFinal});
+    coletarDadosAvaria();
 }

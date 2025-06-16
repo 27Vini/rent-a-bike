@@ -1,3 +1,5 @@
+import { Avaria } from "../item/avaria";
+
 export class Devolucao {
 
     public constructor(
@@ -5,7 +7,8 @@ export class Devolucao {
         private dataDeDevolucao : Date | undefined,
         public readonly valorPago : number,
         public readonly locacao : string | undefined | number,
-        public readonly funcionario : number
+        public readonly funcionario : number,
+        public readonly avariasItens : Avaria[] | []
     ){       
     }
 
@@ -33,5 +36,29 @@ export class Devolucao {
         }
 
         return problemas
+    }
+
+    converterParaFormData() : FormData{
+        const dado = new FormData();
+
+        dado.append("funcionario", this.funcionario.toString());
+        dado.append("id", this.id.toString());
+        dado.append("locacao", this.locacao ? this.locacao.toString() : '');
+        dado.append("valorPago", Number(this.valorPago).toFixed(2));
+        dado.append("dataDeDevolucao", this.dataDeDevolucao ? this.dataDeDevolucao.toISOString() : '');
+
+        this.avariasItens.forEach((avaria, index) => {
+            dado.append(`avariasItens[${index}][descricao]`, avaria.descricao);
+            dado.append(`avariasItens[${index}][funcionario]`, avaria.funcionario.toString());
+            dado.append(`avariasItens[${index}][id]`, avaria.id ? avaria.id.toString() : '');
+            dado.append(`avariasItens[${index}][item]`, avaria.item.toString());
+            dado.append(`avariasItens[${index}][valor]`, Number(avaria.valor).toFixed(2));
+            dado.append(`avariasItens[${index}][dataHora]`, avaria.dataHora.toISOString());
+
+            if (avaria.imagem instanceof File)
+                dado.append(`avariasItens[${index}][imagem]`, avaria.imagem);
+        });
+
+        return dado;
     }
 }

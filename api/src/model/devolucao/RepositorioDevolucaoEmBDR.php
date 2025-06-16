@@ -60,7 +60,7 @@ class RepositorioDevolucaoEmBDR extends RepositorioGenericoEmBDR implements Repo
      * @throws \Exception
      * @return void
      */
-    public function adicionar(Devolucao $devolucao) : void{
+    public function adicionar(Devolucao $devolucao) : void {
         try{
             $comando = "INSERT INTO devolucao (locacao_id,data_de_devolucao,valor_pago,funcionario_id) VALUES (:locacao_id,:data_de_devolucao,:valor_pago, :funcionario_id)";
             $this->executarComandoSql($comando, ["locacao_id" => $devolucao->getLocacao()->getId(), "data_de_devolucao" => $devolucao->getDataDeDevolucao()->format('Y-m-d H:i:s'),

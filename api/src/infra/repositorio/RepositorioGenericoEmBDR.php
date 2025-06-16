@@ -26,7 +26,7 @@ abstract class RepositorioGenericoEmBDR {
      * Executa um comando
      * @param string $sql
      * @param array<string,string | int | float | bool> $parametros
-     * @throws \RepositorioException
+     * @throws \PDOException
      * @return PDOStatement
      */
     public function executarComandoSql( string $sql, array $parametros = [] ): PDOStatement {

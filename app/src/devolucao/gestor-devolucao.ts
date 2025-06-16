@@ -7,12 +7,14 @@ import { ServicoDevolucao } from './servico-devolucao.js';
 import { ItemLocacao } from '../item/item-locacao.js';
 import {toZonedTime } from 'date-fns-tz';
 import { DevolucaoGrafico } from './relatorio/DevolucaoGrafico.js'
+import { Avaria } from '../item/avaria.ts';
 
 export class GestorDevolucao{
 
     private locacaoesDoCliente : [];
     private locacaoEscolhida : Locacao | undefined;
     private horasCorridas : number = 0;
+    private avarias : Avaria[] = [];
 
     async coletarDevolucoes(){
         const response = await fetch( API + 'devolucoes');
@@ -78,7 +80,7 @@ export class GestorDevolucao{
 
     private criarDevolucao(dataDeDevolucao, valorPago, idFuncionario) : Devolucao{
         const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
-        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, idFuncionario);
+        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, idFuncionario, this.avarias);
         const problemas : string [] = devolucao.validar();
         if(problemas.length > 0){
             throw ErrorDominio.comProblemas(problemas);
@@ -90,7 +92,8 @@ export class GestorDevolucao{
 
     async salvarDevolucao(dataDevolucao, valorPago, idFuncionario){
         const devolucao = this.criarDevolucao(dataDevolucao, valorPago, idFuncionario);
-        const response = await fetch( API + 'devolucoes', {method : 'POST', headers : {'Content-Type': 'application/json'}, body : JSON.stringify(devolucao)})
+        const formDataDevolucao = devolucao.converterParaFormData();
+        const response = await fetch( API + 'devolucoes', {method : 'POST', body : formDataDevolucao})
 
         const retorno = await response.json();
         if(!retorno.success){
@@ -136,5 +139,14 @@ export class GestorDevolucao{
             this.horasCorridas = Math.ceil(horas);
         }
         return this.horasCorridas;
+    }
+
+    public registrarAvaria(dadosAvaria){
+        const avaria = new Avaria(null, dadosAvaria.descricao, dadosAvaria.idItem, new Date(), dadosAvaria.funcionario, dadosAvaria.valor, dadosAvaria.imagem[0]);
+        const problemas = avaria.validar();
+        if(problemas.length > 0)
+            throw ErrorDominio.comProblemas(problemas);
+
+        this.avarias.push(avaria);
     }
 }

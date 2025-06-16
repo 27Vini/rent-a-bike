@@ -8,7 +8,16 @@ interface RepositorioAvaria{
      * @throws Exception
      * @return void
      */
-    public function adicionar(Avaria $avaria) : void;
+    public function adicionar(Avaria $avaria, string|int $idDevolucao) : void;
+
+    /**
+     * Salva o caminho da imagem da avaria
+     * @param string $caminhoImagem
+     * @param string|int $idAvaria
+     * @return void
+     * @throws RepositorioException
+     */
+    public function salvarCaminhoImagem(string $caminhoImagem, string|int $idAvaria) : void;
 
     /**
      * Coleta avaria com o ID.

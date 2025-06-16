@@ -35,22 +35,39 @@ class RepositorioAvariaEmBDR extends RepositorioGenericoEmBDR implements Reposit
     /**
      * Adiciona avaria ao banco
      * @param Avaria $avaria
+     * @param string|int $idDevolucao
      * @throws \RepositorioException
      * @throws \Exception
      * @return void
      */
-    public function adicionar(Avaria $avaria) : void{
+    public function adicionar(Avaria $avaria, string|int $idDevolucao) : void{
         try{
-            $comando = "INSERT INTO avaria (lancamento, funcionario_id, descricao, foto, valor, item_id) VALUES (:lancamento, :funcionario_id, :descricao, :foto, :valor, :item_id)";
+            $comando = "INSERT INTO avaria (lancamento, funcionario_id, descricao, foto, valor, item_id, devolucao_id) VALUES (:lancamento, :funcionario_id, :descricao, :foto, :valor, :item_id, :devolucao_id)";
             $this->executarComandoSql($comando, ["lancamento" => $avaria->getLancamento()->format('Y-m-d H:i:s'), "funcionario_id" => $avaria->getAvaliador()->getId(),
-                "descricao" => $avaria->getDescricao(), "foto" => $avaria->getFoto(), "valor" => $avaria->getValor(), "item_id" => $avaria->getItem()->getId()
+                "descricao" => $avaria->getDescricao(), "foto" => $avaria->getFoto(), "valor" => $avaria->getValor(), "item_id" => $avaria->getItem()->getId(), "devolucao_id" => $idDevolucao
             ]);
         
             $avaria->setId($this->ultimoIdAdicionado());
         }catch( PDOException $e){
-            throw new RepositorioException("Erro ao adicionar avaria.", $e->getCode());
+            throw new RepositorioException($e, $e->getCode());
         } catch(Throwable $e){
             throw new Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     * Salva o caminho da imagem da avaria
+     * @param string $caminhoImagem
+     * @param string|int $idAvaria
+     * @return void
+     * @throws RepositorioException
+     */
+    public function salvarCaminhoImagem(string $caminhoImagem, string|int $idAvaria) : void {
+        try{
+            $comando = "UPDATE avaria SET foto = :caminhoFoto WHERE id = :id";
+            $this->executarComandoSql($comando, ['caminhoFoto' => $caminhoImagem, 'id' => $idAvaria]);
+        }catch(PDOException $e){
+            throw new RepositorioException("Erro ao salvar imagem da avaria de id: ".$idAvaria, $e->getCode());
         }
     }
 

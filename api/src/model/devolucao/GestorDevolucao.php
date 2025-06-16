@@ -1,18 +1,31 @@
 <?php
+use Slim\Psr7\UploadedFile as UploadedFile;
 
 class GestorDevolucao{
-    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario ,private Transacao $transacao){
+    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario, private GestorAvaria $gestorAvaria, private Transacao $transacao){
 
     }
 
     /**
      * Salva uma devolução
-     * @param array<string,string> $dados
+     * @param array{
+     *          dataDeDevolucao:string,
+     *          locacao:string,
+     *          funcionario:string, 
+     *          avariasItens:array<int,array{
+        *          dataHora:string,
+        *          item:string,
+        *          funcionario:string,
+        *          descricao:string,
+        *          valor:string
+     *          }>
+     * }$dados
+     * @param array<string|int,array<string,UploadedFile>> $imagens
      * @return void
      */
-    public function salvarDevolucao(array $dados): void{
-        $dataDeDevolucaoString = htmlspecialchars($dados["dataDeDevolucao"] ?? '');
-        $locacaoId = htmlspecialchars( $dados["locacao"] ?? '' );
+    public function salvarDevolucao(array $dados, array $imagens): void{
+        $dataDeDevolucaoString = htmlspecialchars($dados["dataDeDevolucao"]);
+        $locacaoId = htmlspecialchars($dados["locacao"]);
         if(!$dataDeDevolucaoString || !$locacaoId){
             throw new DominioException("Locação ou data de devolução não foram enviados.");
         }
@@ -29,8 +42,11 @@ class GestorDevolucao{
     
             $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario);
         
-    
             $this->repositorioDevolucao->adicionar($devolucao);
+            if(!empty($dados['avariasItens'])){
+                $this->gestorAvaria->salvarAvarias($dados['avariasItens'], $imagens, $devolucao->getId());
+            }
+
             $this->transacao->finalizar();
         } catch(Exception $e){
             $this->transacao->desfazer();

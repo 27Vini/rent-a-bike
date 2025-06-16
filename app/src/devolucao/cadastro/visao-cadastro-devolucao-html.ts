@@ -1,6 +1,7 @@
 import { ControladoraCadastroDevolucao } from "./controladora-cadastro-devolucao.js";
 import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import { sel } from './seletores-cadastro-devolucao.js';
+import { Devolucao } from "../devolucao.js";
 
 export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     private controladora : ControladoraCadastroDevolucao;
@@ -25,11 +26,15 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     public exibirFuncionarios(funcionarios) {
-        const select = document.querySelector(sel.selectFuncionarios);
+        const selectDevolucao = document.querySelector(sel.selectFuncionarios);
+        const selectAvarias = document.querySelector(sel.selectFuncionariosAvaria);
 
-        select!.innerHTML = funcionarios.map(f =>
+        const funcionariosSelect = funcionarios.map(f =>
             this.transformarEmOption({value:f.id, option:f.nome})
         ).join('');
+
+        selectDevolucao!.innerHTML = funcionariosSelect;
+        selectAvarias!.innerHTML = funcionariosSelect;  
     }
 
     private transformarEmOption({value, option}) {
@@ -95,6 +100,16 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         return valores;
     }
 
+    coletarDadosAvaria() {
+        return {
+            idItem      : document.querySelector(sel.inputItemAvaria)!.textContent,
+            imagem      : document.querySelector<HTMLInputElement>(sel.inputFotoAvaria)!.files,
+            descricao   : document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value,
+            valor       : document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value,
+            funcionario : document.querySelector<HTMLInputElement>(sel.selectFuncionariosAvaria)!.value
+        }
+    }
+
     exibirLocacoes(locacoes) {
         document.querySelector<HTMLOutputElement>(sel.output)!.innerText = "";
         if(locacoes.length > 1){
@@ -148,10 +163,24 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
                     <td>${itemLoc.item.codigo}</td>
                     <td>${itemLoc.item.descricao}</td>
                     <td>${subtotal}</td>
+                    <td><button class="registrar-avaria" data-item-id="${itemLoc.item.id}">Lançar avaria</button></td>
                 </tr>
             ` 
         }
+
+        document.querySelectorAll<HTMLElement>(sel.botaoRegistrarAvaria)!.forEach((e) => e.onclick = this.registrarAvaria.bind(this));
         this.controladora.calcularValores()
+    }
+
+    private registrarAvaria(e){
+        e.preventDefault();
+        const botao = e.target;
+        const idItem = botao.dataset.itemId;
+
+        document.querySelector<HTMLOutputElement>(sel.inputItemAvaria)!.innerText = idItem;
+        document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
+
+        document.querySelector<HTMLButtonElement>(sel.botaoCadastrarAvaria)!.addEventListener('click', this.controladora.registrarAvaria.bind(this.controladora));
     }
 
     preencherValores({valorTotal, desconto, valorFinal}){

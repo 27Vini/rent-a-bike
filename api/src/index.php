@@ -160,17 +160,16 @@ $app->get('/devolucoes', callable:function(Request $request, Response $response)
 });
 
 $app->post('/devolucoes', callable: function(Request $request, Response $response) use ($pdo){
-    $jsonBody = $request->getBody()->getContents();
-    $dados = json_decode($jsonBody, true);
+    $dados = $request->getParsedBody();
+    $imagens = $request->getUploadedFiles() ? $request->getUploadedFiles()['avariasItens'] : [];
     $gestorDevolucao = criarGestorDeDevolucao($pdo);
     try{
-        $gestorDevolucao->salvarDevolucao($dados);
+        $gestorDevolucao->salvarDevolucao($dados, $imagens);
       
         $response = $response->withStatus(201)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => true
         ]));
-
     }catch(DominioException $e){
         $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
@@ -339,44 +338,44 @@ $app->get('/avarias', callable:function(Request $request, Response $response) us
     }
 });
 
-$app->post('/avarias', callable: function(Request $request, Response $response) use ($pdo){
-    $jsonBody = $request->getBody()->getContents();
-    $dados = json_decode($jsonBody, true);
-    $gestorAvaria = criarGestorDeAvaria($pdo);
-    try{
-        $gestorAvaria->salvarAvaria($dados);
+// $app->post('/avarias', callable: function(Request $request, Response $response) use ($pdo){
+//     $jsonBody = $request->getBody()->getContents();
+//     $dados = json_decode($jsonBody, true);
+//     $gestorAvaria = criarGestorDeAvaria($pdo);
+//     try{
+//         $gestorAvaria->salvarAvaria($dados);
       
-        $response = $response->withStatus(201)->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode([
-            'success' => true
-        ]));
+//         $response = $response->withStatus(201)->withHeader('Content-Type', 'application/json');
+//         $response->getBody()->write(json_encode([
+//             'success' => true
+//         ]));
 
-    }catch(DominioException $e){
-        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]));
+//     }catch(DominioException $e){
+//         $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+//         $response->getBody()->write(json_encode([
+//             'success' => false,
+//             'message' => $e->getMessage()
+//         ]));
 
-    } catch(RepositorioException $e){
-        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode([
-            'success' => false,
-            'message' => $e->getMessage()
-        ]));
+//     } catch(RepositorioException $e){
+//         $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+//         $response->getBody()->write(json_encode([
+//             'success' => false,
+//             'message' => $e->getMessage()
+//         ]));
 
-    } catch(Exception $e) {
-        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
-        $response->getBody()->write(json_encode([
-            'success' => false,
-            'message' => 'Erro interno do servidor: ' . $e->getMessage()
-        ])); 
-    }
-    finally{
-        return $response;
-    }
+//     } catch(Exception $e) {
+//         $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+//         $response->getBody()->write(json_encode([
+//             'success' => false,
+//             'message' => 'Erro interno do servidor: ' . $e->getMessage()
+//         ])); 
+//     }
+//     finally{
+//         return $response;
+//     }
 
-});
+// });
 
 $app->run();
 

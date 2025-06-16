@@ -16,5 +16,5 @@ export const sel = {
     campoValorTotal     : ".valor-total",
     campoValorFinal     : ".valor-final",
     campoDesconto       : ".valor-desconto",
-    output              : "output"
+    output              : ".div-alerta output"
 }

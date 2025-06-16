@@ -57,6 +57,18 @@ export class ControladoraCadastroDevolucao {
         this.visao.exibirLocacoes(locacao);
     }
 
+    registrarAvaria(){
+        try{
+            const dadosAvaria = this.visao.coletarDadosAvaria();
+            this.gestor.registrarAvaria(dadosAvaria);
+            this.visao.exibirMensagens(["Avaria do item registrada com sucesso!"], false);
+        }catch(error){
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas(), true);
+            else
+                this.visao.exibirMensagens([ error.message ], true);
+        }
+    } 
 
     async enviarDados(){
         try{

@@ -10,24 +10,27 @@ describe('Gestor Devolução', function(){
         $repoLocacao = new RepositorioLocacaoEmBDR($pdo, $repoItemLocacao);
         $repoFuncionario = new RepositorioFuncionarioEmBDR($pdo);
         $repo = new RepositorioDevolucaoEmBDR( $pdo, $repoLocacao, $repoFuncionario);
+        $repoAvaria = new RepositorioAvariaEmBDR($pdo, new RepositorioItemEmBDR($pdo), $repoFuncionario);
         $transacao = new TransacaoComPDO($pdo);
-        $this->gestor = new GestorDevolucao($repo, $repoLocacao,$repoFuncionario ,$transacao);
+
+        $gestorAvaria = new GestorAvaria($repoAvaria, new RepositorioItemEmBDR($pdo), $repoFuncionario);
+        $this->gestor = new GestorDevolucao($repo, $repoLocacao,$repoFuncionario, $gestorAvaria, $transacao);
     });
 
     it("Cadastra uma devolução válida", function(){
-        $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3', "funcionario" => 1]);
+        $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3', "funcionario" => 1], []);
         expect(1)->toBe(1);
     });
 
     it("Cadastrar devolução de uma locação já devolvida deve retornar erro", function(){
         expect(function (){
-            $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3', "funcionario" => 1]);
+            $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '3', "funcionario" => 1], []);
         })->toThrow(new DominioException());
     });
 
     it("Cadastrar devolução com uma locação inexistente deve retornar erro", function(){
         expect(function(){
-            $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '100']);
+            $this->gestor->salvarDevolucao(["dataDeDevolucao"=> '2025-05-23 11:14:00', "locacao" => '100'], []);
         })->toThrow(new DominioException());
     });
 
