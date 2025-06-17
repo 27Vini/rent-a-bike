@@ -55,6 +55,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         }
     }
 
+    exibirMulta(multa) {
+        console.log(multa);
+    }
+
     exibirMensagens(mensagens: string[], erro:boolean) {
         const classErro = "alert";
         const classSucesso = "success";

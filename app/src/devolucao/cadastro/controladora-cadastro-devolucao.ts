@@ -60,7 +60,9 @@ export class ControladoraCadastroDevolucao {
     registrarAvaria(){
         try{
             const dadosAvaria = this.visao.coletarDadosAvaria();
+            const multa = this.gestor.calcularMulta();
             this.gestor.registrarAvaria(dadosAvaria);
+            this.visao.exibirMulta(multa);
             this.visao.exibirMensagens(["Avaria do item registrada com sucesso!"], false);
         }catch(error){
             if(error instanceof ErrorDominio)

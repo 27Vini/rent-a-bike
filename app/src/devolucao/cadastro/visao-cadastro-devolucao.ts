@@ -1,5 +1,6 @@
 export interface VisaoCadastroDevolucao{
     exibirFuncionarios(funcionarios);
+    exibirMulta(multa);
     exibirMensagens(mensagem : string[], erro:boolean);
     coletarInputLocacao();
     coletarIdFuncionario();

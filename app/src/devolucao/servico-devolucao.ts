@@ -1,4 +1,6 @@
 import { Currencies, Money } from "ts-money";
+import { ItemLocacao } from "../item/item-locacao";
+import { Avaria } from "../item/avaria";
 
 export class ServicoDevolucao{
     static calcularValores(subtotais : number [], horasCorridas : number) : {valorTotal, desconto, valorFinal}{
@@ -26,5 +28,22 @@ export class ServicoDevolucao{
 
     private static calcularValorFinal(valorTotal : Money , desconto : Money) :Money{
         return valorTotal.subtract(desconto);
+    }
+
+    public static calcularMulta(itensLocacao : ItemLocacao[], avariasDevolucao : Avaria[]){
+        let multa = 0;
+        
+        // const avarias = [...avariasDevolucao];
+        // console.log(avarias[0]);
+
+        // for(const il of itensLocacao){
+        //     for(const a of avarias){
+        //         if(a.item == il.item.id){                    
+        //             multa += (Number(il.precoLocacao) * 0.10) + Number(a.valor);
+        //         }
+        //     }
+        // }
+
+        return multa;
     }
 }

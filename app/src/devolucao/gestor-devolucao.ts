@@ -115,6 +115,13 @@ export class GestorDevolucao{
         // return {valorTotal, desconto, valorFinal};
     }
 
+    //taxa de limpeza sobre o valor dos itens + valor da avaria
+    calcularMulta(){
+        return 0;
+        // const itensLocacao = this.locacaoEscolhida!.itens;
+        // return ServicoDevolucao.calcularMulta(itensLocacao, this.avarias);
+    }
+
     calcularSubtotal(item : ItemLocacao, devolucao) : Money{
         const horasCorridas = this.calcularHorasCorridas(devolucao);
         const valorPorHora = new Money(item.precoLocacao * 100, Currencies.BRL);
