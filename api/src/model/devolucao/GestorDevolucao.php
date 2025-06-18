@@ -40,7 +40,8 @@ class GestorDevolucao{
                 throw new DominioException("Funcionário não encontrado com id " . intval($dados['funcionario']));
             }
     
-            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario);
+            $avariasItens = !empty($dados['avariasItens']) ? $dados['avariasItens'] : [];
+            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario, $avariasItens);
         
             $this->repositorioDevolucao->adicionar($devolucao);
             if(!empty($dados['avariasItens'])){
@@ -106,13 +107,20 @@ class GestorDevolucao{
      * @param Locacao $locacao
      * @param Funcionario $funcionario
      * @param string $dataDeDevolucaoString
+     * @param array<int,array{
+     *          dataHora:string,
+     *          item:string,
+     *          funcionario:string,
+     *          descricao:string,
+     *          valor:string
+     * }> $dadosAvarias
      * @return Devolucao
      */
-    private function instanciarDevolucao(Locacao $locacao, string $dataDeDevolucaoString, Funcionario $funcionario): Devolucao{
+    private function instanciarDevolucao(Locacao $locacao, string $dataDeDevolucaoString, Funcionario $funcionario, array $dadosAvarias): Devolucao{
         $dataDeDevolucao = $this->transformarData($dataDeDevolucaoString);
         $devolucao = new Devolucao('1', $locacao, $dataDeDevolucao, $funcionario);
 
-        $valorASerPago = $devolucao->calcularValorASerPago();
+        $valorASerPago = $devolucao->calcularValorASerPago($dadosAvarias);
     
         $devolucao->setValorPago($valorASerPago);
         $problemas = $devolucao->validar();

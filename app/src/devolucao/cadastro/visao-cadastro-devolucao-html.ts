@@ -1,7 +1,6 @@
 import { ControladoraCadastroDevolucao } from "./controladora-cadastro-devolucao.js";
 import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import { sel } from './seletores-cadastro-devolucao.js';
-import { Devolucao } from "../devolucao.js";
 
 export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     private controladora : ControladoraCadastroDevolucao;
@@ -56,7 +55,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     exibirMulta(multa) {
-        console.log(multa);
+        document.querySelector<HTMLOutputElement>(sel.valorMultas)!.innerText = multa.toString()
     }
 
     exibirMensagens(mensagens: string[], erro:boolean) {
@@ -185,6 +184,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
 
         document.querySelector<HTMLButtonElement>(sel.botaoCadastrarAvaria)!.addEventListener('click', this.controladora.registrarAvaria.bind(this.controladora));
+    }
+
+    atualizarValorFinal(valorFinal){
+        document.querySelector<HTMLOutputElement>(sel.valorFinal)!.innerText = valorFinal.toString();
     }
 
     preencherValores({valorTotal, desconto, valorFinal}){

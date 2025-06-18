@@ -15,6 +15,7 @@ export class GestorDevolucao{
     private locacaoEscolhida : Locacao | undefined;
     private horasCorridas : number = 0;
     private avarias : Avaria[] = [];
+    private valorFinalInicial : Money = new Money(0, Currencies.BRL)
 
     async coletarDevolucoes(){
         const response = await fetch( API + 'devolucoes');
@@ -108,7 +109,9 @@ export class GestorDevolucao{
     }
 
     calcularValores(subtotais : number []) : {valorTotal, desconto, valorFinal}{
-        return ServicoDevolucao.calcularValores(subtotais, this.horasCorridas);
+        const {valorTotal, desconto, valorFinal} = ServicoDevolucao.calcularValores(subtotais, this.horasCorridas);
+        this.valorFinalInicial = valorFinal;
+        return {valorTotal, desconto, valorFinal}
         // const valorTotal = this.calcularValorTotal(subtotais);
         // const desconto = this.calcularDesconto(valorTotal);
         // const valorFinal = this.calcularValorFinal(valorTotal, desconto);
@@ -117,9 +120,12 @@ export class GestorDevolucao{
 
     //taxa de limpeza sobre o valor dos itens + valor da avaria
     calcularMulta(){
-        return 0;
-        // const itensLocacao = this.locacaoEscolhida!.itens;
-        // return ServicoDevolucao.calcularMulta(itensLocacao, this.avarias);
+        const itensLocacao = this.locacaoEscolhida!.itens;
+        return ServicoDevolucao.calcularMulta(itensLocacao, this.avarias);
+    }
+
+    recalcularValorFinal(multa: Money): Money {
+        return this.valorFinalInicial.add(multa);
     }
 
     calcularSubtotal(item : ItemLocacao, devolucao) : Money{

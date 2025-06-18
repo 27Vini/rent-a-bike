@@ -88,7 +88,7 @@ class GestorAvaria{
 
             $this->repositorioAvaria->salvarCaminhoImagem($caminhoDestino . $nomeImagem, $idAvaria);
         } catch (Exception $e){
-            throw new RepositorioException("Erro ao salvar imagem da avaria.");
+            throw new DominioException("Erro ao salvar imagem da avaria.");
         }
     }
 

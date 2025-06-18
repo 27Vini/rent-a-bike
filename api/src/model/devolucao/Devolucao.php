@@ -87,19 +87,35 @@ class Devolucao implements \JsonSerializable{
 
     /**
      * Calcula valor a ser pago
+     * @param array<int,array{
+     *          dataHora:string,
+     *          item:string,
+     *          funcionario:string,
+     *          descricao:string,
+     *          valor:string
+     * }> $dadosAvarias
      * @return float
      */
-    public function calcularValorASerPago(): float{
+    public function calcularValorASerPago(array $dadosAvarias): float{
         $total = 0;
+        $multa = 0;
         $horasCorridas = $this->calcularHorasCorridas();
+        $temAvarias = !empty($dadosAvarias);
         /**
          * @var ItemLocacao $item
          */
         foreach($this->locacao->getItensLocacao() as $item){
             $total += $item->calculaSubtotal($horasCorridas);
+            if($temAvarias){
+                foreach($dadosAvarias as $avaria){
+                    if($avaria['item'] == $item->getItem()->getId()){
+                        $multa += $item->getPrecoLocacao() * 0.1 + (float) $avaria['valor'];
+                    }
+                }
+            }
         }
         $desconto = $this->calculaDesconto($total, $horasCorridas);
-        return $total - $desconto;
+        return $total + $multa - $desconto;
     }
 
     /**

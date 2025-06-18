@@ -30,19 +30,20 @@ export class ServicoDevolucao{
         return valorTotal.subtract(desconto);
     }
 
-    public static calcularMulta(itensLocacao : ItemLocacao[], avariasDevolucao : Avaria[]){
-        let multa = 0;
-        
-        // const avarias = [...avariasDevolucao];
-        // console.log(avarias[0]);
+    public static calcularMulta(itensLocacao : ItemLocacao[], avariasDevolucao : Avaria[]) : Money{
+        let multa = new Money(0, Currencies.BRL)
 
-        // for(const il of itensLocacao){
-        //     for(const a of avarias){
-        //         if(a.item == il.item.id){                    
-        //             multa += (Number(il.precoLocacao) * 0.10) + Number(a.valor);
-        //         }
-        //     }
-        // }
+        for(const il of itensLocacao){
+            for(const a of avariasDevolucao){
+                if(a.item == il.item.id){              
+                    const precoLocacao = Money.fromDecimal(il.precoLocacao, Currencies.BRL);
+                    const valorAvaria = Money.fromDecimal(a.valor, Currencies.BRL);
+                    const precoLocacaoPorcentagem = precoLocacao.multiply(0.10);
+
+                    multa = multa.add(precoLocacaoPorcentagem).add(valorAvaria);
+                }
+            }
+        }
 
         return multa;
     }

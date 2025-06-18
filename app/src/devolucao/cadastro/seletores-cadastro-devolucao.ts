@@ -18,5 +18,6 @@ export const sel = {
     inputValorAvaria            : "#valor",
     modalAvaria                 : "#registro-avarias",
     botaoCadastrarAvaria        : "#cadastrar-avaria",
-    selectFuncionariosAvaria    : "#funcionario-avaria"
+    selectFuncionariosAvaria    : "#funcionario-avaria",
+    valorMultas                 : "#valor-multas"
 }

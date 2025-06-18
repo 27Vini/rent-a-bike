@@ -12,4 +12,5 @@ export interface VisaoCadastroDevolucao{
     limparForm() : void;
     preencherValores({valorTotal, desconto, valorFinal});
     coletarDadosAvaria();
+    atualizarValorFinal(valorFinal);
 }

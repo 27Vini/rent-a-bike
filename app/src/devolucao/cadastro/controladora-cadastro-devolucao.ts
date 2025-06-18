@@ -1,6 +1,5 @@
 import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import {GestorDevolucao} from '../gestor-devolucao.js';
-import { Item } from "../../item/item.js";
 import { ErrorDominio } from "../../../infra/ErrorDominio.js";
 import { ItemLocacao } from "../../item/item-locacao.js";
 
@@ -60,9 +59,11 @@ export class ControladoraCadastroDevolucao {
     registrarAvaria(){
         try{
             const dadosAvaria = this.visao.coletarDadosAvaria();
-            const multa = this.gestor.calcularMulta();
             this.gestor.registrarAvaria(dadosAvaria);
+            const multa = this.gestor.calcularMulta();
             this.visao.exibirMulta(multa);
+            const novoValorFinal = this.gestor.recalcularValorFinal(multa);
+            this.visao.atualizarValorFinal(novoValorFinal);
             this.visao.exibirMensagens(["Avaria do item registrada com sucesso!"], false);
         }catch(error){
             if(error instanceof ErrorDominio)
