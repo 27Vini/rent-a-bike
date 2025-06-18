@@ -1,6 +1,8 @@
 import {test} from '@playwright/test';
 import { TelaCadastroDevolucao } from './TelaCadastroDevolucao';
 import { sel } from '../../src/devolucao/cadastro/seletores-cadastro-devolucao';
+const path = require('path');
+
 
 test.describe('Cadastro de Devoluções', async () =>{
     let tela : TelaCadastroDevolucao
@@ -65,5 +67,16 @@ test.describe('Cadastro de Devoluções', async () =>{
         await tela.clicar(sel.devolverBtn);
         await tela.esperarResposta('/devolucoes')
         await tela.deveExibirMensagem('Devolvido')
+    })
+
+    test('Cadastro de avaria é realizado com sucesso', async() => {
+        const caminhoImagem = path.resolve(__dirname, 'avariaTeste.jpg');
+        
+        await tela.preencherDados({locacao : '5', data: new Date()});
+        await tela.clicar(sel.pesquisarLocacao);
+
+        await tela.clicar(sel.botaoRegistrarAvaria);
+        await tela.preencherModalAvaria({descricao : "Testando avaria", valor : 20, caminhoImagem : caminhoImagem});
+        await tela.deveExibirMensagem("Avaria do item registrada com sucesso");
     })
 })

@@ -4,6 +4,10 @@ import { Devolucao } from '../src/devolucao/devolucao.js'
 import { ServicoDevolucao } from '../src/devolucao/servico-devolucao.js';
 import {GestorDevolucao} from '../src/devolucao/gestor-devolucao.js'
 import { Locacao } from '../src/locacao/locacao.js';
+import { Item } from '../src/item/item.js';
+import { ItemLocacao } from '../src/item/item-locacao.js';
+import { Avaria } from '../src/item/avaria.js';
+import { Currencies, Money } from 'ts-money';
 
 describe("Devolução", () => {
     it('Valida dado corretamente', async () => {
@@ -24,6 +28,15 @@ describe("Serviço Devolução", ()=>{
         expect(valorFinal).toBeCloseTo(9);
     })
 
+    it("Calcula multa corretamente", async() => {
+        const item = new Item(1, 'I00001', 'Item de teste', 'Modelo teste', 'Fabricante teste', 20, true, 'equipamento');
+        const itemLocacao = new ItemLocacao(10, item, 20, 40);
+        const avaria = new Avaria(2, "Avaria de teste", 1, new Date(), 2, 30, null);
+
+        const valorEsperado = new Money(3200, Currencies.BRL); //32.00
+        const valorRecebido = ServicoDevolucao.calcularMulta([itemLocacao], [avaria]);
+        expect(valorRecebido).toEqual(valorEsperado);
+    });
 })
 
 describe("Gestor de Devolução", () => {

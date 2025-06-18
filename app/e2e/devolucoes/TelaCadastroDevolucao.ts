@@ -24,6 +24,16 @@ export class TelaCadastroDevolucao{
             await this.page.selectOption(sel.selectLocacao, {index : 1});
     }
 
+    async preencherModalAvaria(dados:{descricao : string, valor : number, caminhoImagem : string}){
+        const modalVisivel = await this.page.locator(sel.modalAvaria).isVisible()
+        if(modalVisivel){
+            await this.page.fill(sel.inputDescAvaria, dados.descricao);
+            await this.page.fill(sel.inputValorAvaria, dados.valor.toString());
+            await this.page.setInputFiles(sel.inputFotoAvaria, dados.caminhoImagem);
+            await this.clicar(sel.botaoCadastrarAvaria);
+        }
+    }
+
     async esperarResposta(endpoint : string){
         await this.page.waitForResponse(response => response.url().includes(endpoint));
     }
