@@ -72,7 +72,7 @@ test.describe('Cadastro de Devoluções', async () =>{
     test('Cadastro de avaria é realizado com sucesso', async() => {
         const caminhoImagem = path.resolve(__dirname, 'avariaTeste.jpg');
         
-        await tela.preencherDados({locacao : '5', data: new Date()});
+        await tela.preencherDados({locacao : '10', data: new Date()});
         await tela.clicar(sel.pesquisarLocacao);
 
         await tela.clicar(sel.botaoRegistrarAvaria);

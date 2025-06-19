@@ -1,7 +1,9 @@
 <?php
 
 class GestorCliente {
-    public function __construct(private RepositorioCliente $repositorioCliente){}
+    public function __construct(private RepositorioCliente $repositorioCliente, private Autenticador $autenticador){
+        $this->autenticador->abrirSessao();
+    }
 
     /**
      * Coleta cliente pelo código ou CPF
@@ -10,6 +12,7 @@ class GestorCliente {
      */
     public function coletarComCodigoOuCpf(string $parametro){
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             $cliente = $this->repositorioCliente->coletarComCodigoOuCpf($parametro);
 
             return $cliente;

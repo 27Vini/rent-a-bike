@@ -1,16 +1,16 @@
 <?php
 
-function criarGestorDeLocacao(PDO $pdo): GestorLocacao{
+function criarGestorDeLocacao(PDO $pdo, Autenticador $autenticador): GestorLocacao{
     $repositorioCliente = new RepositorioClienteEmBDR($pdo);
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
     $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo, $repositorioItemLocacao);
     $transacao = new TransacaoComPDO($pdo);
     
-    return new GestorLocacao($repositorioLocacao, $repositorioCliente, $repositorioFuncionario, $transacao);
+    return new GestorLocacao($repositorioLocacao, $repositorioCliente, $repositorioFuncionario, $transacao, $autenticador);
 }
 
-function criarGestorDeDevolucao(PDO $pdo): GestorDevolucao{
+function criarGestorDeDevolucao(PDO $pdo, Autenticador $autenticador): GestorDevolucao{
     $transacao = new TransacaoComPDO($pdo);
 
     $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
@@ -18,35 +18,35 @@ function criarGestorDeDevolucao(PDO $pdo): GestorDevolucao{
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     $repositorioAvaria = new RepositorioAvariaEmBDR($pdo, new RepositorioItemEmBDR($pdo), $repositorioFuncionario);
     $repositorioDevolucao = new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao, $repositorioFuncionario);
-    $gestorAvaria = criarGestorDeAvaria($pdo);
+    $gestorAvaria = criarGestorDeAvaria($pdo, $autenticador);
 
-    return new GestorDevolucao($repositorioDevolucao, $repositorioLocacao, $repositorioFuncionario, $gestorAvaria, $transacao);
+    return new GestorDevolucao($repositorioDevolucao, $repositorioLocacao, $repositorioFuncionario, $gestorAvaria, $transacao, $autenticador);
 }
 
 
-function criarGestorDeAvaria(PDO $pdo): GestorAvaria{
+function criarGestorDeAvaria(PDO $pdo, Autenticador $autenticador): GestorAvaria{
     $repositorioItem = new RepositorioItemEmBDR($pdo);
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     $repositorioAvaria = new RepositorioAvariaEmBDR($pdo, $repositorioItem, $repositorioFuncionario);
     $transacao = new TransacaoComPDO($pdo);
     
-    return new GestorAvaria($repositorioAvaria, $repositorioItem, $repositorioFuncionario);
+    return new GestorAvaria($repositorioAvaria, $repositorioItem, $repositorioFuncionario, $autenticador);
 }
 
-function criarGestorDeFuncionario(PDO $pdo): GestorFuncionario{
+function criarGestorDeFuncionario(PDO $pdo, Autenticador $autenticador): GestorFuncionario{
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     
-    return new GestorFuncionario($repositorioFuncionario);
+    return new GestorFuncionario($repositorioFuncionario, $autenticador);
 }
 
-function criarGestorDeCliente(PDO $pdo): GestorCliente{
+function criarGestorDeCliente(PDO $pdo, Autenticador $autenticador): GestorCliente{
     $repositorioCliente = new RepositorioClienteEmBDR($pdo);
     
-    return new GestorCliente($repositorioCliente);
+    return new GestorCliente($repositorioCliente, $autenticador);
 }
 
-function criarGestorDeItem(PDO $pdo): GestorItem{
+function criarGestorDeItem(PDO $pdo, Autenticador $autenticador): GestorItem{
     $repositorioItem = new RepositorioItemEmBDR($pdo);
     
-    return new GestorItem($repositorioItem);
+    return new GestorItem($repositorioItem, $autenticador);
 }

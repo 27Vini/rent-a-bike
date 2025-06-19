@@ -1,17 +1,13 @@
 <?php
+require_once __DIR__ . '/../src/infra/repositorio/CriadorDeGestores.php';
+
 
 describe('Gestor de locações', function(){
     beforeAll(function(){
         `cd ../g4 && pnpm run db`;
         $pdo = new PDO('mysql:dbname=g4;host=localhost;charset=utf8', 'root', '');
 
-        $repoItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
-        $repoLocacao = new RepositorioLocacaoEmBDR($pdo, $repoItemLocacao);
-        $repoCliente = new RepositorioClienteEmBDR($pdo);
-        $repoFuncionario = new RepositorioFuncionarioEmBDR($pdo);
-
-        $transacao = new TransacaoComPDO($pdo);
-        $this->gestorLocacao = new GestorLocacao($repoLocacao, $repoCliente, $repoFuncionario, $transacao);
+        $this->gestorLocacao = criarGestorDeLocacao($pdo, new AutenticadorParaTestes(new GerenteDeSessaoEmSession()));
     });
 
     it('locação salva corretamente', function(){

@@ -1,7 +1,9 @@
 <?php
 
 class GestorLocacao {
-    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario, private Transacao $transacao){}
+    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario, private Transacao $transacao, private Autenticador $autenticador){
+        $this->autenticador->abrirSessao();
+    }
 
     /**
      * Salva uma locação
@@ -32,6 +34,7 @@ class GestorLocacao {
      */
     public function salvarLocacao(array $dadosLocacao) : void {
        try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             $this->transacao->iniciar();
 
             $cliente = $this->repositorioCliente->coletarComId(intval($dadosLocacao['cliente']));
@@ -116,10 +119,12 @@ class GestorLocacao {
     /**
      * Coleta todas as locações
      * @return array<Locacao>
+     * @throws DominioException
      * @throws Exception
      */
     public function coletarTodos() : array {
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             $locacoes = [];
             $locacoes = $this->repositorioLocacao->coletarTodos();
 
@@ -133,14 +138,18 @@ class GestorLocacao {
      * Coleta uma locação ou array de locações com array de parâmetros
      * @param array<string,string> $parametros
      * @throws Exception
+     * @throws DominioException
      * @return array<Locacao> | Locacao
      */
     public function coletarCom(array $parametros): array | Locacao{
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             foreach($parametros as &$p){
                 $p = htmlspecialchars($p);
             }
             return $this->repositorioLocacao->coletarComParametros($parametros);
+        }catch( DominioException $e){
+            throw $e;
         }catch(Exception $e){
             throw $e;
         }

@@ -2,8 +2,8 @@
 use Slim\Psr7\UploadedFile as UploadedFile;
 
 class GestorDevolucao{
-    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario, private GestorAvaria $gestorAvaria, private Transacao $transacao){
-
+    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario, private GestorAvaria $gestorAvaria, private Transacao $transacao, private Autenticador $autenticador){
+        $this->autenticador->abrirSessao();
     }
 
     /**
@@ -30,6 +30,7 @@ class GestorDevolucao{
             throw new DominioException("Locação ou data de devolução não foram enviados.");
         }
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             $this->transacao->iniciar();
             $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId, 'verificarAtivo' => '1']);
             if($locacao == null){
@@ -60,9 +61,11 @@ class GestorDevolucao{
      * @return array<Devolucao>
      */
     public function coletarDevolucoes():array{
-        try{
+        try{            
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             return $this->repositorioDevolucao->coletarTodos();
-        }catch(Exception $e){
+        } catch(Exception $e){
+            error_log($e->getMessage());
             throw $e;
         }
     }
@@ -74,26 +77,28 @@ class GestorDevolucao{
      * @return DevolucaoGraficoDTO[]
      */
     public function coletarDevolucoesParaGrafico(array $dados): array{
-        $dataInicial = htmlspecialchars($dados["dataInicial"] ?? "");
-        $dataFinal = htmlspecialchars($dados["dataFinal"] ?? "");
-        if($dataInicial === ''){
-            $dataInicial = date('Y-m-01');
-        }
-        if($dataFinal === ''){
-            $dataFinal = date('Y-m-t');
-        }
-
-        $dataInicial = new DateTime($dataInicial);
-        $dataFinal = new DateTime($dataFinal);
-        
-        if($dataInicial > new DateTime()){
-            throw new DominioException("A data inicial não pode ser maior que a data atual.");
-        }
-        if($dataFinal < $dataInicial){
-            throw new DominioException("A data final não pode ser menor que a data inicial.");
-        }
-        
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
+            
+            $dataInicial = htmlspecialchars($dados["dataInicial"] ?? "");
+            $dataFinal = htmlspecialchars($dados["dataFinal"] ?? "");
+            if($dataInicial === ''){
+                $dataInicial = date('Y-m-01');
+            }
+            if($dataFinal === ''){
+                $dataFinal = date('Y-m-t');
+            }
+
+            $dataInicial = new DateTime($dataInicial);
+            $dataFinal = new DateTime($dataFinal);
+            
+            if($dataInicial > new DateTime()){
+                throw new DominioException("A data inicial não pode ser maior que a data atual.");
+            }
+            if($dataFinal < $dataInicial){
+                throw new DominioException("A data final não pode ser menor que a data inicial.");
+            }
+        
             return $this->repositorioDevolucao->coletarDevolucoesPorData($dataInicial->format('Y-m-d H:i:s'), $dataFinal->format('Y-m-d H:i:s'));
         }catch(Exception $e){
             $this->transacao->desfazer();

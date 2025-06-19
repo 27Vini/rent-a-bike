@@ -1,7 +1,9 @@
 <?php
 
 class GestorItem{
-    public function __construct(private RepositorioItem $repositorioItem){}
+    public function __construct(private RepositorioItem $repositorioItem, private Autenticador $autenticador){
+        $this->autenticador->abrirSessao();
+    }
 
     /**
      * Coleta um item com o código informado
@@ -11,6 +13,7 @@ class GestorItem{
      */
     public function coletarComCodigo(string $codigo) : Item{
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             $item = $this->repositorioItem->coletarComCodigo($codigo);
 
             return $item;
@@ -26,15 +29,18 @@ class GestorItem{
      * @throws Exception
      */
     public function coletarItensParaRelatorio(array $parametros) : array {
-        $dataInicial = !empty($parametros['dataInicial']) ? (new DateTime($parametros['dataInicial'])) : new DateTime('first day of this month');
-        $dataFinal = !empty($parametros['dataFinal']) ? (new DateTime($parametros['dataFinal'])) : new DateTime('last day of this month');
-
-        if($dataInicial > new DateTime())
-            throw new DominioException("Data inicial não deve ser maior do que a data atual");
-        if($dataFinal < $dataInicial)
-            throw new DominioException("Data final não deve ser menor do que a data inicial");
-
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
+            
+            $dataInicial = !empty($parametros['dataInicial']) ? (new DateTime($parametros['dataInicial'])) : new DateTime('first day of this month');
+            $dataFinal = !empty($parametros['dataFinal']) ? (new DateTime($parametros['dataFinal'])) : new DateTime('last day of this month');
+
+            if($dataInicial > new DateTime())
+                throw new DominioException("Data inicial não deve ser maior do que a data atual");
+            if($dataFinal < $dataInicial)
+                throw new DominioException("Data final não deve ser menor do que a data inicial");
+
+
             $dataInicialString = $dataInicial->format("Y-m-d H:i:s");
             $dataFinalString = $dataFinal->format("Y-m-d H:i:s");
 

@@ -1,11 +1,13 @@
 <?php
+require_once __DIR__ . '/../src/infra/repositorio/CriadorDeGestores.php';
+
 
 describe("Testes para Relatório de Itens Alugados por Período", function(){
     beforeAll(function(){
         `cd ../g4 && pnpm run db`;
         $pdo = new PDO('mysql:dbname=g4;host=localhost;charset=utf8', 'root', '');
 
-        $this->gestorItem = new GestorItem(new RepositorioItemEmBDR($pdo));
+        $this->gestorItem = criarGestorDeItem($pdo, new AutenticadorParaTestes(new GerenteDeSessaoEmSession()));
     });
 
     describe("Datas válidas", function(){

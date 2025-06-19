@@ -95,17 +95,20 @@ export class GestorLocacao{
         );
 
         const retorno = await response.json()
-        if(!retorno.success){
-            throw new ErrorDominio(retorno.message);
+        if(!retorno.success || !response.ok){
+            throw ErrorDominio.comProblemas[(retorno.message)];
         }
     }
 
     async coletarLocacoes() : Promise<any>{
         const response = await fetch(API + "locacoes");
-        if(!response.ok)
-            throw ErrorDominio.comProblemas(["Erro ao obter as locações."]);
+        // if(!response.ok)
+        //     throw ErrorDominio.comProblemas(["Erro ao obter as locações."]);
 
         const locacoes = await response.json();
+        if(!response.ok){
+            throw ErrorDominio.comProblemas([locacoes.message])
+        }
         if(locacoes.length == 0)
             throw ErrorDominio.comProblemas(['Não há locações para serem exibidas.']);
 
@@ -119,7 +122,7 @@ export class GestorLocacao{
         const response = await fetch(API + "itens?codigo=" + codigo);
         const retorno = await response.json();
 
-        if(!retorno.success)
+        if(!retorno.success || !response.ok)
             throw ErrorDominio.comProblemas([retorno.message]);
 
         if(retorno.data.length == 0)
@@ -134,7 +137,7 @@ export class GestorLocacao{
         const response = await fetch(API + url)
         const retorno = await response.json();
 
-        if(!retorno.success){
+        if(!retorno.success || !response.ok){
             throw ErrorDominio.comProblemas([retorno.message]);
         }
 
@@ -169,7 +172,7 @@ export class GestorLocacao{
         const response = await fetch(API + "clientes"+campo);
         const retorno = await response.json();
         
-        if(!retorno.success){
+        if(!retorno.success || !response.ok){
             throw ErrorDominio.comProblemas([retorno.message]);
         }
 

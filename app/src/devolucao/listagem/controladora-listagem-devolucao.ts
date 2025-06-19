@@ -1,5 +1,6 @@
 import { VisaoListagemDevolucao } from "./visao-listagem-devolucao.js";
 import {GestorDevolucao} from '../gestor-devolucao.js';
+import { ErrorDominio } from "../../../infra/ErrorDominio.js";
 
 export class ControladoraListagemDevolucao{
 
@@ -19,7 +20,10 @@ export class ControladoraListagemDevolucao{
             }
             this.visao.desenharDevolucoes(devolucoes);
         }catch(error){
-            this.visao.exibirMensagens([error.message], true);
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas(), true);
+            else 
+                this.visao.exibirMensagens([error.message], true);
         }
     }
 

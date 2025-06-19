@@ -1,6 +1,7 @@
 <?php
 use Slim\Psr7\Stream;
 use Slim\Psr7\UploadedFile as UploadedFile;
+require_once __DIR__ . '/../src/infra/repositorio/CriadorDeGestores.php';
 
 
 describe('Gestor de Avarias', function(){
@@ -8,11 +9,7 @@ describe('Gestor de Avarias', function(){
         `cd ../g4 && pnpm run db`;
         $pdo = new PDO( 'mysql:dbname=g4;host=localhost;charset=utf8', 'root', '' );
 
-        $repoItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
-        $repoFuncionario = new RepositorioFuncionarioEmBDR($pdo);
-        $repoAvaria = new RepositorioAvariaEmBDR($pdo, new RepositorioItemEmBDR($pdo), $repoFuncionario);
-
-        $this->gestorAvaria = new GestorAvaria($repoAvaria, new RepositorioItemEmBDR($pdo), $repoFuncionario);
+        $this->gestorAvaria = criarGestorDeAvaria($pdo, new AutenticadorParaTestes(new GerenteDeSessaoEmSession()));
     });
 
     beforeEach(function(){

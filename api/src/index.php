@@ -11,6 +11,10 @@ use Slim\Factory\AppFactory;
 require_once __DIR__ . '/../../vendor/autoload.php';
 require_once __DIR__ . '/infra/repositorio/CriadorDeGestores.php';
 
+$autenticador = new Autenticador(new GerenteDeSessaoEmSession());
+$autenticador->abrirSessao();
+
+
 $app = AppFactory::create();
 
 $pdo = null;
@@ -28,6 +32,27 @@ try {
     die( 'Erro ao criar o banco de dados.' );
 }
 
+
+$app->add(function(Request $request, $handler)use($autenticador){
+    $rotaDesejada = $request->getUri()->getPath();
+
+    if($rotaDesejada == '/login'){
+        return $handler->handle($request);
+    }
+    try{
+        $autenticador->verificarSeUsuarioEstaLogado();
+        return $handler->handle($request);
+    }catch(DominioException $e){
+        $response = new \Slim\Psr7\Response();
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+        return $response->withStatus(401)->withHeader('Content-Type', 'application/json');
+    }
+
+});
+
 $app->add(function (Request $request, $handler) {
     $response = $handler->handle($request);
     return $response
@@ -41,11 +66,45 @@ $app->options('/{routes:.+}', function (Request $request, Response $response) {
     return $response;
 });
 
-$app->get('/locacoes', function(Request $request, Response $response) use($pdo) {
+$app->post('/login', function(Request $request, Response $response) use ($autenticador, $pdo){
+    $dados = $request->getBody();
+    try{
+        $autenticador->autenticarFuncionario($pdo, $dados);
+        $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(json_encode([
+                'success' => true
+            ]));
+    } catch (DominioException $e) {
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(Exception $e) {
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Erro interno do servidor: ' . $e->getMessage()
+        ]));
+
+    } finally{
+        return $response;
+    }
+});
+
+$app->get('/locacoes', function(Request $request, Response $response) use($pdo, $autenticador) {
     $parametros = $request->getQueryParams();
     try {
         $locacoes = [];
-        $gestorLocacao = criarGestorDeLocacao($pdo);
+        $gestorLocacao = criarGestorDeLocacao($pdo, $autenticador);
         if(count($parametros) > 0){
             $locacoes = $gestorLocacao->coletarCom($parametros);
         }else{
@@ -84,10 +143,10 @@ $app->get('/locacoes', function(Request $request, Response $response) use($pdo) 
     }
 });
 
-$app->post('/locacoes', callable: function(Request $request, Response $response) use ($pdo){
+$app->post('/locacoes', callable: function(Request $request, Response $response) use ($pdo, $autenticador){
     try{
         $dados = $request->getBody();
-        $gestorLocacao = criarGestorDeLocacao($pdo);
+        $gestorLocacao = criarGestorDeLocacao($pdo, $autenticador);
         $gestorLocacao->salvarLocacao(json_decode($dados, true));
 
         $response = $response->withStatus(201)->withHeader('Content-Type', 'application/json');
@@ -119,10 +178,10 @@ $app->post('/locacoes', callable: function(Request $request, Response $response)
     }
 });
 
-$app->get('/devolucoes', callable:function(Request $request, Response $response) use($pdo){
+$app->get('/devolucoes', callable:function(Request $request, Response $response) use($pdo, $autenticador){
     try{
         $dados = $request->getQueryParams();
-        $gestorDevolucao = criarGestorDeDevolucao($pdo);
+        $gestorDevolucao = criarGestorDeDevolucao($pdo, $autenticador);
         if(isset($dados['dataInicial']) && isset($dados['dataFinal'])){
             $devolucoes = $gestorDevolucao->coletarDevolucoesParaGrafico($dados);
         }else{
@@ -159,10 +218,10 @@ $app->get('/devolucoes', callable:function(Request $request, Response $response)
     }
 });
 
-$app->post('/devolucoes', callable: function(Request $request, Response $response) use ($pdo){
+$app->post('/devolucoes', callable: function(Request $request, Response $response) use ($pdo, $autenticador){
     $dados = $request->getParsedBody();
     $imagens = $request->getUploadedFiles() ? $request->getUploadedFiles()['avariasItens'] : [];
-    $gestorDevolucao = criarGestorDeDevolucao($pdo);
+    $gestorDevolucao = criarGestorDeDevolucao($pdo, $autenticador);
     try{
         $gestorDevolucao->salvarDevolucao($dados, $imagens);
       
@@ -197,9 +256,9 @@ $app->post('/devolucoes', callable: function(Request $request, Response $respons
 
 });
 
-$app->get('/funcionarios', callable:function(Request $request, Response $response) use($pdo){
+$app->get('/funcionarios', callable:function(Request $request, Response $response) use($pdo, $autenticador){
     try{
-        $gestorFuncionario = criarGestorDeFuncionario($pdo);
+        $gestorFuncionario = criarGestorDeFuncionario($pdo, $autenticador);
         $funcionarios = $gestorFuncionario->coletarFuncionarios();
 
         $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
@@ -231,11 +290,11 @@ $app->get('/funcionarios', callable:function(Request $request, Response $respons
     }
 });
 
-$app->get('/clientes', callable:function(Request $request, Response $response) use($pdo){
+$app->get('/clientes', callable:function(Request $request, Response $response) use($pdo,$autenticador){
     try{
         $parametro = $request->getQueryParams();
 
-        $gestorCliente = criarGestorDeCliente($pdo);
+        $gestorCliente = criarGestorDeCliente($pdo, $autenticador);
         $cliente = $gestorCliente->coletarComCodigoOuCpf($parametro['parametro']);
 
         $response->getBody()->write(json_encode([
@@ -266,9 +325,9 @@ $app->get('/clientes', callable:function(Request $request, Response $response) u
     }
 });
 
-$app->get('/itens', callable:function(Request $request, Response $response) use($pdo){
+$app->get('/itens', callable:function(Request $request, Response $response) use($pdo, $autenticador){
     try{
-        $gestorItem = criarGestorDeItem($pdo);
+        $gestorItem = criarGestorDeItem($pdo, $autenticador);
         $parametros = $request->getQueryParams();
         if(isset($parametros['dataInicial']) && isset($parametros['dataFinal'])){
             $resultado = $gestorItem->coletarItensParaRelatorio($parametros);
@@ -305,9 +364,9 @@ $app->get('/itens', callable:function(Request $request, Response $response) use(
 });
 
 
-$app->get('/avarias', callable:function(Request $request, Response $response) use($pdo){
+$app->get('/avarias', callable:function(Request $request, Response $response) use($pdo, $autenticador){
     try{
-        $gestorAvaria = criarGestorDeAvaria($pdo);
+        $gestorAvaria = criarGestorDeAvaria($pdo, $autenticador);
         $avarias = $gestorAvaria->coletarAvarias();
 
         $response->getBody()->write(json_encode([

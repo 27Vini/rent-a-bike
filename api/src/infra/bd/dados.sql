@@ -7,11 +7,11 @@ INSERT INTO cliente (codigo, nome, cpf, data_nascimento, telefone, email, endere
 ('C0000004', 'Aline Souza', '45612378900', '1987-08-19', '31999998888', 'alinesouza@email.com', 'Av. Central, 222 - Porto Alegre/RS', '/app/img/customer_person_people_woman_user_client_1635.png');
 
 
-INSERT INTO funcionario (nome) VALUES
-('Carlos Mendes'),
-('Ana Paula'),
-('Renato Borges'),
-('Clara Menezes');
+INSERT INTO funcionario (nome, senha, cpf, cargo, sal) VALUES
+('Carlos Mendes', 'd4f22c44177906e52c35d9f232410d251f2b764d1a5ce2b0003926ae8c0bb38cf4220e1fd7212b8f5625c7a5081bb07835f6ea893b1d311f9ff7a4daceeab532', '12345678901', 'gerente', '7d64d0d90f9435b031e8f5d35f3577'),
+('Ana Paula', 'c4c4b21b823bf636f57e44400504ede7d7e487c9775b32030d099e1038e04d90b132644351630a4d42507c010206e1073b3c22e72dd6708fa65955e51eee3e2e', '23456789012', 'gerente', '17c46e8dc8361f6e3f50b1867318c4'),
+('Renato Borges', '41ddb3911b68494e6ecf05ffd2e7e86b5062933c0a550a04d22c7161ff44ecc8b8850d8d42a00ace86d5b9846d05a3af1091f2cab2fed5027ffd101d9d7d123a', '34567890123', 'atendente', '97a4e820f64c697d30997456c60018'),
+('Clara Menezes', '0cdaa9cf75fdc18704604a5036e0fcf2a32282b7c88b9364c17f00559f33e7ecf0c3e79100754a5507dc3fc3468f71bb00fa39abebd9a79e72a3791ab57479fb', '45678901234', 'mecanico', 'ff08935d2b1e867993d2b14e22a456');
 
 INSERT INTO item (codigo, descricao, modelo, fabricante, valorPorHora, disponibilidade, tipo) VALUES
 ('I0000001', 'Bicicleta Aro 29', 'MTB', 'Caloi', 15.00, TRUE, 'bicicleta'),

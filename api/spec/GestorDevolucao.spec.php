@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../src/infra/repositorio/CriadorDeGestores.php';
+
 
 describe('Gestor Devolução', function(){
 
@@ -6,15 +8,7 @@ describe('Gestor Devolução', function(){
         `cd ../g4 && pnpm run db`;
         $pdo = new PDO( 'mysql:dbname=g4;host=localhost;charset=utf8', 'root', '' );
 
-        $repoItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
-        $repoLocacao = new RepositorioLocacaoEmBDR($pdo, $repoItemLocacao);
-        $repoFuncionario = new RepositorioFuncionarioEmBDR($pdo);
-        $repo = new RepositorioDevolucaoEmBDR( $pdo, $repoLocacao, $repoFuncionario);
-        $repoAvaria = new RepositorioAvariaEmBDR($pdo, new RepositorioItemEmBDR($pdo), $repoFuncionario);
-        $transacao = new TransacaoComPDO($pdo);
-
-        $gestorAvaria = new GestorAvaria($repoAvaria, new RepositorioItemEmBDR($pdo), $repoFuncionario);
-        $this->gestor = new GestorDevolucao($repo, $repoLocacao,$repoFuncionario, $gestorAvaria, $transacao);
+        $this->gestor = criarGestorDeDevolucao($pdo, new AutenticadorParaTestes(new GerenteDeSessaoEmSession())); 
     });
 
     it("Cadastra uma devolução válida", function(){

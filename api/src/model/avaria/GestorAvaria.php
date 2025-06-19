@@ -2,8 +2,8 @@
 use Slim\Psr7\UploadedFile as UploadedFile;
 class GestorAvaria{
 
-    public function __construct(private RepositorioAvaria $repositorioAvaria, private RepositorioItem $repositorioItem, private RepositorioFuncionario $repositorioFuncionario){
-
+    public function __construct(private RepositorioAvaria $repositorioAvaria, private RepositorioItem $repositorioItem, private RepositorioFuncionario $repositorioFuncionario, private Autenticador $autenticador){
+        $this->autenticador->abrirSessao();
     }
 
     /** Salva mais de uma avaria por vez 
@@ -18,9 +18,14 @@ class GestorAvaria{
      * @param string|int $idDevolucao
     */
     public function salvarAvarias(array $dadosAvarias, array $imagens, string|int $idDevolucao) : void {
-        foreach($dadosAvarias as $key => $dadosAvaria){
-            $imagem = $imagens[$key];
-            $this->salvarAvaria($dadosAvaria, $imagem, $idDevolucao);
+        try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
+            foreach($dadosAvarias as $key => $dadosAvaria){
+                $imagem = $imagens[$key];
+                $this->salvarAvaria($dadosAvaria, $imagem, $idDevolucao);
+            }
+        }catch(Exception $e){
+            throw $e;
         }
     }
 
@@ -45,6 +50,7 @@ class GestorAvaria{
         $foto = !empty($imagem) ? $imagem['imagem'] : null;
 
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             //$this->transacao->iniciar();
             $funcionario = $this->repositorioFuncionario->coletarComId(intval($funcionarioId));
             if($funcionario == null){
@@ -75,6 +81,8 @@ class GestorAvaria{
     private function salvarImagem(Avaria $avaria) : void{
         if($avaria->getFoto() instanceof UploadedFile){
             try{
+                $this->autenticador->verificarSeUsuarioEstaLogado();
+
                 $caminhoDestino = __DIR__ . "/fotos/";
                 $extensao = pathinfo($avaria->getFoto()->getClientFilename(), PATHINFO_EXTENSION);
 
@@ -97,6 +105,7 @@ class GestorAvaria{
      */
     public function coletarAvarias():array{
         try{
+            $this->autenticador->verificarSeUsuarioEstaLogado();
             return $this->repositorioAvaria->coletarTodos();
         }catch(Exception $e){
             throw $e;

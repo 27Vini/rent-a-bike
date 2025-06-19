@@ -1,6 +1,5 @@
 <?php
 
-
 class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements RepositorioFuncionario{
     public function __construct(PDO $pdo){
         parent::__construct($pdo);
@@ -51,5 +50,17 @@ class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements Re
         }
 
         return $funcionarios;
+    }
+
+    public function coletarComCpf(string $cpf): Funcionario{
+        try{
+            $comando = "SELECT * from funcionario WHERE cpf = :cpf";
+            $ps = $this->executarComandoSql($comando, ["cpf" => $cpf]);
+            
+            $dadosFuncionario = $ps->fetch(PDO::FETCH_ASSOC);
+            return $dadosFuncionario;
+        }catch(PDOException $pdo){
+            throw new RepositorioException("Erro ao consultar funcionário.");
+        }
     }
 }

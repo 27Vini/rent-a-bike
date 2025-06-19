@@ -11,4 +11,12 @@ interface RepositorioFuncionario {
      * @return array<Funcionario>
      */
     public function coletarTodos() : array;
+    /**
+     * Coleta funcionário pelo Cpf.
+     * @param string $cpf
+     * @throws DominioException
+     * @throws RepositorioException
+     * @return Funcionario
+     */
+    public function coletarComCpf(string $cpf) : Funcionario;
 }

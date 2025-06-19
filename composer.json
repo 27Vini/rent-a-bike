@@ -18,7 +18,9 @@
                     "api/src/infra/",
                     "api/src/infra/repositorio/",
                     "api/src/infra/util/",
-                    "api/src/infra/excecoes/"
+                    "api/src/infra/excecoes/",
+                    "api/src/infra/seguranca/",
+                    "api/src/infra/session/"
                 ]
         }
     },

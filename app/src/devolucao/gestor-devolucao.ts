@@ -20,8 +20,7 @@ export class GestorDevolucao{
     async coletarDevolucoes(){
         const response = await fetch( API + 'devolucoes');
         const retorno = await response.json();
-        
-        if(!retorno.success){
+        if(!retorno.success || !response.ok){
             throw ErrorDominio.comProblemas([retorno.message]);
         }
 
@@ -32,7 +31,7 @@ export class GestorDevolucao{
         const reponse = await fetch(API + `devolucoes?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
         const retorno = await reponse.json();
 
-        if(!retorno.success){
+        if(!retorno.success || !reponse.ok){
             throw ErrorDominio.comProblemas([retorno.message]);
         }
         if(retorno.data.length == 0){
@@ -45,8 +44,8 @@ export class GestorDevolucao{
         const response = await fetch(API + "funcionarios");
         const retorno = await response.json();
 
-        if(!retorno.success)
-            throw ErrorDominio.comProblemas(["Erro ao obter funcionários."+response.status]);
+        if(!retorno.success || !response.ok)
+            throw ErrorDominio.comProblemas(["Erro ao obter funcionários. Erro:"+response.status]);
 
         return retorno.data;
     }
@@ -66,7 +65,7 @@ export class GestorDevolucao{
 
         const response = await fetch( API + `locacoes?${parametro}`)
         const locacoes = await response.json();
-        if(!locacoes.success){
+        if(!locacoes.success || !response.ok){
             throw ErrorDominio.comProblemas([locacoes.message]);
         }
         this.horasCorridas = 0;
@@ -97,7 +96,7 @@ export class GestorDevolucao{
         const response = await fetch( API + 'devolucoes', {method : 'POST', body : formDataDevolucao})
 
         const retorno = await response.json();
-        if(!retorno.success){
+        if(!retorno.success || !response.ok){
             throw ErrorDominio.comProblemas([retorno.message]);
         }
     }
