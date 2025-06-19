@@ -42,8 +42,8 @@ class GestorAvaria{
         $funcionarioId = htmlspecialchars((string)$dados['funcionario']);
         $descricao =  htmlspecialchars((string)$dados['descricao']);
         $valor = htmlspecialchars((string)$dados['valor']);
-        $foto = '';
-        
+        $foto = !empty($imagem) ? $imagem['imagem'] : null;
+
         try{
             //$this->transacao->iniciar();
             $funcionario = $this->repositorioFuncionario->coletarComId(intval($funcionarioId));
@@ -56,11 +56,9 @@ class GestorAvaria{
             }
     
             $avaria = $this->instanciarAvaria($funcionario, $item, $lancamentoString, $descricao, $foto, $valor);
-            
+
             $this->repositorioAvaria->adicionar($avaria, $idDevolucao);
-            if(!empty($imagem)){
-                $this->salvarImagem($imagem['imagem'], $avaria->getId());
-            }
+            $this->salvarImagem($avaria);
 
             //$this->transacao->finalizar();
         } catch(Exception $e){
@@ -71,24 +69,25 @@ class GestorAvaria{
 
     /**
      * Salva imagem da avaria no servidor
-     * @param UploadedFile $imagemAvaria
-     * @param string|int $idAvaria
+     * @param Avaria $avaria
      * @return void
      */
-    private function salvarImagem(UploadedFile $imagemAvaria, string|int $idAvaria) : void{
-        try{
-            $caminhoDestino = __DIR__ . "/fotos/";
-            $extensao = pathinfo($imagemAvaria->getClientFilename(), PATHINFO_EXTENSION);
+    private function salvarImagem(Avaria $avaria) : void{
+        if($avaria->getFoto() instanceof UploadedFile){
+            try{
+                $caminhoDestino = __DIR__ . "/fotos/";
+                $extensao = pathinfo($avaria->getFoto()->getClientFilename(), PATHINFO_EXTENSION);
 
-            if(!is_dir($caminhoDestino))
-                mkdir($caminhoDestino);
+                if(!is_dir($caminhoDestino))
+                    mkdir($caminhoDestino);
 
-            $nomeImagem = $idAvaria . "." . $extensao;
-            $imagemAvaria->moveTo($caminhoDestino . $nomeImagem);
+                $nomeImagem = $avaria->getId() . "." . $extensao;
+                $avaria->getFoto()->moveTo($caminhoDestino . $nomeImagem);
 
-            $this->repositorioAvaria->salvarCaminhoImagem($caminhoDestino . $nomeImagem, $idAvaria);
-        } catch (Exception $e){
-            throw new DominioException("Erro ao salvar imagem da avaria.");
+                $this->repositorioAvaria->salvarCaminhoImagem($caminhoDestino . $nomeImagem, $avaria->getId());
+            } catch (Exception $e){
+                throw new DominioException("Erro ao salvar imagem da avaria.");
+            }
         }
     }
 
@@ -111,11 +110,11 @@ class GestorAvaria{
      * @param Item $item
      * @param string $lancamentoString
      * @param string $descricao
-     * @param string $foto
+     * @param UploadedFile|null $foto
      * @param string $valor
      * @return Avaria
      */
-    private function instanciarAvaria(Funcionario $funcionario, Item $item, string $lancamentoString, string $descricao, string $foto, string $valor): Avaria{
+    private function instanciarAvaria(Funcionario $funcionario, Item $item, string $lancamentoString, string $descricao, UploadedFile|null $foto, string $valor): Avaria{
         $lancamento = $this->transformarData($lancamentoString);
         $avaria = new Avaria("1", $lancamento, $funcionario, $descricao, $foto, (float) $valor, $item);
         

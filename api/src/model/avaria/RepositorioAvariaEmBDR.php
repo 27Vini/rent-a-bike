@@ -44,7 +44,7 @@ class RepositorioAvariaEmBDR extends RepositorioGenericoEmBDR implements Reposit
         try{
             $comando = "INSERT INTO avaria (lancamento, funcionario_id, descricao, foto, valor, item_id, devolucao_id) VALUES (:lancamento, :funcionario_id, :descricao, :foto, :valor, :item_id, :devolucao_id)";
             $this->executarComandoSql($comando, ["lancamento" => $avaria->getLancamento()->format('Y-m-d H:i:s'), "funcionario_id" => $avaria->getAvaliador()->getId(),
-                "descricao" => $avaria->getDescricao(), "foto" => $avaria->getFoto(), "valor" => $avaria->getValor(), "item_id" => $avaria->getItem()->getId(), "devolucao_id" => $idDevolucao
+                "descricao" => $avaria->getDescricao(), "foto" => '', "valor" => $avaria->getValor(), "item_id" => $avaria->getItem()->getId(), "devolucao_id" => $idDevolucao
             ]);
         
             $avaria->setId($this->ultimoIdAdicionado());
@@ -109,7 +109,8 @@ class RepositorioAvariaEmBDR extends RepositorioGenericoEmBDR implements Reposit
             $item = $repositorioItem->coletarComId(intval($dadosAvaria["item_id"]));
             $funcionario = $repositorioFuncionario->coletarComId(intval($dadosAvaria['funcionario_id']));
             
-            $avaria = new Avaria($dadosAvaria['id'], new DateTime($dadosAvaria['lancamento']), $funcionario, $dadosAvaria['descricao'], $dadosAvaria['foto'], (float) $dadosAvaria['valor'], $item);
+            //verificar como retornar o caminho da foto aqui
+            $avaria = new Avaria($dadosAvaria['id'], new DateTime($dadosAvaria['lancamento']), $funcionario, $dadosAvaria['descricao'], null, (float) $dadosAvaria['valor'], $item);
 
             return $avaria;
         }catch(Throwable $e){

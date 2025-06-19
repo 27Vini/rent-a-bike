@@ -1,9 +1,13 @@
 <?php
+use Slim\Psr7\UploadedFile as UploadedFile;
 require_once __DIR__.'/../../infra/util/validarId.php';
+require_once __DIR__.'/../../infra/util/validarImagem.php';
+
 class Avaria implements JsonSerializable{
-    public function __construct(private int|string $id, private DateTime $lancamento, private Funcionario $avaliador, 
-                                    private string $descricao, private string $foto, private float $valor, private Item $item
-                               ){}
+    private const TIPOS_PERMITIDOS_IMAGEM = ['image/jpeg', 'image/jpg'];
+
+    
+    public function __construct(private int|string $id, private DateTime $lancamento, private Funcionario $avaliador, private string $descricao, private UploadedFile|null $foto, private float $valor, private Item $item){}
 
     public function getId(): int|string {
         return $this->id;
@@ -21,7 +25,7 @@ class Avaria implements JsonSerializable{
         return $this->descricao;
     }
 
-    public function getFoto(): string {
+    public function getFoto(): UploadedFile | null {
         return $this->foto;
     }
 
@@ -49,7 +53,7 @@ class Avaria implements JsonSerializable{
         $this->descricao = $descricao;
     }
 
-    public function setFoto(string $foto): void {
+    public function setFoto(UploadedFile | null $foto): void {
         $this->foto = $foto;
     }
 
@@ -78,12 +82,17 @@ class Avaria implements JsonSerializable{
             $problemas[] = "O valor deve ser um número maior do que 0.";
         }
 
+        
+        if($this->foto instanceof UploadedFile && !validarTipoImagemPermitido($this->foto, self::TIPOS_PERMITIDOS_IMAGEM)){
+            $problemas[] = "Tipo imagem inválida. Imagem deve ser do tipo " . implode(', ', self::TIPOS_PERMITIDOS_IMAGEM);
+        }
+
         return $problemas;
     }
 
     /**
       * Serializa em JSON para manuseio da API
-      * @return array{lancamento: string, id: int|string, avaliador: Funcionario, descricao: string, foto: string, valor: float, item: Item}
+      * @return array{lancamento: string, id: int|string, avaliador: Funcionario, descricao: string, foto: UploadedFile | null, valor: float, item: Item}
       */
     public function jsonSerialize(): mixed {
         return [
