@@ -19,5 +19,6 @@ export const sel = {
     modalAvaria                 : "#registro-avarias",
     botaoCadastrarAvaria        : "#cadastrar-avaria",
     selectFuncionariosAvaria    : "#funcionario-avaria",
-    valorMultas                 : "#valor-multas"
+    valorMultas                 : "#valor-multas",
+    botaoFecharModal            : ".fechar-modal"
 }

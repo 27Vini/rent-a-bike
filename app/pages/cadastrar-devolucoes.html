@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/cadastro.css">
+    <link rel="stylesheet" href="../styles/modal.css">
     <link rel="icon" href="../styles/images/logo.png" type="image/png">
     <!-- <link rel="stylesheet" href="../styles/cadastro-devolucoes.css"> -->
     <script src="../src/devolucao/cadastro/visao-cadastro-devolucao-html.ts" type="module" defer></script>
@@ -71,18 +72,21 @@
     </table>
 
     <dialog id="registro-avarias">
-        <h1>Registro de Avarias #<span id="item"></span></h1>
+        <div class="botao-fechar">
+            <span class="fechar-modal">
+                <img src="../styles/images/close.png">
+            </span>
+        </div>
+        <h2>Registro de Avarias do Item #<span id="item"></span></h2>
 
         <hr>
         <div class="bloco-avaria">
-            <div class="group-funcionario">
-                <label for="funcionario-avaria">Funcionario:</label>
-                <select id="funcionario-avaria" name="funcionario-avaria"></select>
-            </div>
+            <label for="funcionario-avaria">Funcionario:</label>
+            <select id="funcionario-avaria" name="funcionario-avaria"></select>
             <label for="descricao-avaria">Descrição:</label>
             <input type="text" id="descricao-avaria">
             <label for="foto-avaria">Imagem:</label>
-            <input type="file" id="foto-avaria" accept=".jpg, .jpeg">
+            <input type="file" id="foto-avaria" accept=".jpg,.jpeg">
             <label for="valor">Valor a Cobrar (R$):</label>
             <input type="number" id="valor">
             <button id="cadastrar-avaria">Cadastrar</button>

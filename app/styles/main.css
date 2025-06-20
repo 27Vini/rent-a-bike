@@ -14,7 +14,7 @@ body {
     min-height: 100vh;
 }
 
-a {
+a, button {
     cursor: pointer;
 }
 
@@ -186,4 +186,43 @@ footer {
 
 .links a{
     padding: 15px;
+}
+
+/** TELA DE LOGIN */
+.logo-index{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 200px;
+}
+
+.login {
+    display: flex;
+    justify-content:  center;
+}
+
+#form-login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#form-login input{
+    margin-bottom: 20px;
+}
+
+#form-login button{
+    width: -webkit-fill-available;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+}
+
+#usuario, #senha {
+    height: 40px;
+    width: 250px;
+    border: solid 1px;
+    border-radius: 8px;
+    background-color: #e7e7e7;
 }

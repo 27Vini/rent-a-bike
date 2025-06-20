@@ -16,7 +16,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector(sel.devolverBtn)?.addEventListener('click', this.controladora.enviarDados.bind(this.controladora));
         document.querySelector(sel.selectLocacao)?.addEventListener('change', this.controladora.procurarLocacaoDoSelecionada.bind(this.controladora));
         document.querySelector(sel.devolucao)?.addEventListener('input', this.bloquearInputLocacao.bind(this));
-
+        document.querySelector(sel.botaoFecharModal)!.addEventListener('click', this.fecharModal.bind(this));
         this.bloquearInputLocacao();
     }
 
@@ -208,6 +208,9 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         return document.querySelector<HTMLInputElement>(sel.devolucao)!.value;
     }
 
+    fecharModal(){
+        document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.close();
+    }
 }
 
 const visao = new VisaoCadastroDevolucaoHTML();
