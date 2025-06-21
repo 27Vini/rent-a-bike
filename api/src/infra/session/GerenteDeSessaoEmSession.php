@@ -19,6 +19,16 @@ class GerenteDeSessaoEmSession implements GerenteDeSessao{
                 'httponly' => false
             ]
         );
+
+        setcookie(
+            'cargo',
+            $funcionario->getCargo(),
+             [
+                'expires' => time() + 60 * 60 * 24,
+                'path' => '/',
+                'httponly' => false
+            ]
+        );
     }
 
     public function fecharSessao(): void{

@@ -20,7 +20,6 @@ export class ControladoraCadastroLocacao{
             this.visao.exibirMensagens(['Locação salva com sucesso!'], false);
             this.visao.limparTelaCadastro();
         }catch(erro){
-            console.log(erro);
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);
             else 

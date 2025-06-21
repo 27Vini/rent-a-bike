@@ -25,4 +25,12 @@ enum EnumCargo :  string{
     public static function isValid(string $tipo) : bool {
         return in_array($tipo, self::toArray());
     }
+
+    /**
+     * Retorna o cargo como string.
+     * @return string
+     */
+    public function toString(): string {
+        return $this->value;
+    }
 }

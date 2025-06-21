@@ -82,22 +82,23 @@ export class GestorLocacao{
         if(problemas.length > 0)
             throw ErrorDominio.comProblemas(problemas);
 
-        this.cadastrarLocacao(locacao);
+       
+        await this.cadastrarLocacao(locacao);
     }
 
     private async cadastrarLocacao(locacao:Locacao){
         const response = await fetch(API + "locacoes", 
-            {
-                method:"POST",
-                headers:{"Content-Type":"application/json"},
-                body:JSON.stringify(locacao),
-                credentials: 'include'
-            }
+        {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(locacao),
+            credentials: 'include'
+        }
         );
 
         const retorno = await response.json()
         if(!retorno.success || !response.ok){
-            throw ErrorDominio.comProblemas[(retorno.message)];
+            throw ErrorDominio.comProblemas([retorno.message]);
         }
     }
 

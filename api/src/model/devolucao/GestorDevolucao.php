@@ -30,6 +30,8 @@ class GestorDevolucao{
         }
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::CADASTRAR);
+
             $this->transacao->iniciar();
             $locacao = $this->repositorioLocacao->coletarComParametros(['id' => $locacaoId, 'verificarAtivo' => '1']);
             if($locacao == null){
@@ -59,6 +61,8 @@ class GestorDevolucao{
     public function coletarDevolucoes():array{
         try{            
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::LISTAR);
+
             return $this->repositorioDevolucao->coletarTodos();
         } catch(Exception $e){
             throw $e;
@@ -74,6 +78,7 @@ class GestorDevolucao{
     public function coletarDevolucoesParaGrafico(array $dados): array{
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::EXIBIR_RELATORIO_DEVOLUCOES);
             
             $dataInicial = htmlspecialchars($dados["dataInicial"] ?? "");
             $dataFinal = htmlspecialchars($dados["dataFinal"] ?? "");

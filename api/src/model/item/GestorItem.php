@@ -31,6 +31,7 @@ class GestorItem{
     public function coletarItensParaRelatorio(array $parametros) : array {
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::EXIBIR_RELATORIO_ITENS);
             
             $dataInicial = !empty($parametros['dataInicial']) ? (new DateTime($parametros['dataInicial'])) : new DateTime('first day of this month');
             $dataFinal = !empty($parametros['dataFinal']) ? (new DateTime($parametros['dataFinal'])) : new DateTime('last day of this month');

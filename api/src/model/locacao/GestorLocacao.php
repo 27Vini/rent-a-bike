@@ -35,6 +35,8 @@ class GestorLocacao {
     public function salvarLocacao(array $dadosLocacao) : void {
        try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::CADASTRAR);
+            
             $this->transacao->iniciar();
 
             $cliente = $this->repositorioCliente->coletarComId(intval($dadosLocacao['cliente']));
@@ -123,6 +125,8 @@ class GestorLocacao {
     public function coletarTodos() : array {
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::LISTAR);
+
             $locacoes = [];
             $locacoes = $this->repositorioLocacao->coletarTodos();
 

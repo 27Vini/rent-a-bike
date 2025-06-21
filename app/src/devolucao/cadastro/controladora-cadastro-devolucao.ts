@@ -60,10 +60,14 @@ export class ControladoraCadastroDevolucao {
         try{
             const dadosAvaria = this.visao.coletarDadosAvaria();
             this.gestor.registrarAvaria(dadosAvaria);
+            this.visao.limparFormAvaria();
+
             const multa = this.gestor.calcularMulta();
             this.visao.exibirMulta(multa);
+
             const novoValorFinal = this.gestor.recalcularValorFinal(multa);
             this.visao.atualizarValorFinal(novoValorFinal);
+            
             this.visao.exibirMensagens(["Avaria do item registrada com sucesso!"], false);
         }catch(error){
             if(error instanceof ErrorDominio)

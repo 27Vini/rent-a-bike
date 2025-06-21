@@ -84,6 +84,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         return Number(document.querySelector<HTMLSelectElement>(sel.selectLocacao)!.value);
     }
 
+    coletarDataDevolucao() {
+        return document.querySelector<HTMLInputElement>(sel.devolucao)!.value;
+    }
+
     coletarSubtotais(): number[] {
         const valores : number[] = [];
         const trs = document.querySelectorAll('tbody tr');
@@ -173,7 +177,6 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
 
         document.querySelector<HTMLOutputElement>(sel.inputItemAvaria)!.innerText = idItem;
         document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
-
     }
 
     atualizarValorFinal(valorFinal){
@@ -194,8 +197,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector('tbody')!.innerHTML = "";
     }
 
-    coletarDataDevolucao() {
-        return document.querySelector<HTMLInputElement>(sel.devolucao)!.value;
+    limparFormAvaria() : void {
+        document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value = ''
+        document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value = ''
+        document.querySelector<HTMLInputElement>(sel.inputFotoAvaria)!.value = '';
     }
 
     fecharModal(){

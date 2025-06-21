@@ -195,13 +195,13 @@ $app->post('/locacoes', function(Request $request, Response $response) use ($pdo
         $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false, 
-            'message' => 'Erro interno do servidor:'.$e->getMessage()
+            'message' => $e->getMessage()
         ]));
     }catch(DominioException $e){
-        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false, 
-            'message' => 'Erro interno do servidor:'.$e->getMessage()
+            'message' => $e->getMessage()
         ]));
     }catch(Exception $e){
         $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');

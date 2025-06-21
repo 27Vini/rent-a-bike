@@ -11,13 +11,14 @@ export class ControladoraAutenticador{
     }
 
     gerenciarAutenticacao(){
+        this.gestor.verificarPermissaoDeAcesso();
+
         this.visao.criarOHeader();
         const nome = this.gestor.coletarUsuarioDoCookie() || '';
         this.visao.mostrarNome(nome);
     }
 
     async sair(){
-        console.log('alooo')
         await this.gestor.deslogar();
     }
 }

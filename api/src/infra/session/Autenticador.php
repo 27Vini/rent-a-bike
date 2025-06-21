@@ -52,4 +52,17 @@ class Autenticador{
     public function obterFuncionarioLogado() : Funcionario {
         return $_SESSION['funcionario'];
     }
+
+    /**
+     * Verificar se usuário tem permissão para acessar o conteúdo pretendido
+     * @param AutorizadorAcoes $acao
+     * @return void
+     */
+    public function verificarPermissao(AutorizadorAcoes $acao){
+        $cargoFuncionario = ($this->obterFuncionarioLogado())->getCargo();
+        
+        if(!AutorizadorAcoes::podeRealizarAcao($cargoFuncionario, $acao->toString())){
+            throw new DominioException("Você não possui permissão para acessar o conteúdo.");
+        }
+    }
 }
