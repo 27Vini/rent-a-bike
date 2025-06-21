@@ -103,7 +103,8 @@ export class GestorDevolucao{
 
     getLocacacaoDoGestorPeloId(id : number) : Locacao | undefined{
         const locacao = this.locacaoesDoCliente.find( l => l.id == id);
-        this.locacaoEscolhida = locacao;
+        const locacaoObj =  new Locacao(locacao!.id, locacao!.cliente.id, locacao!.funcionario.id, locacao!.itensLocacao, locacao!.entrada, locacao!.horas, 0, locacao!.valorTotal, locacao!.previsaoDeEntrega);
+        this.locacaoEscolhida = locacaoObj;
         return locacao;
     }
 

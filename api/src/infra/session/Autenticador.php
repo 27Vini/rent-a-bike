@@ -27,7 +27,12 @@ class Autenticador{
     }
 
     public function fecharSessao(): void{
-        $this->gerenteSessao->fecharSessao();
+        try{
+            $this->verificarSeUsuarioEstaLogado();
+            $this->gerenteSessao->fecharSessao();
+        }catch(DominioException $e){
+            throw $e;
+        }
     }
 
     /**

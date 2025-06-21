@@ -4,19 +4,20 @@ import { sel } from './seletores-cadastro-devolucao.js';
 
 export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     private controladora : ControladoraCadastroDevolucao;
-
+    
     public constructor(){
         this.controladora = new ControladoraCadastroDevolucao(this);
     }
-
+    
     iniciar(){
         document.addEventListener('DOMContentLoaded', this.controladora.coletarFuncionarios.bind(this.controladora));
-
+        
         document.querySelector(sel.pesquisarLocacao)?.addEventListener('click', this.controladora.pesquisarLocacao.bind(this.controladora));
         document.querySelector(sel.devolverBtn)?.addEventListener('click', this.controladora.enviarDados.bind(this.controladora));
         document.querySelector(sel.selectLocacao)?.addEventListener('change', this.controladora.procurarLocacaoDoSelecionada.bind(this.controladora));
         document.querySelector(sel.devolucao)?.addEventListener('input', this.bloquearInputLocacao.bind(this));
         document.querySelector(sel.botaoFecharModal)!.addEventListener('click', this.fecharModal.bind(this));
+        document.querySelector<HTMLButtonElement>(sel.botaoCadastrarAvaria)!.addEventListener('click', this.controladora.registrarAvaria.bind(this.controladora));
         this.bloquearInputLocacao();
     }
 
@@ -173,7 +174,6 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLOutputElement>(sel.inputItemAvaria)!.innerText = idItem;
         document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
 
-        document.querySelector<HTMLButtonElement>(sel.botaoCadastrarAvaria)!.addEventListener('click', this.controladora.registrarAvaria.bind(this.controladora));
     }
 
     atualizarValorFinal(valorFinal){

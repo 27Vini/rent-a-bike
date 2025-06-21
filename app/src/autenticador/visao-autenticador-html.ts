@@ -1,0 +1,59 @@
+import { ControladoraAutenticador } from "./controladora-autenticador";
+import { sel } from "./seletores-autenticador";
+import { VisaoAutenticador } from "./visao-autenticador";
+
+export class VisaoAutenticadorHTML implements VisaoAutenticador{
+    private controladora : ControladoraAutenticador;
+
+    constructor(){
+        this.controladora = new ControladoraAutenticador(this);
+    }
+
+    iniciar(){
+        window.addEventListener("DOMContentLoaded", this.controladora.gerenciarAutenticacao.bind(this.controladora));
+    }
+
+    criarOHeader(): void {
+        const header = document.querySelector("header");
+        header?.appendChild(this.criarDiv());
+    }
+
+    criarDiv() : HTMLElement{
+        const div = document.createElement('div');
+        
+        div.append(
+            this.criarOutputDeUsuario(),
+            this.criarBotaoDeSair()
+        )
+
+        return div;
+    }
+
+    criarBotaoDeSair(): HTMLElement{
+        const botao = document.createElement('button')
+
+        botao.innerText = "Sair";
+        botao.setAttribute('hidden', '');
+        botao.setAttribute('id', sel.botaoSair.replace('#', ''));
+        botao.addEventListener("click", this.controladora.sair.bind(this.controladora));
+        return botao;
+    }
+
+    criarOutputDeUsuario(): HTMLElement{
+        const output = document.createElement("div");
+        output.setAttribute("id", sel.nome.replace("#", ""));
+        return output;
+    }
+
+    mostrarNome(nome: string): void {
+        if(nome !== ''){
+            document.querySelector<HTMLOutputElement>(sel.nome)!.innerHTML = `Olá, ${nome}`;
+            document.querySelector<HTMLButtonElement>(sel.botaoSair)?.removeAttribute('hidden');
+        }
+    }
+
+
+}
+
+const visao = new VisaoAutenticadorHTML();
+visao.iniciar()

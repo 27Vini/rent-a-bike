@@ -104,6 +104,39 @@ $app->post('/login', function(Request $request, Response $response) use ($autent
     }
 });
 
+$app->post('/logout',callable: function(Request $request, Response $response) use ($autenticador){
+    try{
+        $autenticador->fecharSessao();
+        $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write(json_encode([
+                'success' => true
+            ]));
+    } catch (DominioException $e) {
+        $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(RepositorioException $e){
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => $e->getMessage()
+        ]));
+
+    } catch(Exception $e) {
+        $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        $response->getBody()->write(json_encode([
+            'success' => false,
+            'message' => 'Erro interno do servidor: ' . $e->getMessage()
+        ]));
+
+    } finally{
+        return $response;
+    }
+});
+
 $app->get('/locacoes', function(Request $request, Response $response) use($pdo, $autenticador) {
     $parametros = $request->getQueryParams();
     try {
@@ -147,7 +180,7 @@ $app->get('/locacoes', function(Request $request, Response $response) use($pdo, 
     }
 });
 
-$app->post('/locacoes', callable: function(Request $request, Response $response) use ($pdo, $autenticador){
+$app->post('/locacoes', function(Request $request, Response $response) use ($pdo, $autenticador){
     try{
         $dados = $request->getBody();
         $gestorLocacao = criarGestorDeLocacao($pdo, $autenticador);

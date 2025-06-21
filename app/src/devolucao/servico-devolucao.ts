@@ -32,10 +32,9 @@ export class ServicoDevolucao{
 
     public static calcularMulta(itensLocacao : ItemLocacao[], avariasDevolucao : Avaria[]) : Money{
         let multa = new Money(0, Currencies.BRL)
-
         for(const il of itensLocacao){
             for(const a of avariasDevolucao){
-                if(a.item == il.item.id){              
+                if(a.item == il.item.id){      
                     const precoLocacao = Money.fromDecimal(il.precoLocacao, Currencies.BRL);
                     const valorAvaria = Money.fromDecimal(a.valor, Currencies.BRL);
                     const precoLocacaoPorcentagem = precoLocacao.multiply(0.10);
