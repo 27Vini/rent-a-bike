@@ -1,5 +1,6 @@
 import {test} from '@playwright/test'
 import { TelaListagemDevolucao } from './TelaListagemDevolucao.js'
+import { logar } from '../realiza-login.js';
 
 test.describe('Listagem de devoluções', async () => {
 
@@ -11,6 +12,7 @@ test.describe('Listagem de devoluções', async () => {
     });
 
     test.beforeEach( async ({page}) => {
+        await logar(page);
         tela = new TelaListagemDevolucao(page)
         await tela.abrir()
     })

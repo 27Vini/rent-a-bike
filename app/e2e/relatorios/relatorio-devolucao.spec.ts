@@ -1,6 +1,7 @@
 import {test} from "@playwright/test";
 import { TelaRelatorioDevolucao } from "./tela-relatorio-devolucao";
 import { sel } from "../../src/devolucao/relatorio/sel-relatorio-devolucao";
+import { logar } from "../realiza-login";
 
 
 test.describe('Relatório de devoluções por data de locação', async () => {
@@ -12,6 +13,7 @@ test.describe('Relatório de devoluções por data de locação', async () => {
     });
 
     test.beforeEach( async ({page}) => {
+        await logar(page);
         tela = new TelaRelatorioDevolucao(page);
         await tela.abrir();
     });

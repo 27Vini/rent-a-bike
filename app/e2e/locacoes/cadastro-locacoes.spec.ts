@@ -1,6 +1,7 @@
 import {test} from "@playwright/test";
 import { TelaCadastroLocacao } from "./tela-cadastro-locacao";
 import { sel } from "../../src/locacao/cadastro/seletores-cadastro-locacao";
+import { logar } from "../realiza-login";
 
 test.describe('Cadastro de locações', () => {
     let tela:TelaCadastroLocacao;
@@ -11,6 +12,7 @@ test.describe('Cadastro de locações', () => {
     });
     
     test.beforeEach(async ({page}) => {
+        await logar(page);
         tela = new TelaCadastroLocacao(page);
         await tela.abrir();
     });
@@ -19,7 +21,6 @@ test.describe('Cadastro de locações', () => {
         await tela.preencherFormCadastro('12345678900', 2, 'I0000010');
         await tela.esperarResposta('/itens')
         await tela.clicar(sel.botaoCadastrar);
-        await tela.esperarResposta('/locacoes')
 
         await tela.deveExibirAMensagem("sucesso");
     });

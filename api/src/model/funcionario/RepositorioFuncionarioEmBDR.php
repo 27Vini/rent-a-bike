@@ -58,7 +58,10 @@ class RepositorioFuncionarioEmBDR extends RepositorioGenericoEmBDR implements Re
             $ps = $this->executarComandoSql($comando, ["cpf" => $cpf]);
             
             $dadosFuncionario = $ps->fetch(PDO::FETCH_ASSOC);
-            return $dadosFuncionario;
+            if($dadosFuncionario == null){
+                throw new DominioException("Nenhum funcionário encontrado com esse CPF");
+            }
+            return new Funcionario($dadosFuncionario['id'], $dadosFuncionario['nome'], $dadosFuncionario['senha'], $dadosFuncionario['cpf'], $dadosFuncionario['sal'], $dadosFuncionario['cargo']);
         }catch(PDOException $pdo){
             throw new RepositorioException("Erro ao consultar funcionário.");
         }

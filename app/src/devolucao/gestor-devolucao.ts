@@ -18,7 +18,7 @@ export class GestorDevolucao{
     private valorFinalInicial : Money = new Money(0, Currencies.BRL)
 
     async coletarDevolucoes(){
-        const response = await fetch( API + 'devolucoes');
+        const response = await fetch( API + 'devolucoes', {credentials: 'include'});
         const retorno = await response.json();
         if(!retorno.success || !response.ok){
             throw ErrorDominio.comProblemas([retorno.message]);
@@ -28,7 +28,7 @@ export class GestorDevolucao{
     }
 
     async coletarDevolucoesGrafico(dataInicial: string, dataFinal: string) : Promise<DevolucaoGrafico[]>{
-        const reponse = await fetch(API + `devolucoes?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
+        const reponse = await fetch(API + `devolucoes?dataInicial=${dataInicial}&dataFinal=${dataFinal}`, {credentials: 'include'});
         const retorno = await reponse.json();
 
         if(!retorno.success || !reponse.ok){
@@ -41,7 +41,7 @@ export class GestorDevolucao{
     }
 
     async coletarFuncionariosCadastrados(){
-        const response = await fetch(API + "funcionarios");
+        const response = await fetch(API + "funcionarios", {credentials: 'include'});
         const retorno = await response.json();
 
         if(!retorno.success || !response.ok)
@@ -63,7 +63,7 @@ export class GestorDevolucao{
             parametro += `&id=${pesquisa}`;
         }
 
-        const response = await fetch( API + `locacoes?${parametro}`)
+        const response = await fetch( API + `locacoes?${parametro}`, {credentials: 'include'})
         const locacoes = await response.json();
         if(!locacoes.success || !response.ok){
             throw ErrorDominio.comProblemas([locacoes.message]);
@@ -93,7 +93,7 @@ export class GestorDevolucao{
     async salvarDevolucao(dataDevolucao, valorPago, idFuncionario){
         const devolucao = this.criarDevolucao(dataDevolucao, valorPago, idFuncionario);
         const formDataDevolucao = devolucao.converterParaFormData();
-        const response = await fetch( API + 'devolucoes', {method : 'POST', body : formDataDevolucao})
+        const response = await fetch( API + 'devolucoes', {method : 'POST', body : formDataDevolucao, credentials: 'include'})
 
         const retorno = await response.json();
         if(!retorno.success || !response.ok){

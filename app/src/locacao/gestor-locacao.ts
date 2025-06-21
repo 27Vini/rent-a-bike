@@ -90,7 +90,8 @@ export class GestorLocacao{
             {
                 method:"POST",
                 headers:{"Content-Type":"application/json"},
-                body:JSON.stringify(locacao)
+                body:JSON.stringify(locacao),
+                credentials: 'include'
             }
         );
 
@@ -101,7 +102,7 @@ export class GestorLocacao{
     }
 
     async coletarLocacoes() : Promise<any>{
-        const response = await fetch(API + "locacoes");
+        const response = await fetch(API + "locacoes", {credentials: 'include'});
         // if(!response.ok)
         //     throw ErrorDominio.comProblemas(["Erro ao obter as locações."]);
 
@@ -119,7 +120,7 @@ export class GestorLocacao{
         if(codigo == '')
             throw ErrorDominio.comProblemas(["Digite um código válido."]);
         
-        const response = await fetch(API + "itens?codigo=" + codigo);
+        const response = await fetch(API + "itens?codigo=" + codigo, {credentials: 'include'});
         const retorno = await response.json();
 
         if(!retorno.success || !response.ok)
@@ -134,7 +135,7 @@ export class GestorLocacao{
 
     async obterItensParaRelatorio(dataInicial:string, dataFinal:string){
         const url = `itens?dataInicial=${dataInicial}&dataFinal=${dataFinal}`;
-        const response = await fetch(API + url)
+        const response = await fetch(API + url, {credentials: 'include'})
         const retorno = await response.json();
 
         if(!retorno.success || !response.ok){
@@ -154,7 +155,7 @@ export class GestorLocacao{
     }
 
     async coletarFuncionariosCadastrados(){
-        const response = await fetch(API + "funcionarios");
+        const response = await fetch(API + "funcionarios", {credentials: 'include'});
 
         if(!response.ok)
             throw ErrorDominio.comProblemas(["Erro ao obter funcionários."+response.status]);
@@ -169,7 +170,7 @@ export class GestorLocacao{
         }
 
         let campo = "?parametro="+codigoCpf;
-        const response = await fetch(API + "clientes"+campo);
+        const response = await fetch(API + "clientes"+campo, {credentials: 'include'});
         const retorno = await response.json();
         
         if(!retorno.success || !response.ok){

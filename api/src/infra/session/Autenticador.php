@@ -17,7 +17,6 @@ class Autenticador{
         $gestorFuncionario = criarGestorDeFuncionario($pdo, $this);
     
         $funcionario = $gestorFuncionario->logar(json_decode($json, true));
-    
         $this->gerenteSessao->setFuncionario($funcionario);
     }
 
@@ -36,11 +35,9 @@ class Autenticador{
      * @return void
      */
     public function verificarSeUsuarioEstaLogado(): void{
+        if(!isset($_SESSION['funcionario']) || $_SESSION['funcionario'] == null){
+            throw new DominioException("Usuário não autenticado.");
+        }
 
-        // AINDA NAO FAZ NADA PORQUE NAO TEMOS TELA DE LOGIN
-
-        // if(!isset($_SESSION['funcionario']) || $_SESSION['funcionario'] !== null){
-        //     throw new DominioException("Usuário não autenticado.");
-        // }
     }
 }

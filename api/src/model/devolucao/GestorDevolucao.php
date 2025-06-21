@@ -65,7 +65,6 @@ class GestorDevolucao{
             $this->autenticador->verificarSeUsuarioEstaLogado();
             return $this->repositorioDevolucao->coletarTodos();
         } catch(Exception $e){
-            error_log($e->getMessage());
             throw $e;
         }
     }

@@ -1,6 +1,7 @@
 import {test} from '@playwright/test';
 import { TelaCadastroDevolucao } from './TelaCadastroDevolucao';
 import { sel } from '../../src/devolucao/cadastro/seletores-cadastro-devolucao';
+import { logar }from '../realiza-login';
 const path = require('path');
 
 
@@ -14,6 +15,7 @@ test.describe('Cadastro de Devoluções', async () =>{
 
 
     test.beforeEach( async ({page}) => {
+        await logar(page);
         tela = new TelaCadastroDevolucao(page);
         await tela.abrir();
     })

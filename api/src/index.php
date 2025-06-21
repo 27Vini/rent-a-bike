@@ -34,6 +34,7 @@ try {
 
 
 $app->add(function(Request $request, $handler)use($autenticador){
+    $autenticador->abrirSessao();
     $rotaDesejada = $request->getUri()->getPath();
 
     if($rotaDesejada == '/login'){
@@ -72,7 +73,8 @@ $app->post('/login', function(Request $request, Response $response) use ($autent
         $autenticador->autenticarFuncionario($pdo, $dados);
         $response = $response->withStatus(200)->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode([
-                'success' => true
+                'success' => true,
+                'message' => "Autenticado com sucesso"
             ]));
     } catch (DominioException $e) {
         $response = $response->withStatus(400)->withHeader('Content-Type', 'application/json');

@@ -1,5 +1,6 @@
 import { expect, test} from "@playwright/test";
 import { TelaLocacoes } from "./tela-locacoes";
+import { logar } from "../realiza-login";
 
 test.describe('Listagem de locações', () => {
     let tela:TelaLocacoes;
@@ -10,6 +11,7 @@ test.describe('Listagem de locações', () => {
     });
 
     test.beforeEach(async ({page}) => {
+        await logar(page);
         tela = new TelaLocacoes(page);
         await tela.abrir()
     })

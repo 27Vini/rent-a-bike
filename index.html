@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./app/styles/images/logo.png" type="image/png">
     <link rel="stylesheet" href="./app/styles/main.css">
+    <script src="./app/src/login/visao-login-html.ts" defer type="module"></script>
     <title>Rent a Bike</title>
 </head>
 <body>
@@ -18,12 +19,12 @@
         <a href="./app/pages/listagem-devolucoes.html" id="devolucoes">Devoluções</a>
     </nav> 
     <section class="login">
-        <output class="erro-login"></output>
         <form id="form-login" method="POST">
             <input type="text" name="usuario" id="usuario" placeholder="000.000.000-00">
             <input type="password" name="senha" id="senha" placeholder="senha">
             <button id="logar">Entrar</button>
         </form>
     </section>
+    <output class="erro-login"></output>
 </body>
 </html>

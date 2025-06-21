@@ -1,6 +1,7 @@
 import { test} from "@playwright/test";
 import { TelaRelatorioItens } from "./tela-relatorio-itens";
 import { seletores } from "../../src/locacao/relatorio/seletores-relatorio-itens";
+import { logar } from "../realiza-login";
 
 test.describe('Relatório de Itens por Período', () => {
     let tela:TelaRelatorioItens;
@@ -11,6 +12,7 @@ test.describe('Relatório de Itens por Período', () => {
     });
 
     test.beforeEach(async ({page}) => {
+        await logar(page);
         tela = new TelaRelatorioItens(page);
         await tela.abrir()
     })
