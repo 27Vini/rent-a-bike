@@ -3,7 +3,6 @@ export interface VisaoCadastroDevolucao{
     exibirMulta(multa);
     exibirMensagens(mensagem : string[], erro:boolean);
     coletarInputLocacao();
-    coletarIdFuncionario();
     exibirLocacoes(locacoes);
     coletarDataDevolucao();
     coletarIdLocacaoDoSelect() : number;

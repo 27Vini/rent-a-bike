@@ -7,7 +7,7 @@ export class Devolucao {
         private dataDeDevolucao : Date | undefined,
         public readonly valorPago : number,
         public readonly locacao : string | undefined | number,
-        public readonly funcionario : number,
+        public readonly funcionario : number | null,
         public readonly avariasItens : Avaria[] | []
     ){       
     }
@@ -22,9 +22,6 @@ export class Devolucao {
         }
         if(this.locacao == undefined){
             problemas.push("Uma locação deve ser informada.");
-        }
-        if(this.funcionario <= 0){
-            problemas.push("Um funcionário deve ser informado.");
         }
         if(this.dataDeDevolucao == undefined){
             problemas.push("Uma data de devolução deve ser informada.");
@@ -41,7 +38,6 @@ export class Devolucao {
     converterParaFormData() : FormData{
         const dado = new FormData();
 
-        dado.append("funcionario", this.funcionario.toString());
         dado.append("id", this.id.toString());
         dado.append("locacao", this.locacao ? this.locacao.toString() : '');
         dado.append("valorPago", Number(this.valorPago).toFixed(2));

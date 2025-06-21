@@ -36,10 +36,12 @@ try {
 $app->add(function(Request $request, $handler)use($autenticador){
     $autenticador->abrirSessao();
     $rotaDesejada = $request->getUri()->getPath();
+    $metodo = $request->getMethod();
 
-    if($rotaDesejada == '/login'){
+    if($metodo === 'OPTIONS' || $rotaDesejada == '/login'){
         return $handler->handle($request);
     }
+
     try{
         $autenticador->verificarSeUsuarioEstaLogado();
         return $handler->handle($request);
@@ -133,7 +135,7 @@ $app->get('/locacoes', function(Request $request, Response $response) use($pdo, 
             'message' => $e->getMessage()
         ]));
 
-    } catch(Exception $e) {
+    } catch(Throwable $e) {
         $response = $response->withStatus(500)->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode([
             'success' => false,
@@ -334,7 +336,7 @@ $app->get('/itens', callable:function(Request $request, Response $response) use(
         if(isset($parametros['dataInicial']) && isset($parametros['dataFinal'])){
             $resultado = $gestorItem->coletarItensParaRelatorio($parametros);
         } else {
-            $resultado = $gestorItem->coletarComCodigo($parametros['codigo']);
+            $resultado = $gestorItem->coletarComCodigoEAvaria($parametros['codigo']);
         }
 
         $response->getBody()->write(json_encode([

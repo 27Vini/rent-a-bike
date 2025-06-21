@@ -2,7 +2,6 @@ export const sel = {
     inputCliente        : "#cliente",
     inputHoras          : "#horas",
     inputCodigoItem     : "#item",
-    selectFuncionario   : "#funcionario",
     botaoCadastrar      : "#cadastrar",
     botaoBuscarCliente  : "#pesquisar-cliente",
     botaoBuscarItem     : "#pesquisar-item",

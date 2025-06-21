@@ -11,8 +11,6 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     }
 
     iniciar(){
-        document.addEventListener('DOMContentLoaded', this.preencherSelectFuncionario.bind(this));
-
         document.querySelector(sel.botaoBuscarCliente)?.addEventListener("click", this.pesquisarCliente.bind(this))
         document.querySelector(sel.botaoBuscarItem)?.addEventListener("click", this.pesquisarItem.bind(this))
         document.querySelector(sel.inputHoras)?.addEventListener("blur", this.aoDigitarHora.bind(this));
@@ -20,9 +18,8 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         document.querySelector(sel.botaoCadastrar)!.addEventListener("click", this.cadastrar.bind(this));
     }
 
-    coletarDados() : {funcionario, cliente, horas}{
+    coletarDados() : {cliente, horas}{
         return {
-            funcionario : document.querySelector<HTMLInputElement>(sel.selectFuncionario)!.value,
             cliente     : document.querySelector<HTMLInputElement>(sel.inputCliente)!.dataset.id,
             horas       : this.coletarHoras()
         }
@@ -64,23 +61,6 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         }
     }
 
-    /** SELECT DE FUNCIONÁRIOS */
-    private async preencherSelectFuncionario(){
-        await this.controladora.coletarFuncionarios();
-    }
-
-    public exibirFuncionarios(funcionarios) {
-        const select = document.querySelector(sel.selectFuncionario);
-
-        select!.innerHTML = funcionarios.map(f =>
-            this.transformarEmOption({value:f.id, option:f.nome})
-        ).join('');
-    }
-
-    private transformarEmOption({value, option}) {
-        return `<option value=${value}>${option}</option>`
-    }
-
     /** PESQUISA DE CLIENTES */
     private async pesquisarCliente(){
         await this.controladora.coletarClienteComCodigoOuCpf();
@@ -118,15 +98,16 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
         linha.remove();
     }
 
-    exibirItem({descricao, disponibilidade, valorPorHora}){
+    exibirItem({descricao, disponibilidade, valorPorHora, avaria}){
         const ul = document.querySelector(sel.listaItem);
         ul!.innerHTML = '';
 
+        let avariaItem = avaria != null ? `${avaria} -` : ''; 
         let disponivel = disponibilidade ? 'disponível' : 'indisponível';
         let valorItem = Money.fromDecimal(valorPorHora, 'BRL');
 
         const li = document.createElement('li');
-        li.innerHTML = `${descricao} - R$${valorItem}/h - <strong>${disponivel}</strong>`
+        li.innerHTML = `${descricao} - ${avariaItem}  R$${valorItem}/h - <strong>${disponivel}</strong>`
 
         ul!.appendChild(li);
         ul!.removeAttribute("hidden");

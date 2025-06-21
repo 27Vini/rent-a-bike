@@ -19,10 +19,10 @@ interface RepositorioItem{
     /**
      * Coleta um item com o código informado
      * @param string $codigo
-     * @return Item
+     * @return array<string,Item|string>
      * @throws DominioException
      */
-    public function coletarComCodigo(string $codigo) : Item;
+    public function coletarComCodigoEAvaria(string $codigo) : array;
 
     /**
      * Coleta dados dos itens para o relatório

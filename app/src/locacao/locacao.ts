@@ -4,7 +4,7 @@ export class Locacao{
     constructor(
         public readonly id:number = 0, 
         public readonly cliente:number,
-        public readonly funcionario:number,
+        public readonly funcionario:number | null,
         public readonly itens:ItemLocacao[] | Object[],
         public readonly entrada:Date,
         public readonly numeroDeHoras:number, 
@@ -37,11 +37,6 @@ export class Locacao{
         if(this.cliente <= 0){
             erros.push("Um cliente deve estar associado à locação.");
         }
-
-        if(this.funcionario <= 0){
-            erros.push("Um funcionário deve estar associado à locação.");
-        }
-
         return erros;
     }
 }

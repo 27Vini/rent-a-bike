@@ -65,11 +65,11 @@ export class GestorLocacao{
         };
     }
 
-    async salvarLocacao({funcionario, cliente, horas}) : Promise<void> {
+    async salvarLocacao({cliente, horas}) : Promise<void> {
         const locacao = new Locacao(
             100, 
             cliente, 
-            funcionario, 
+            null, 
             this.itens,
             new Date(),
             horas,
@@ -129,7 +129,7 @@ export class GestorLocacao{
         if(retorno.data.length == 0)
             throw ErrorDominio.comProblemas(["Nenhum item encontrado."]);
 
-        this.setItem(retorno.data);
+        this.setItem(retorno.data.item);
         return retorno.data;
     }
 

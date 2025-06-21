@@ -15,24 +15,12 @@ export class ControladoraCadastroLocacao{
     async cadastrar(){
         const dados = this.visao.coletarDados();
         try{
-            await this.gestor.salvarLocacao({funcionario: dados.funcionario, cliente:dados.cliente, horas:dados.horas});
+            await this.gestor.salvarLocacao({cliente:dados.cliente, horas:dados.horas});
 
             this.visao.exibirMensagens(['Locação salva com sucesso!'], false);
             this.visao.limparTelaCadastro();
         }catch(erro){
-            if(erro instanceof ErrorDominio)
-                this.visao.exibirMensagens(erro.getProblemas(), true);
-            else 
-                this.visao.exibirMensagens([erro.message], true);
-        }
-    }
-
-    async coletarFuncionarios(){
-        try{
-            const funcionarios = await this.gestor.coletarFuncionariosCadastrados();
-
-            this.visao.exibirFuncionarios(funcionarios);
-        }catch(erro){
+            console.log(erro);
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);
             else 
@@ -58,7 +46,8 @@ export class ControladoraCadastroLocacao{
         try{
             const codigo = this.visao.coletarCodigoItem();
             const item = await this.gestor.coletarItemComCodigo(codigo);
-            this.visao.exibirItem({codigo:item.codigo, descricao:item.descricao, disponibilidade:item.disponibilidade, valorPorHora:item.valorPorHora});
+            console.log(item);
+            this.visao.exibirItem({codigo:item.item.codigo, descricao:item.item.descricao, disponibilidade:item.item.disponibilidade, valorPorHora:item.item.valorPorHora, avaria:item.avaria});
         }catch(erro){
             if(erro instanceof ErrorDominio)
                 this.visao.exibirMensagens(erro.getProblemas(), true);

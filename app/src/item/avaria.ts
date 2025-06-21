@@ -13,6 +13,9 @@ export class Avaria {
         const tiposImgPermitidos = ["image/jpg", "image/jpeg"];
         const problemas : string[] = [];
 
+        if(!(this.imagem instanceof File))
+            problemas.push("Imagem da avaria deve ser enviada.");
+
         if(this.imagem instanceof File && !tiposImgPermitidos.includes(this.imagem.type))
             problemas.push("Imagem deve ser dos tipos: "+tiposImgPermitidos.join(','));
 

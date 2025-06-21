@@ -38,6 +38,13 @@ class Autenticador{
         if(!isset($_SESSION['funcionario']) || $_SESSION['funcionario'] == null){
             throw new DominioException("Usuário não autenticado.");
         }
+    }
 
+    /**
+     * Retorna o funcionário logado no sistema no momento 
+     * @return Funcionario
+     */
+    public function obterFuncionarioLogado() : Funcionario {
+        return $_SESSION['funcionario'];
     }
 }

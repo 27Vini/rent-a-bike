@@ -1,5 +1,4 @@
 import {TipoItem} from './tipo-item-enum.js';
-import { ErrorDominio } from '../../infra/ErrorDominio.js';
 export class Item {
   static readonly TAM_CODIGO = 8;
   static readonly TAM_MIN_STRING = 2;

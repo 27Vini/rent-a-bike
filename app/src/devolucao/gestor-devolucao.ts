@@ -78,9 +78,9 @@ export class GestorDevolucao{
         return locacoes.data;
     }
 
-    private criarDevolucao(dataDeDevolucao, valorPago, idFuncionario) : Devolucao{
+    private criarDevolucao(dataDeDevolucao, valorPago) : Devolucao{
         const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
-        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, idFuncionario, this.avarias);
+        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, null, this.avarias);
         const problemas : string [] = devolucao.validar();
         if(problemas.length > 0){
             throw ErrorDominio.comProblemas(problemas);
@@ -90,8 +90,8 @@ export class GestorDevolucao{
         return devolucao
     }
 
-    async salvarDevolucao(dataDevolucao, valorPago, idFuncionario){
-        const devolucao = this.criarDevolucao(dataDevolucao, valorPago, idFuncionario);
+    async salvarDevolucao(dataDevolucao, valorPago){
+        const devolucao = this.criarDevolucao(dataDevolucao, valorPago);
         const formDataDevolucao = devolucao.converterParaFormData();
         const response = await fetch( API + 'devolucoes', {method : 'POST', body : formDataDevolucao, credentials: 'include'})
 

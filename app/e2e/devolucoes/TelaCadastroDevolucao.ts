@@ -1,12 +1,12 @@
 import { Page, expect } from "@playwright/test";
 import { sel } from "../../src/devolucao/cadastro/seletores-cadastro-devolucao";
-import { APP } from "../../infra/app";
+import { APP, PAGE_CADASTRO_DEVOLUCAO } from "../../infra/app";
 
 export class TelaCadastroDevolucao{
     constructor(private page : Page){}
 
     async abrir(){
-        await this.page.goto(APP + 'app/pages/cadastrar-devolucoes.html')
+        await this.page.goto(APP + PAGE_CADASTRO_DEVOLUCAO)
     }
 
     async clicar(seletor : string){

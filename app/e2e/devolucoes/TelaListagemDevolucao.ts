@@ -1,11 +1,11 @@
 import {Page, expect} from '@playwright/test'
-import { APP } from '../../infra/app';
+import { APP, PAGE_DEVOLUCOES } from '../../infra/app';
 
 export class TelaListagemDevolucao{
     constructor(private page : Page){}
 
     async abrir(){
-        await this.page.goto(APP)
+        await this.page.goto(APP + PAGE_DEVOLUCOES)
     }
 
     async irPara(seletor : string){
@@ -21,7 +21,7 @@ export class TelaListagemDevolucao{
     }
 
     async deveConterDevolucao( id : number){
-        await this.irPara('#devolucoes')
+        await this.irPara('.devolucoes')
         this.esperarResposta('/devolucoes')
         const tbody = this.page.locator('tbody')
 

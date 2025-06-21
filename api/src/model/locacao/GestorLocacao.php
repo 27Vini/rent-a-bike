@@ -1,7 +1,7 @@
 <?php
 
 class GestorLocacao {
-    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private RepositorioFuncionario $repositorioFuncionario, private Transacao $transacao, private Autenticador $autenticador){
+    public function __construct(private RepositorioLocacao $repositorioLocacao, private RepositorioCliente $repositorioCliente, private Transacao $transacao, private Autenticador $autenticador){
         $this->autenticador->abrirSessao();
     }
 
@@ -10,7 +10,7 @@ class GestorLocacao {
      *
      * @param array{
      *   cliente: string|int,
-     *   funcionario: string|int,
+     *   funcionario: string|int|null,
      *   numeroDeHoras: string|int,
      *   itens: array<int, array{
      *     item: array{
@@ -38,11 +38,9 @@ class GestorLocacao {
             $this->transacao->iniciar();
 
             $cliente = $this->repositorioCliente->coletarComId(intval($dadosLocacao['cliente']));
-            $funcionario = $this->repositorioFuncionario->coletarComId(intval($dadosLocacao['funcionario']));
+            $funcionario = $this->autenticador->obterFuncionarioLogado();
             
             $itensLocacao = [];
-
-
             foreach($dadosLocacao['itens'] as $itemLocacao){
                 $item = $this->transformarEmItem($itemLocacao['item']);
                 $itemLocacao = $this->transformarEmItemLocacao($itemLocacao, $item, intval($dadosLocacao['numeroDeHoras']));

@@ -1,12 +1,11 @@
 export interface VisaoCadastroLocacao{
-    coletarDados() : {funcionario, cliente, horas};
+    coletarDados() : {cliente, horas};
     coletarHoras();
     coletarCliente();
     coletarCodigoItem();
 
-    exibirFuncionarios(funcionarios);
     exibirCliente({id, nome, foto});
-    exibirItem({codigo, descricao, disponibilidade, valorPorHora});
+    exibirItem({codigo, descricao, disponibilidade, valorPorHora, avaria});
     construirTabela({itens, valores});
     exibirDataHoraEntrega(entrega:Date);
     exibirMensagens(mensagens : string[], erro:boolean);

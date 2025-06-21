@@ -2,12 +2,11 @@
 
 function criarGestorDeLocacao(PDO $pdo, Autenticador $autenticador): GestorLocacao{
     $repositorioCliente = new RepositorioClienteEmBDR($pdo);
-    $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
     $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo, $repositorioItemLocacao);
     $transacao = new TransacaoComPDO($pdo);
     
-    return new GestorLocacao($repositorioLocacao, $repositorioCliente, $repositorioFuncionario, $transacao, $autenticador);
+    return new GestorLocacao($repositorioLocacao, $repositorioCliente, $transacao, $autenticador);
 }
 
 function criarGestorDeDevolucao(PDO $pdo, Autenticador $autenticador): GestorDevolucao{
@@ -16,11 +15,10 @@ function criarGestorDeDevolucao(PDO $pdo, Autenticador $autenticador): GestorDev
     $repositorioItemLocacao = new RepositorioItemLocacaoEmBDR($pdo);
     $repositorioLocacao = new RepositorioLocacaoEmBDR($pdo, $repositorioItemLocacao);
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
-    $repositorioAvaria = new RepositorioAvariaEmBDR($pdo, new RepositorioItemEmBDR($pdo), $repositorioFuncionario);
     $repositorioDevolucao = new RepositorioDevolucaoEmBDR($pdo, $repositorioLocacao, $repositorioFuncionario);
     $gestorAvaria = criarGestorDeAvaria($pdo, $autenticador);
 
-    return new GestorDevolucao($repositorioDevolucao, $repositorioLocacao, $repositorioFuncionario, $gestorAvaria, $transacao, $autenticador);
+    return new GestorDevolucao($repositorioDevolucao, $repositorioLocacao, $gestorAvaria, $transacao, $autenticador);
 }
 
 
@@ -28,7 +26,6 @@ function criarGestorDeAvaria(PDO $pdo, Autenticador $autenticador): GestorAvaria
     $repositorioItem = new RepositorioItemEmBDR($pdo);
     $repositorioFuncionario = new RepositorioFuncionarioEmBDR($pdo);
     $repositorioAvaria = new RepositorioAvariaEmBDR($pdo, $repositorioItem, $repositorioFuncionario);
-    $transacao = new TransacaoComPDO($pdo);
     
     return new GestorAvaria($repositorioAvaria, $repositorioItem, $repositorioFuncionario, $autenticador);
 }

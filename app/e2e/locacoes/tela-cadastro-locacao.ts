@@ -1,11 +1,11 @@
 import{expect, Page} from '@playwright/test';
 import{sel} from '../../src/locacao/cadastro/seletores-cadastro-locacao';
-import {APP} from '../../infra/app';
+import {APP, PAGE_CADASTRO_LOCACAO} from '../../infra/app';
 export class TelaCadastroLocacao{
     constructor(private page:Page){}
 
     async abrir(){
-        await this.page.goto(APP + "app/pages/cadastrar-locacao.html");
+        await this.page.goto(APP + PAGE_CADASTRO_LOCACAO);
     }
 
     async clicar(elemento:string){

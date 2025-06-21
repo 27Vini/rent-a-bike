@@ -17,17 +17,17 @@ test.describe('Listagem de locações', () => {
     })
 
     test('abrir página correta de locações', async() => {
-        await tela.irPara("#locacoes");
+        await tela.irPara(".locacoes");
         await tela.verificarLink("http://localhost:5173/app/pages/listagem-locacoes.html");
     })
 
     test('verificar listagem de locações registradas', async() => {
-        await tela.irPara(".pages #locacoes");
+        await tela.irPara(".locacoes");
         await tela.deveExibirUmaLocacao(1);
     })
 
     test('botão cadastrar altera a url', async() => {
-        await tela.irPara("#locacoes");
+        await tela.irPara(".locacoes");
         await tela.irPara("#cadastrar-locacao");
         await tela.verificarLink("http://localhost:5173/app/pages/cadastrar-locacao.html");
     })
@@ -36,7 +36,7 @@ test.describe('Listagem de locações', () => {
         const { execa } = await import('execa');
         await execa('pnpm', ['db:e'], { stdio: 'inherit' });
 
-        await tela.irPara('#locacoes');
+        await tela.irPara('.locacoes');
         await tela.deveExibirMensagem("Nenhuma locação encontrada.");
     })
 })

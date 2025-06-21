@@ -10,7 +10,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     iniciar(){
-        document.addEventListener('DOMContentLoaded', this.preencherSelectFuncionario.bind(this));
+        document.addEventListener('DOMContentLoaded', this.controladora.coletarFuncionarios.bind(this.controladora));
 
         document.querySelector(sel.pesquisarLocacao)?.addEventListener('click', this.controladora.pesquisarLocacao.bind(this.controladora));
         document.querySelector(sel.devolverBtn)?.addEventListener('click', this.controladora.enviarDados.bind(this.controladora));
@@ -20,19 +20,13 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         this.bloquearInputLocacao();
     }
 
-    private async preencherSelectFuncionario(){
-        await this.controladora.coletarFuncionarios();
-    }
-
     public exibirFuncionarios(funcionarios) {
-        const selectDevolucao = document.querySelector(sel.selectFuncionarios);
         const selectAvarias = document.querySelector(sel.selectFuncionariosAvaria);
 
         const funcionariosSelect = funcionarios.map(f =>
             this.transformarEmOption({value:f.id, option:f.nome})
         ).join('');
 
-        selectDevolucao!.innerHTML = funcionariosSelect;
         selectAvarias!.innerHTML = funcionariosSelect;  
     }
 
@@ -79,10 +73,6 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
 
     coletarInputLocacao() {
         return document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value;
-    }
-
-    coletarIdFuncionario() {
-        return document.querySelector<HTMLInputElement>(sel.selectFuncionarios)!.value;
     }
 
     coletarValorFinal() : string | null{

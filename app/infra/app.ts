@@ -1,1 +1,5 @@
 export const APP = "http://localhost:5173/"
+export const PAGE_DEVOLUCOES = "app/pages/listagem-devolucoes.html"
+export const PAGE_CADASTRO_DEVOLUCAO = "app/pages/cadastrar-devolucoes.html"
+export const PAGE_LOCACOES = "app/pages/listagem-locacoes.html"
+export const PAGE_CADASTRO_LOCACAO = "app/pages/cadastrar-locacao.html"

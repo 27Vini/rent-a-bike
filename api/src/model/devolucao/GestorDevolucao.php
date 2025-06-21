@@ -2,7 +2,7 @@
 use Slim\Psr7\UploadedFile as UploadedFile;
 
 class GestorDevolucao{
-    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private RepositorioFuncionario $repositorioFuncionario, private GestorAvaria $gestorAvaria, private Transacao $transacao, private Autenticador $autenticador){
+    public function __construct(private RepositorioDevolucao $repositorioDevolucao, private RepositorioLocacao $repositorioLocacao, private GestorAvaria $gestorAvaria, private Transacao $transacao, private Autenticador $autenticador){
         $this->autenticador->abrirSessao();
     }
 
@@ -11,7 +11,6 @@ class GestorDevolucao{
      * @param array{
      *          dataDeDevolucao:string,
      *          locacao:string,
-     *          funcionario:string, 
      *          avariasItens:array<int,array{
         *          dataHora:string,
         *          item:string,
@@ -36,10 +35,7 @@ class GestorDevolucao{
             if($locacao == null){
                 throw new DominioException("Locação não encontrada com id " . $locacaoId);
             }
-            $funcionario = $this->repositorioFuncionario->coletarComId(intval($dados['funcionario']));
-            if($funcionario == null){
-                throw new DominioException("Funcionário não encontrado com id " . intval($dados['funcionario']));
-            }
+            $funcionario = $this->autenticador->obterFuncionarioLogado();
     
             $avariasItens = !empty($dados['avariasItens']) ? $dados['avariasItens'] : [];
             $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario, $avariasItens);

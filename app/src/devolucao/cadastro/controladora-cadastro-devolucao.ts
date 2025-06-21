@@ -76,8 +76,7 @@ export class ControladoraCadastroDevolucao {
     async enviarDados(){
         try{
             const valorFinal = this.visao.coletarValorFinal();
-            const idFuncionario = this.visao.coletarIdFuncionario();
-            await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal, idFuncionario);
+            await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal);
             this.visao.limparForm();
             this.visao.exibirMensagens(['Devolvido com sucesso.'], false);
         }catch( error ){

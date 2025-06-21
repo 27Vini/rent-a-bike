@@ -59,20 +59,22 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
     /**
      * Coleta um item com o código informado
      * @param string $codigo
-     * @return Item
+     * @return array<string,Item|string>
      * @throws DominioException
      * @throws RepositorioException
      */
-    public function coletarComCodigo(string $codigo) : Item {
+    public function coletarComCodigoEAvaria(string $codigo) : array {
         try{
-            $comando = "SELECT * FROM item WHERE codigo = :codigo LIMIT 1";
+            $comando = "SELECT item.*, (SELECT avaria.descricao FROM avaria WHERE avaria.item_id = item.id LIMIT 1) as avaria FROM item WHERE codigo = :codigo LIMIT 1";
             $ps = $this->executarComandoSql($comando, ["codigo" => $codigo]);
 
             if($ps->rowCount() == 0)
                 throw new DominioException('Item não encontrado.');
 
             $dadosItem = $ps->fetch();
-            return $this->transformarEmItem($dadosItem);
+            $dados['item'] = $this->transformarEmItem($dadosItem);
+            $dados['avaria'] = $dadosItem['avaria'];
+            return $dados;
         }catch(DominioException $e){
             throw $e;
         }catch(Exception $e){

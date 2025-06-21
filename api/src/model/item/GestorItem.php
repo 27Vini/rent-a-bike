@@ -8,15 +8,15 @@ class GestorItem{
     /**
      * Coleta um item com o código informado
      * @param string $codigo
-     * @return Item
+     * @return array<string,Item|string>
      * @throws Exception
      */
-    public function coletarComCodigo(string $codigo) : Item{
+    public function coletarComCodigoEAvaria(string $codigo) : array{
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
-            $item = $this->repositorioItem->coletarComCodigo($codigo);
+            $dadosItem = $this->repositorioItem->coletarComCodigoEAvaria($codigo);
 
-            return $item;
+            return $dadosItem;
         }catch(Exception $e){
             throw $e;
         }
