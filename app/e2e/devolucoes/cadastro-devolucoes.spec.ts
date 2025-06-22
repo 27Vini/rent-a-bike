@@ -5,7 +5,7 @@ import { logar }from '../realiza-login';
 const path = require('path');
 
 
-test.describe('Cadastro de Devoluções', async () =>{
+test.describe('Cadastro de Devoluções', () =>{
     let tela : TelaCadastroDevolucao
 
     test.beforeAll(async () => {
