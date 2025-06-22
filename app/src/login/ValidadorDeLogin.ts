@@ -12,7 +12,7 @@ export class ValidadorDeLogin{
         const problemas : string[] = [];
 
         if(this.cpf.length !== this.TAM_CPF){
-            problemas.push("O CPF deve conter " + this.TAM_CPF + " caracters");
+            problemas.push("O CPF deve conter " + this.TAM_CPF + " caracteres");
         }
 
         return problemas;
