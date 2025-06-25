@@ -86,7 +86,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      * Coleta dados dos itens para o relatório
      * @param string $dataInicial
      * @param string $dataFinal
-     * @return array{itens:list<array{descricao:string,qtdVezesAlugado:string}>,totalLocacoes:string}     
+     * @return array{itens:list<array{descricao:string,qtdVezesAlugado:string}>,totalLocacoes:int}     
      * @throws DominioException
      * @throws RepositorioException
      */
@@ -104,20 +104,16 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
                     ";
             $ps = $this->executarComandoSql($comando, ["dataInicial" => $dataInicial, "dataFinal" => $dataFinal]);
 
-            if($ps->rowCount() == 0)
+            $totalDados = $ps->rowCount();
+            if($totalDados == 0)
                 throw new DominioException('Dados não encontrados.');
 
             /** @var list<array{descricao:string,qtdVezesAlugado:string}> $dadosItens */
             $dadosItens = $ps->fetchAll();
 
-
-            $comando = "SELECT count(id) as qtdTotalLocacoes FROM locacao l WHERE l.entrada >= :dataInicial AND l.entrada <= :dataFinal";
-            $ps = $this->executarComandoSql($comando, ["dataInicial" => $dataInicial, "dataFinal" => $dataFinal]);
-            $totalLocacoes = $ps->fetch();
-
             $dadosItensRelatorio = [
                 "itens"         => $dadosItens,
-                "totalLocacoes" => $totalLocacoes['qtdTotalLocacoes']
+                "totalLocacoes" => $totalDados
             ];
 
             return $dadosItensRelatorio;

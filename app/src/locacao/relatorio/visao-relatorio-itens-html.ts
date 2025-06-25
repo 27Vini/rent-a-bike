@@ -77,12 +77,13 @@ export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
 
     private gerarTabelaRanking(itensRanking:[]){
         const tabela = document.querySelector(seletores.tabelaRanking)!;
-        tabela.innerHTML = itensRanking.map(i => this.desenharLinhaRanking(i)).join('');
+        tabela.innerHTML = itensRanking.map((item, i) => this.desenharLinhaRanking(item, i+1)).join('');
     }
 
-    private desenharLinhaRanking(item){
+    private desenharLinhaRanking(item, posicao){
         return `
             <tr>
+                <td>${posicao}º</td>
                 <td>${item.qtdVezesAlugado}</td>
                 <td>${item.descricao}</td>
             </tr>

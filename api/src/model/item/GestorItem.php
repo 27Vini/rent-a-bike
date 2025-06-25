@@ -73,11 +73,11 @@ class GestorItem{
     /**
      * Retorna um objeto de ItemRelatorioDTO
      * @param string|int $qtdVezesAlugado
-     * @param string $qtdTotalLocacoes
+     * @param string|int $qtdTotalLocacoes
      * @param string $descricao
      * @return ItemRelatorioDTO
      */
-    private function gerarItemRelatorioDTO(string|int $qtdVezesAlugado, string $qtdTotalLocacoes, string $descricao) : ItemRelatorioDTO{
+    private function gerarItemRelatorioDTO(string|int $qtdVezesAlugado, string|int $qtdTotalLocacoes, string $descricao) : ItemRelatorioDTO{
         $porcentagem = intval($qtdVezesAlugado)/intval($qtdTotalLocacoes);
         return new ItemRelatorioDTO(intval($qtdVezesAlugado), $descricao, floatval($porcentagem));
     }

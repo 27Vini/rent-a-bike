@@ -1,3 +1,4 @@
+import { APP } from "../../infra/app";
 import { ControladoraAutenticador } from "./controladora-autenticador";
 import { sel } from "./seletores-autenticador";
 import { VisaoAutenticador } from "./visao-autenticador";
@@ -52,6 +53,9 @@ export class VisaoAutenticadorHTML implements VisaoAutenticador{
         }
     }
 
+    redirecionarPara(url: string = APP) {
+        location.href = url;
+    }
 
 }
 
