@@ -27,6 +27,18 @@ export class GestorDevolucao{
         return retorno.data;
     }
 
+    async podeCadastrarAvaria() : Promise<boolean>{
+        const { GestorAutenticador } = await import('../autenticador/gestor-autenticador.ts');
+        const { Cookie } = await import('../autenticador/cookie.ts');
+
+        const gestor = new GestorAutenticador(new Cookie());
+        try{
+            return gestor.verificarSePodeCadastrarAvaria();
+        }catch(error){
+            throw error;
+        }
+    }
+
     async coletarDevolucoesGrafico(dataInicial: string, dataFinal: string) : Promise<DevolucaoGrafico[]>{
         const reponse = await fetch(API + `devolucoes?dataInicial=${dataInicial}&dataFinal=${dataFinal}`, {credentials: 'include'});
         const retorno = await reponse.json();

@@ -39,6 +39,20 @@ export class ControladoraCadastroDevolucao {
         }
     }
 
+    async verificarSePodeCadastrarAvaria(){
+        try{
+            const pode = await this.gestor.podeCadastrarAvaria();
+            this.visao.podeCadastrarAvaria(pode);
+        }catch( error ){
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas(), true);
+            else
+                this.visao.exibirMensagens([ error.message ], true);
+            
+            return
+        }
+    }
+
     calcularValores(){
         const subtotais : number[] = this.visao.coletarSubtotais();
         const {valorTotal, desconto, valorFinal} = this.gestor.calcularValores(subtotais);

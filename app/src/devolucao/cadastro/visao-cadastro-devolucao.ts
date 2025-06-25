@@ -13,4 +13,5 @@ export interface VisaoCadastroDevolucao{
     preencherValores({valorTotal, desconto, valorFinal});
     coletarDadosAvaria();
     atualizarValorFinal(valorFinal);
+    podeCadastrarAvaria(pode : boolean) : void
 }

@@ -14,6 +14,7 @@ export class VisaoAutenticadorHTML implements VisaoAutenticador{
         window.addEventListener("DOMContentLoaded", this.controladora.gerenciarAutenticacao.bind(this.controladora));
     }
 
+
     criarOHeader(): void {
         const header = document.querySelector("header");
         header?.appendChild(this.criarDiv());

@@ -20,6 +20,7 @@ class GestorAvaria{
     public function salvarAvarias(array $dadosAvarias, array $imagens, string|int $idDevolucao) : void {
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::CADASTRAR_AVARIA);
             foreach($dadosAvarias as $key => $dadosAvaria){
                 $imagem = $imagens[$key];
                 $this->salvarAvaria($dadosAvaria, $imagem, $idDevolucao);
@@ -48,9 +49,10 @@ class GestorAvaria{
         $descricao =  htmlspecialchars((string)$dados['descricao']);
         $valor = htmlspecialchars((string)$dados['valor']);
         $foto = !empty($imagem) ? $imagem['imagem'] : null;
-
+        
         try{
             $this->autenticador->verificarSeUsuarioEstaLogado();
+            $this->autenticador->verificarPermissao(AutorizadorAcoes::CADASTRAR_AVARIA);
             //$this->transacao->iniciar();
             $funcionario = $this->repositorioFuncionario->coletarComId(intval($funcionarioId));
             if($funcionario == null){

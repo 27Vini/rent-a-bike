@@ -165,9 +165,19 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
                 </tr>
             ` 
         }
-
+        this.controladora.verificarSePodeCadastrarAvaria();
         document.querySelectorAll<HTMLElement>(sel.botaoRegistrarAvaria)!.forEach((e) => e.onclick = this.registrarAvaria.bind(this));
         this.controladora.calcularValores()
+    }
+
+    podeCadastrarAvaria(pode : boolean) : void{
+        if(pode){
+            return;
+        }
+        const botoes = document.querySelectorAll<HTMLButtonElement>(sel.botaoRegistrarAvaria);
+        botoes.forEach(b => {
+            b.disabled = true
+        })
     }
 
     private registrarAvaria(e){

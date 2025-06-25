@@ -1,6 +1,7 @@
 import { APP, FORBIDDEN } from "../../infra/app";
 import { ErrorForbidden } from "../../infra/ErrorForbidden";
 import { ErrorNaoAutorizado } from "../../infra/ErrorNaoAutorizado";
+import { Cookie } from "./cookie";
 import { GestorAutenticador } from "./gestor-autenticador";
 import { VisaoAutenticador } from "./visao-autenticador";
 
@@ -10,7 +11,7 @@ export class ControladoraAutenticador{
 
     constructor(visao : VisaoAutenticador){
         this.visao = visao;
-        this.gestor = new GestorAutenticador();
+        this.gestor = new GestorAutenticador(new Cookie());
     }
 
     gerenciarAutenticacao(){
@@ -18,7 +19,7 @@ export class ControladoraAutenticador{
             this.gestor.verificarPermissaoDeAcesso();
 
             this.visao.criarOHeader();
-            const nome = this.gestor.coletarUsuarioDoCookie() || '';
+            const nome = this.gestor.coletarUsuario() || '';
             this.visao.mostrarNome(nome);
         } catch(error){
             if(error instanceof ErrorNaoAutorizado){

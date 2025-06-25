@@ -3,6 +3,7 @@
 enum AutorizadorAcoes : string{
     case LISTAR = 'listar';
     case CADASTRAR = 'cadastrar';
+    case CADASTRAR_AVARIA = "cadastrar avaria";
     case EXIBIR_RELATORIO_ITENS = 'exibir relatório de itens';
     case EXIBIR_RELATORIO_DEVOLUCOES = 'exibir relatório de devoluções';
 
@@ -15,7 +16,8 @@ enum AutorizadorAcoes : string{
             self::LISTAR->value,
             self::CADASTRAR->value,
             self::EXIBIR_RELATORIO_ITENS->value,
-            self::EXIBIR_RELATORIO_DEVOLUCOES->value
+            self::EXIBIR_RELATORIO_DEVOLUCOES->value,
+            selF::CADASTRAR_AVARIA->value
         ];
     }
 
@@ -55,6 +57,10 @@ enum AutorizadorAcoes : string{
                     return true;
                 return false;
             case self::EXIBIR_RELATORIO_DEVOLUCOES->toString() : 
+                if($cargo == EnumCargo::GERENTE->toString())
+                    return true;
+                return false;
+            case self::CADASTRAR_AVARIA->toString():
                 if($cargo == EnumCargo::GERENTE->toString())
                     return true;
                 return false;

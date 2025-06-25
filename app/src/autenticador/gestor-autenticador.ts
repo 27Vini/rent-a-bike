@@ -1,13 +1,17 @@
-import { Cookie } from "./cookie";
-import { APP, FORBIDDEN } from '../../infra/app'
 import { API } from '../../infra/api'
 import { ServicoAutenticador } from "./servico-autenticador";
 import { ErrorNaoAutorizado } from "../../infra/ErrorNaoAutorizado";
 import { ErrorForbidden } from "../../infra/ErrorForbidden";
+import { LeitorDeCredencial } from "./leitor-de-credencial";
+import { cargos } from './cargos-enum';
 
 export class GestorAutenticador{
-    coletarUsuarioDoCookie(): string | null{
-        const nome : string | null = Cookie.obter('user_name');
+
+    constructor(private leitorDeCredencial : LeitorDeCredencial){
+    }
+
+    coletarUsuario(): string | null{
+        const nome : string | null = this.leitorDeCredencial.obter('user_name');
         if(nome == '' || nome == null){
             throw new ErrorNaoAutorizado();
         }
@@ -15,19 +19,39 @@ export class GestorAutenticador{
         return nome;
     }
 
-    verificarPermissaoDeAcesso() {
-        const cargoFuncionario = Cookie.obter('cargo');
+    coletarCargo() : string{
+        const cargoFuncionario = this.leitorDeCredencial.obter('cargo');
         if(cargoFuncionario == null){
             throw new ErrorNaoAutorizado();
         }
+        return cargoFuncionario;
+    }
 
-        if(!ServicoAutenticador.verificarPermissao(cargoFuncionario!)){
-            throw new ErrorForbidden();
+    verificarSePodeCadastrarAvaria() : boolean{
+        try{
+            const cargo = this.coletarCargo();
+            if(cargo !== cargos.GERENTE){
+                return false;
+            }
+            return true;
+        }catch(error){
+            throw error;
+        }
+    }
+
+    verificarPermissaoDeAcesso() {
+        try{
+            const cargoFuncionario = this.coletarCargo();
+    
+            if(!ServicoAutenticador.verificarPermissao(cargoFuncionario!)){
+                throw new ErrorForbidden();
+            }
+        }catch(error){
+            throw error;
         }
     }
 
     async deslogar(): Promise<void>{
         const response = await fetch(API + 'logout', { method: 'POST' , credentials : 'include'});
-        console.log("resposta: " + response.status);
     }
 }
