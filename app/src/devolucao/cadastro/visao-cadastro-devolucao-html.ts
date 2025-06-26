@@ -1,6 +1,7 @@
 import { ControladoraCadastroDevolucao } from "./controladora-cadastro-devolucao.js";
 import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import { sel } from './seletores-cadastro-devolucao.js';
+import DOMPurify from "dompurify";
 
 export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     private controladora : ControladoraCadastroDevolucao;
@@ -73,11 +74,12 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     coletarInputLocacao() {
-        return document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value;
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.locacaoInput)!.value)
+        ;
     }
 
     coletarValorFinal() : string | null{
-        return document.querySelector(sel.valorFinal)!.textContent;
+        return DOMPurify.sanitize(document.querySelector(sel.valorFinal)!.textContent || '');
     }
 
     coletarIdLocacaoDoSelect(): number {
@@ -85,7 +87,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     coletarDataDevolucao() {
-        return document.querySelector<HTMLInputElement>(sel.devolucao)!.value;
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.devolucao)!.value);
     }
 
     coletarSubtotais(): number[] {
@@ -93,18 +95,18 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         const trs = document.querySelectorAll('tbody tr');
         for(const tr of trs){
             const td = tr.querySelectorAll('td')[2];
-            valores.push(Number(td.textContent));
+            valores.push(Number(DOMPurify.sanitize(td.textContent || '')));
         }
         return valores;
     }
 
     coletarDadosAvaria() {
         return {
-            idItem      : document.querySelector(sel.inputItemAvaria)!.textContent,
+            idItem      : DOMPurify.sanitize(document.querySelector(sel.inputItemAvaria)!.textContent || ''),
             imagem      : document.querySelector<HTMLInputElement>(sel.inputFotoAvaria)!.files,
-            descricao   : document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value,
-            valor       : document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value,
-            funcionario : document.querySelector<HTMLInputElement>(sel.selectFuncionariosAvaria)!.value
+            descricao   : DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value),
+            valor       : DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value),
+            funcionario : DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.selectFuncionariosAvaria)!.value)
         }
     }
 

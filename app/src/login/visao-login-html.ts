@@ -1,6 +1,7 @@
 import { ControladoraLogin } from "./controladora-login";
 import { sel } from "./seletores-login";
 import { VisaoLogin } from "./visao-login";
+import DOMPurify from "dompurify";
 
 export class VisaoLoginHTML implements VisaoLogin{
 
@@ -19,8 +20,8 @@ export class VisaoLoginHTML implements VisaoLogin{
 
 
     coletarDados(): { login: string; senha: string; } {
-        const login = document.querySelector<HTMLInputElement>(sel.campoUsuario)!.value;
-        const senha = document.querySelector<HTMLInputElement>(sel.campoSenha)!.value;
+        const login = DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.campoUsuario)!.value);
+        const senha = DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.campoSenha)!.value);
         return {login, senha};
     }
 

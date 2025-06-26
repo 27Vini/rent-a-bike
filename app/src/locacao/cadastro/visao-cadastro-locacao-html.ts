@@ -2,6 +2,7 @@ import { ControladoraCadastroLocacao } from "./controladora-cadastro-locacao";
 import { VisaoCadastroLocacao } from "./visao-cadastro-locacao";
 import { Money } from "ts-money";
 import { sel } from "./seletores-cadastro-locacao";
+import DOMPurify from "dompurify";
 
 export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     private controladora:ControladoraCadastroLocacao;
@@ -20,26 +21,22 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
 
     coletarDados() : {cliente, horas}{
         return {
-            cliente     : document.querySelector<HTMLInputElement>(sel.inputCliente)!.dataset.id,
+            cliente     : DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.inputCliente)!.dataset.id || ''),
             horas       : this.coletarHoras()
         }
     }
 
     coletarHoras(){
         const input = document.querySelector<HTMLInputElement>(sel.inputHoras)!;
-        return Number(input.value);
+        return Number(DOMPurify.sanitize(input.value));
     }
 
     coletarCliente(){
-        return document.querySelector<HTMLInputElement>(sel.inputCliente)!.value;
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.inputCliente)!.value);
     }
 
     coletarCodigoItem(){
-        return document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.value;
-    }
-
-    coletarCodigoItemASerRemovido(){
-        return this.coletarCodigoItemASerRemovido;
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.inputCodigoItem)!.value);
     }
 
     private cadastrar(){

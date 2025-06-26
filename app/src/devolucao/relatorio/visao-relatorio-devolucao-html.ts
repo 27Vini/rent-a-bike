@@ -1,6 +1,7 @@
 import { ControladoraRelatorioDevolucao } from "./controladora-relatorio-devolucao";
 import { VisaoRelatorioDevolucao } from "./visao-relatorio-devolucao";
 import { sel } from './sel-relatorio-devolucao';
+import DOMPurify from "dompurify";
 import {Chart,BarController,BarElement,CategoryScale,LinearScale,Tooltip,Legend} from 'chart.js';
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -17,11 +18,11 @@ class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
     }
 
     coletarDataInicial(): string {
-        return document.querySelector<HTMLInputElement>(sel.dataInicial)!.value
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.dataInicial)!.value)
     }
 
     coletarDataFinal(): string {
-        return document.querySelector<HTMLInputElement>(sel.dataFinal)!.value
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.dataFinal)!.value)
     }
 
     gerarGrafico(devolucoes) {

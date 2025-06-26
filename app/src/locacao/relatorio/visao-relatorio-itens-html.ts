@@ -2,6 +2,7 @@ import { ControladoraRelatorioItens } from "./controladora-relatorio-itens";
 import { VisaoRelatorioItens } from "./visao-relatorio-itens";
 import { seletores } from "./seletores-relatorio-itens";
 import { Chart } from 'chart.js/auto';
+import DOMPurify from "dompurify";
 import { PieController, ArcElement, Tooltip,Legend,Title } from 'chart.js';
 Chart.register(PieController, ArcElement, Tooltip, Legend, Title);
 
@@ -18,11 +19,11 @@ export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
     }
 
     coletarDataInicial(): string {
-        return document.querySelector<HTMLInputElement>(seletores.dataInicial)!.value
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(seletores.dataInicial)!.value)
     }
 
     coletarDataFinal(): string {
-        return document.querySelector<HTMLInputElement>(seletores.dataFinal)!.value
+        return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(seletores.dataFinal)!.value)
     }
 
     gerarRelatorio(itensRelatorio) {

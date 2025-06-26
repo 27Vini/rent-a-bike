@@ -51,12 +51,14 @@ class GestorItem{
 
             $dadosItensRelatorio = [];
             if(count($itens) > 10){
+                $somatorioDoTop10 = 0;
                 for($i = 0; $i < 10; $i++){
-                    $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO($itens[$i]['qtdVezesAlugado'], $totalLocacoes, $itens[$i]['descricao']);
+                    $qtd = intval($itens[$i]['qtdVezesAlugado']);
+                    $somatorioDoTop10 += $qtd;
+                    $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO($qtd, $totalLocacoes, $itens[$i]['descricao']);
                 }
 
-                $arrayOutros = array_slice($itens, 10);
-                $somatorioOutros = array_sum(array_column($arrayOutros, 'qtdVezesAlugado'));
+                $somatorioOutros = intval($totalLocacoes) - $somatorioDoTop10;
                 $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO((int)$somatorioOutros, $totalLocacoes, "Outros");
             } else {                
                 foreach($itens as $item){
