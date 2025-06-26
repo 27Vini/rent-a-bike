@@ -20,20 +20,24 @@ describe("Devolução", () => {
 
 describe("Serviço Devolução", ()=>{
     it("Calcula valores corretamente", async () => {
+        const item = new Item(1, 'I00001', 'Item de teste', 'Modelo teste', 'Fabricante teste', 20, true, 'equipamento');
+        const itemLocacao = new ItemLocacao(10, item, 20, 40);
+
         const subtotais = [1,4,5];
         const horasCorridas = 3;
-        const {valorTotal, desconto, valorFinal} = ServicoDevolucao.calcularValores(subtotais, horasCorridas);
+        
+        const {valorTotal, desconto, valorFinal} = ServicoDevolucao.calcularValores(subtotais, horasCorridas, [itemLocacao]);
         expect(valorTotal).toBeCloseTo(10);
         expect(desconto).toBeCloseTo(1);
-        expect(valorFinal).toBeCloseTo(9);
+        expect(valorFinal).toBeCloseTo(11);
     })
 
     it("Calcula multa corretamente", async() => {
         const item = new Item(1, 'I00001', 'Item de teste', 'Modelo teste', 'Fabricante teste', 20, true, 'equipamento');
         const itemLocacao = new ItemLocacao(10, item, 20, 40);
-        const avaria = new Avaria(2, "Avaria de teste", 1, new Date(), 2, 30, null);
+        const avaria = new Avaria(2, "Avaria de teste", item, new Date(), 2, 20, null);
 
-        const valorEsperado = new Money(3200, Currencies.BRL); //32.00
+        const valorEsperado = new Money(2000, Currencies.BRL); //20.00
         const valorRecebido = ServicoDevolucao.calcularMulta([itemLocacao], [avaria]);
         expect(valorRecebido).toEqual(valorEsperado);
     });

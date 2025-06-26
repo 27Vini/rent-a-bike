@@ -78,7 +78,7 @@ test.describe('Cadastro de Devoluções', () =>{
         await tela.clicar(sel.pesquisarLocacao);
 
         await tela.clicar(sel.botaoRegistrarAvaria);
-        await tela.preencherModalAvaria({descricao : "Testando avaria", valor : 20, caminhoImagem : caminhoImagem});
+        await tela.preencherModalAvaria({descricao : "Testando avaria", valor : 2, caminhoImagem : caminhoImagem});
         await tela.deveExibirMensagem("Avaria do item registrada com sucesso");
     })
 })

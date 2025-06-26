@@ -17,7 +17,8 @@ class GestorDevolucao{
         *          funcionario:string,
         *          descricao:string,
         *          valor:string
-     *          }>
+     *          }>,
+     *          itensParaLimpeza:array<int,string|int>
      * }$dados
      * @param array<string|int,array<string,UploadedFile>> $imagens
      * @return void
@@ -40,7 +41,9 @@ class GestorDevolucao{
             $funcionario = $this->autenticador->obterFuncionarioLogado();
     
             $avariasItens = !empty($dados['avariasItens']) ? $dados['avariasItens'] : [];
-            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario, $avariasItens);
+            $itensParaLimpeza = !empty($dados['itensParaLimpeza']) ? $dados['itensParaLimpeza'] : [];
+
+            $devolucao = $this->instanciarDevolucao($locacao[0], $dataDeDevolucaoString, $funcionario, $avariasItens, $itensParaLimpeza);
         
             $this->repositorioDevolucao->adicionar($devolucao);
             if(!empty($dados['avariasItens'])){
@@ -119,13 +122,14 @@ class GestorDevolucao{
      *          descricao:string,
      *          valor:string
      * }> $dadosAvarias
+     * @param array<int,string|int> $itensParaLimpeza
      * @return Devolucao
      */
-    private function instanciarDevolucao(Locacao $locacao, string $dataDeDevolucaoString, Funcionario $funcionario, array $dadosAvarias): Devolucao{
+    private function instanciarDevolucao(Locacao $locacao, string $dataDeDevolucaoString, Funcionario $funcionario, array $dadosAvarias, array $itensParaLimpeza = []): Devolucao{
         $dataDeDevolucao = $this->transformarData($dataDeDevolucaoString);
         $devolucao = new Devolucao('1', $locacao, $dataDeDevolucao, $funcionario);
 
-        $valorASerPago = $devolucao->calcularValorASerPago($dadosAvarias);
+        $valorASerPago = $devolucao->calcularValorASerPago($dadosAvarias, $itensParaLimpeza);
     
         $devolucao->setValorPago($valorASerPago);
         $problemas = $devolucao->validar();
@@ -143,7 +147,6 @@ class GestorDevolucao{
     private function transformarData(string $data): DateTime{
         $dataDevolucao = new DateTime($data);
         $dataDevolucao->setTimezone(new DateTimeZone('America/Sao_Paulo'));
-        //error_log('ALOOO'.$dataDevolucao->format('Y-m-d H:i:s'));
         $dataFormatada = $dataDevolucao->format('Y-m-d H:i:s');
         return new DateTime($dataFormatada);
     }

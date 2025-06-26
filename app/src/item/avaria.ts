@@ -1,8 +1,10 @@
+import { Item } from "./item.ts";
+
 export class Avaria {
     constructor(
         public readonly id : number | null,
         public readonly descricao : string,
-        public readonly item : number,
+        public readonly item : Item,
         public readonly dataHora : Date,
         public readonly funcionario : number,
         public readonly valor : number,
@@ -21,6 +23,10 @@ export class Avaria {
 
         if(this.valor < 0)
             problemas.push("Valor da avaria deve ser maior do que zero.");
+
+        console.log(this.item);
+        if(this.valor > this.item.valorPorHora)
+            problemas.push("Valor da avaria não deve ser maior do que o valor de um item novo.");
 
         return problemas;
     }

@@ -10,8 +10,9 @@ export interface VisaoCadastroDevolucao{
     coletarValorFinal() : string | null;
     limparForm() : void;
     limparFormAvaria() : void;
-    preencherValores({valorTotal, desconto, valorFinal});
+    preencherValores({valorTotal, desconto, valorFinal, valorTaxaLimpeza});
     coletarDadosAvaria();
+    coletarIdsItensASeremLimpos();
     atualizarValorFinal(valorFinal);
     podeCadastrarAvaria(pode : boolean) : void
 }

@@ -90,6 +90,13 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         return DOMPurify.sanitize(document.querySelector<HTMLInputElement>(sel.devolucao)!.value);
     }
 
+    coletarIdsItensASeremLimpos(){
+        const inputs = document.querySelectorAll<HTMLInputElement>("input.aplicar-taxa-limpeza[type='checkbox']:checked");
+        const ids = Array.from(inputs).map(e => e.value);
+
+        return ids;
+    }
+
     coletarSubtotais(): number[] {
         const valores : number[] = [];
         const trs = document.querySelectorAll('tbody tr');
@@ -163,12 +170,14 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
                     <td>${itemLoc.item.codigo}</td>
                     <td>${itemLoc.item.descricao}</td>
                     <td>${subtotal}</td>
+                    <td><input type="checkbox" name="limpeza" class="aplicar-taxa-limpeza" value="${itemLoc.item.id}"></td>
                     <td><button class="registrar-avaria" data-item-id="${itemLoc.item.id}">Lançar avaria</button></td>
                 </tr>
             ` 
         }
         this.controladora.verificarSePodeCadastrarAvaria();
         document.querySelectorAll<HTMLElement>(sel.botaoRegistrarAvaria)!.forEach((e) => e.onclick = this.registrarAvaria.bind(this));
+        document.querySelectorAll<HTMLElement>(sel.checkboxTaxaLimpeza)!.forEach((e) => e.onclick = this.aplicarTaxaDeLimpeza.bind(this));
         this.controladora.calcularValores()
     }
 
@@ -191,14 +200,19 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
     }
 
+    private aplicarTaxaDeLimpeza(){
+        this.controladora.calcularValores();
+    }
+
     atualizarValorFinal(valorFinal){
         document.querySelector<HTMLOutputElement>(sel.valorFinal)!.innerText = valorFinal.toString();
     }
 
-    preencherValores({valorTotal, desconto, valorFinal}){
+    preencherValores({valorTotal, desconto, valorFinal, valorTaxaLimpeza}){
         document.querySelector<HTMLOutputElement>(sel.valorTotal)!.innerText = valorTotal.toString()
         document.querySelector<HTMLOutputElement>(sel.desconto)!.innerText = desconto.toString()
         document.querySelector<HTMLOutputElement>(sel.valorFinal)!.innerText = valorFinal.toString()
+        document.querySelector<HTMLOutputElement>(sel.valorTaxaLimpeza)!.innerText = valorTaxaLimpeza.toString()
     }
 
     limparForm(): void {

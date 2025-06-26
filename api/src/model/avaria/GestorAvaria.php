@@ -86,6 +86,8 @@ class GestorAvaria{
                 $this->autenticador->verificarSeUsuarioEstaLogado();
 
                 $caminhoDestino = __DIR__ . "/fotos/";
+                $caminhoDestinoRelativo = str_replace('\\', '/', str_replace($_SERVER['DOCUMENT_ROOT'], '', $caminhoDestino));
+
                 $extensao = pathinfo($avaria->getFoto()->getClientFilename(), PATHINFO_EXTENSION);
 
                 if(!is_dir($caminhoDestino))
@@ -94,7 +96,7 @@ class GestorAvaria{
                 $nomeImagem = $avaria->getId() . "." . $extensao;
                 $avaria->getFoto()->moveTo($caminhoDestino . $nomeImagem);
 
-                $this->repositorioAvaria->salvarCaminhoImagem($caminhoDestino . $nomeImagem, $avaria->getId());
+                $this->repositorioAvaria->salvarCaminhoImagem($caminhoDestinoRelativo . $nomeImagem, $avaria->getId());
             } catch (Exception $e){
                 throw new DominioException("Erro ao salvar imagem da avaria.");
             }

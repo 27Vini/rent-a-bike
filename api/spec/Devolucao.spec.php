@@ -65,7 +65,7 @@ describe("Devolução", function (){
 
         it('Calcula valor a ser pago corretamente', function(){
             $this->devolucao = new Devolucao(1, $this->locacao, (new DateTime())->add(new DateInterval('PT3H')), $this->funcionario);
-            $total = $this->devolucao->calcularValorASerPago([]);
+            $total = $this->devolucao->calcularValorASerPago([], []);
             expect($total)->toBeCloseTo(137.30, 1);
         });
     });

@@ -20,7 +20,7 @@ describe('Gestor de Avarias', function(){
             "item" => 9,
             "funcionario" => 3, 
             "descricao" => "Avaria de teste", 
-            "valor" => 30.00
+            "valor" => 2.00
         ];
     });
 
@@ -57,7 +57,7 @@ describe('Gestor de Avarias', function(){
             $stream = new Stream(fopen($path, 'r'));
             $imagem = new UploadedFile($stream, 'avariaInvalida.png', 'image/png', filesize($path), \UPLOAD_ERR_OK);
 
-            $avaria = new Avaria(100, new DateTime(), new Funcionario(99, 'Teste'), 'Teste de avaria inválida', $imagem, 35.00, $this->item);
+            $avaria = new Avaria(100, new DateTime(), new Funcionario(99, 'Teste'), 'Teste de avaria inválida', $imagem, 5.00, $this->item);
             $problemas = $avaria->validar();
 
             expect($problemas)->toHaveLength(1);

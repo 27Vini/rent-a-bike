@@ -20,5 +20,7 @@ export const sel = {
     botaoCadastrarAvaria        : "#cadastrar-avaria",
     selectFuncionariosAvaria    : "#funcionario-avaria",
     valorMultas                 : "#valor-multas",
-    botaoFecharModal            : ".fechar-modal"
+    valorTaxaLimpeza            : "#valor-taxa-limpeza",
+    botaoFecharModal            : ".fechar-modal",
+    checkboxTaxaLimpeza         : ".aplicar-taxa-limpeza"
 }

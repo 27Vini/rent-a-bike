@@ -8,7 +8,8 @@ export class Devolucao {
         public readonly valorPago : number,
         public readonly locacao : string | undefined | number,
         public readonly funcionario : number | null,
-        public readonly avariasItens : Avaria[] | []
+        public readonly avariasItens : Avaria[] | [],
+        public readonly itensParaLimpeza : number []
     ){       
     }
 
@@ -43,11 +44,15 @@ export class Devolucao {
         dado.append("valorPago", Number(this.valorPago).toFixed(2));
         dado.append("dataDeDevolucao", this.dataDeDevolucao ? this.dataDeDevolucao.toISOString() : '');
 
+        this.itensParaLimpeza.forEach((idItem, index) => {
+            dado.append(`itensParaLimpeza[${index}]`, idItem.toString());
+        });
+
         this.avariasItens.forEach((avaria, index) => {
             dado.append(`avariasItens[${index}][descricao]`, avaria.descricao);
             dado.append(`avariasItens[${index}][funcionario]`, avaria.funcionario.toString());
             dado.append(`avariasItens[${index}][id]`, avaria.id ? avaria.id.toString() : '');
-            dado.append(`avariasItens[${index}][item]`, avaria.item.toString());
+            dado.append(`avariasItens[${index}][item]`, avaria.item.id!.toString());
             dado.append(`avariasItens[${index}][valor]`, Number(avaria.valor).toFixed(2));
             dado.append(`avariasItens[${index}][dataHora]`, avaria.dataHora.toISOString());
 

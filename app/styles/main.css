@@ -39,9 +39,12 @@ a, button {
 }
 
 .div-alerta{
+    position: fixed;
+    right: 0px;     
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    z-index: 1000;   
 }
 
 .alert {

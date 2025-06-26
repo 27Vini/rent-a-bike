@@ -34,8 +34,6 @@ export class ControladoraCadastroDevolucao {
                 this.visao.exibirMensagens(error.getProblemas(), true);
             else
                 this.visao.exibirMensagens([ error.message ], true);
-            
-            return
         }
     }
 
@@ -48,15 +46,15 @@ export class ControladoraCadastroDevolucao {
                 this.visao.exibirMensagens(error.getProblemas(), true);
             else
                 this.visao.exibirMensagens([ error.message ], true);
-            
-            return
         }
     }
 
     calcularValores(){
         const subtotais : number[] = this.visao.coletarSubtotais();
-        const {valorTotal, desconto, valorFinal} = this.gestor.calcularValores(subtotais);
-        this.visao.preencherValores({valorTotal, desconto, valorFinal})
+        const itensASeremLimpos : number [] = this.visao.coletarIdsItensASeremLimpos();
+
+        const {valorTotal, desconto, valorFinal, valorTaxaLimpeza} = this.gestor.calcularValores(subtotais, itensASeremLimpos);
+        this.visao.preencherValores({valorTotal, desconto, valorFinal, valorTaxaLimpeza})
     }
 
     calcularSubtotal(item : ItemLocacao){
@@ -94,7 +92,9 @@ export class ControladoraCadastroDevolucao {
     async enviarDados(){
         try{
             const valorFinal = this.visao.coletarValorFinal();
-            await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), valorFinal);
+            const itensParaLimpeza = this.visao.coletarIdsItensASeremLimpos();
+
+            await this.gestor.salvarDevolucao(this.visao.coletarDataDevolucao(), itensParaLimpeza, valorFinal);
             this.visao.limparForm();
             this.visao.exibirMensagens(['Devolvido com sucesso.'], false);
         }catch( error ){

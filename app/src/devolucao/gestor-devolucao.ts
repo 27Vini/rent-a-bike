@@ -90,9 +90,9 @@ export class GestorDevolucao{
         return locacoes.data;
     }
 
-    private criarDevolucao(dataDeDevolucao, valorPago) : Devolucao{
+    private criarDevolucao(dataDeDevolucao, itensParaLimpeza, valorPago) : Devolucao{
         const dataDevolucaoReal = dataDeDevolucao ? new Date(dataDeDevolucao) : undefined
-        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, null, this.avarias);
+        const devolucao = new Devolucao(10, dataDevolucaoReal, valorPago, this.locacaoEscolhida?.id, null, this.avarias, itensParaLimpeza);
         const problemas : string [] = devolucao.validar();
         if(problemas.length > 0){
             throw ErrorDominio.comProblemas(problemas);
@@ -102,8 +102,8 @@ export class GestorDevolucao{
         return devolucao
     }
 
-    async salvarDevolucao(dataDevolucao, valorPago){
-        const devolucao = this.criarDevolucao(dataDevolucao, valorPago);
+    async salvarDevolucao(dataDevolucao, itensParaLimpeza, valorPago){
+        const devolucao = this.criarDevolucao(dataDevolucao, itensParaLimpeza, valorPago);
         const formDataDevolucao = devolucao.converterParaFormData();
         const response = await fetch( API + 'devolucoes', {method : 'POST', body : formDataDevolucao, credentials: 'include'})
 
@@ -120,17 +120,29 @@ export class GestorDevolucao{
         return locacao;
     }
 
-    calcularValores(subtotais : number []) : {valorTotal, desconto, valorFinal}{
-        const {valorTotal, desconto, valorFinal} = ServicoDevolucao.calcularValores(subtotais, this.horasCorridas);
-        this.valorFinalInicial = valorFinal;
-        return {valorTotal, desconto, valorFinal}
-        // const valorTotal = this.calcularValorTotal(subtotais);
-        // const desconto = this.calcularDesconto(valorTotal);
-        // const valorFinal = this.calcularValorFinal(valorTotal, desconto);
-        // return {valorTotal, desconto, valorFinal};
+    getItensDaLocacaoPeloId(idsItens : number []) {
+        const itens = [];
+
+        for(let itemLocacao of this.locacaoEscolhida!.itens){
+            itemLocacao.precisaLimpeza = idsItens.includes(itemLocacao.item.id.toString());
+           
+            if(itemLocacao.precisaLimpeza)
+                itens.push(itemLocacao);
+        }
+
+        return itens;
     }
 
-    //taxa de limpeza sobre o valor dos itens + valor da avaria
+    calcularValores(subtotais : number [], itensASeremLimpos : number[]) : {valorTotal, desconto, valorFinal, valorTaxaLimpeza}{
+        const itensLocacaoPraLimpeza = this.getItensDaLocacaoPeloId(itensASeremLimpos);
+        const {valorTotal, desconto, valorFinal, valorTaxaLimpeza} = ServicoDevolucao.calcularValores(subtotais, this.horasCorridas, itensLocacaoPraLimpeza);
+
+        this.valorFinalInicial = valorFinal;
+        this.valorTaxaLimpeza = valorTaxaLimpeza;
+
+        return {valorTotal, desconto, valorFinal, valorTaxaLimpeza}
+    }
+
     calcularMulta(){
         const itensLocacao = this.locacaoEscolhida!.itens;
         return ServicoDevolucao.calcularMulta(itensLocacao, this.avarias);
@@ -167,7 +179,8 @@ export class GestorDevolucao{
     }
 
     public registrarAvaria(dadosAvaria){
-        const avaria = new Avaria(null, dadosAvaria.descricao, dadosAvaria.idItem, new Date(), dadosAvaria.funcionario, dadosAvaria.valor, dadosAvaria.imagem[0]);
+        const itemLocacaoDaAvaria = this.getItensDaLocacaoPeloId([dadosAvaria.idItem]);
+        const avaria = new Avaria(null, dadosAvaria.descricao, itemLocacaoDaAvaria[0].item, new Date(), dadosAvaria.funcionario, dadosAvaria.valor, dadosAvaria.imagem[0]);
         const problemas = avaria.validar();
         if(problemas.length > 0)
             throw ErrorDominio.comProblemas(problemas);

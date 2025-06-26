@@ -82,6 +82,9 @@ class Avaria implements JsonSerializable{
             $problemas[] = "O valor deve ser um número maior do que 0.";
         }
 
+        if($this->valor > $this->item->getValorPorHora()){
+            $problemas[] = "Valor da avaria não deve ser maior do que o valor de um item novo.";
+        }   
         
         if($this->foto instanceof UploadedFile && !validarTipoImagemPermitido($this->foto, self::TIPOS_PERMITIDOS_IMAGEM)){
             $problemas[] = "Tipo imagem inválida. Imagem deve ser do tipo " . implode(', ', self::TIPOS_PERMITIDOS_IMAGEM);

@@ -7,7 +7,8 @@ export class ItemLocacao{
         public readonly id : number,
         public readonly item : Item,
         public readonly precoLocacao : number,
-        public subtotal : number
+        public subtotal : number,
+        public precisaLimpeza : boolean = false
     ){}
 
     validar() : string[] {

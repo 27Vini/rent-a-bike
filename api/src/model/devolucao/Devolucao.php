@@ -93,12 +93,14 @@ class Devolucao implements \JsonSerializable{
      *          funcionario:string,
      *          descricao:string,
      *          valor:string
-     * }> $dadosAvarias
+     * }> $dadosAvarias,
+     * @param array<int,int|string> $itensParaLimpeza
      * @return float
      */
-    public function calcularValorASerPago(array $dadosAvarias): float{
+    public function calcularValorASerPago(array $dadosAvarias, array $itensParaLimpeza): float{
         $total = 0;
         $multa = 0;
+        $taxaLimpeza = 0;
         $horasCorridas = $this->calcularHorasCorridas();
         $temAvarias = !empty($dadosAvarias);
         /**
@@ -109,13 +111,17 @@ class Devolucao implements \JsonSerializable{
             if($temAvarias){
                 foreach($dadosAvarias as $avaria){
                     if($avaria['item'] == $item->getItem()->getId()){
-                        $multa += $item->getPrecoLocacao() * 0.1 + (float) $avaria['valor'];
+                        $multa += (float) $avaria['valor'];
                     }
                 }
             }
+
+            if(in_array($item->getItem()->getId(), $itensParaLimpeza)){
+                $taxaLimpeza += (float) $item->getPrecoLocacao() * 0.1;
+            }
         }
         $desconto = $this->calculaDesconto($total, $horasCorridas);
-        return $total + $multa - $desconto;
+        return $total + $multa - $desconto + $taxaLimpeza;
     }
 
     /**

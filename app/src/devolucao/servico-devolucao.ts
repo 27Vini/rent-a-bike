@@ -3,11 +3,13 @@ import { ItemLocacao } from "../item/item-locacao";
 import { Avaria } from "../item/avaria";
 
 export class ServicoDevolucao{
-    static calcularValores(subtotais : number [], horasCorridas : number) : {valorTotal, desconto, valorFinal}{
+    static calcularValores(subtotais : number [], horasCorridas : number, itensLocacao : ItemLocacao[]) : {valorTotal, desconto, valorFinal, valorTaxaLimpeza}{
         const valorTotal = this.calcularValorTotal(subtotais);
         const desconto = this.calcularDesconto(valorTotal, horasCorridas);
-        const valorFinal = this.calcularValorFinal(valorTotal, desconto);
-        return {valorTotal, desconto, valorFinal};
+        const valorTaxaLimpeza = this.calcularTaxaDeLimpeza(itensLocacao);
+        const valorFinal = this.calcularValorFinal(valorTotal, desconto, valorTaxaLimpeza);
+
+        return {valorTotal, desconto, valorFinal, valorTaxaLimpeza};
     }
 
     private static calcularValorTotal(subtotais : number []) : Money{
@@ -26,20 +28,30 @@ export class ServicoDevolucao{
         return new Money(0, Currencies.BRL);
     }
 
-    private static calcularValorFinal(valorTotal : Money , desconto : Money) :Money{
-        return valorTotal.subtract(desconto);
+    private static calcularValorFinal(valorTotal : Money , desconto : Money, taxaLimpeza : Money) :Money{
+        return valorTotal.subtract(desconto).add(taxaLimpeza);
+    }
+
+    private static calcularTaxaDeLimpeza(itensLocacao : ItemLocacao[]) : Money{
+        let taxa = new Money(0, Currencies.BRL);
+        for(const il of itensLocacao){
+            const precoLocacao = Money.fromDecimal(il.precoLocacao, Currencies.BRL);
+            const precoLocacaoPorcentagem = precoLocacao.multiply(0.10);
+
+            taxa = taxa.add(precoLocacaoPorcentagem);
+        }
+
+        return taxa;
     }
 
     public static calcularMulta(itensLocacao : ItemLocacao[], avariasDevolucao : Avaria[]) : Money{
         let multa = new Money(0, Currencies.BRL)
         for(const il of itensLocacao){
             for(const a of avariasDevolucao){
-                if(a.item == il.item.id){      
-                    const precoLocacao = Money.fromDecimal(il.precoLocacao, Currencies.BRL);
+                if(a.item.id == il.item.id){      
                     const valorAvaria = Money.fromDecimal(a.valor, Currencies.BRL);
-                    const precoLocacaoPorcentagem = precoLocacao.multiply(0.10);
 
-                    multa = multa.add(precoLocacaoPorcentagem).add(valorAvaria);
+                    multa = multa.add(valorAvaria);
                 }
             }
         }
