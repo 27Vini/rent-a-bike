@@ -1,11 +1,12 @@
-<?php 
-
+<?php
+Dotenv\Dotenv::createMutable(__DIR__ . '/../../../../')->load();
 class Hashador{
     function gerarSal(): string {
         return bin2hex( random_bytes( 15 ) );
     }
     private function adicionarPimenta( string $texto ): string {
-        return '3493peyfkl,nc' . $texto . '2-0857rodiycjkxcv';
+        $senha = $_ENV['PREFIXO_PIMENTA'] . $texto . $_ENV['SUFIXO_PIMENTA'];
+        return $senha;
     }
 
     private function adicionarSal( string $texto, string $sal ): string {

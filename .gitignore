@@ -4,3 +4,4 @@
 /vendor
 api.json
 test-results
+.env

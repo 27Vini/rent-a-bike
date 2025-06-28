@@ -1,4 +1,4 @@
-import { test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { TelaAutorizacao } from './TelaAutorizacao';
 import { APP, FORBIDDEN, PAGE_CADASTRO_DEVOLUCAO, PAGE_CADASTRO_LOCACAO, PAGE_DEVOLUCOES, PAGE_LOCACOES, PAGE_RELATORIO_DEVOLUCAO, PAGE_RELATORIO_ITENS } from '../../infra/app';
 
@@ -90,6 +90,14 @@ test.describe('Autorização e permissão', () => {
         test('Consegue acessar cadastro de devolução', async() => {
             await tela.irParaCadastroDevolucao();
             await tela.verificarUrl(APP+PAGE_CADASTRO_DEVOLUCAO);
+        });
+
+        test('Botão de avaria bloqueado', async () => {
+            await tela.realizarLogin('34567890123', 'renato!@#');
+            await tela.irParaCadastroDevolucao();
+            const {sel : selDevolucao} = await import('../../src/devolucao/cadastro/seletores-cadastro-devolucao');
+            await tela.verificarSeBotaoEstaDisable(selDevolucao.botaoRegistrarAvaria);
+
         });
     });
 

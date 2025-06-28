@@ -42,6 +42,14 @@ export class TelaAutorizacao{
         await this.irPara(APP + PAGE_CADASTRO_DEVOLUCAO);
     }
 
+    async verificarSeBotaoEstaDisable(sel : string){
+        const {TelaCadastroDevolucao} = await import('../devolucoes/TelaCadastroDevolucao');
+        const telaDevolucao = new TelaCadastroDevolucao(this.page);
+        telaDevolucao.preencherDados({locacao:'10',data: new Date()});
+        const selRegistrarAvaria = this.page.locator(sel).first();
+        await expect(selRegistrarAvaria).toBeDisabled();
+    }
+
     async verificarUrl(url : string){
         await expect(this.page).toHaveURL(url)
     }

@@ -21,6 +21,7 @@ test.describe('Cadastro de locações', () => {
         await tela.preencherFormCadastro('12345678900', 2, 'I0000010');
         await tela.esperarResposta('/itens')
         await tela.clicar(sel.botaoCadastrar);
+        await tela.esperarResposta('/locacoes')
 
         await tela.deveExibirAMensagem("sucesso");
     });
