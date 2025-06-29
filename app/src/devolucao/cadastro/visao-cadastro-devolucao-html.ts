@@ -19,6 +19,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector(sel.devolucao)?.addEventListener('input', this.bloquearInputLocacao.bind(this));
         document.querySelector(sel.botaoFecharModal)!.addEventListener('click', this.fecharModal.bind(this));
         document.querySelector<HTMLButtonElement>(sel.botaoCadastrarAvaria)!.addEventListener('click', this.controladora.registrarAvaria.bind(this.controladora));
+        document.querySelector<HTMLInputElement>(sel.inputFotoAvaria)!.addEventListener('change', this.alterarInputFoto.bind(this));
         this.bloquearInputLocacao();
     }
 
@@ -97,6 +98,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         return ids;
     }
 
+    coletarIdItemAvaria() {
+        return DOMPurify.sanitize(document.querySelector(sel.inputItemAvaria)!.textContent || '');
+    }
+
     coletarSubtotais(): number[] {
         const valores : number[] = [];
         const trs = document.querySelectorAll('tbody tr');
@@ -170,8 +175,8 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
                     <td>${itemLoc.item.codigo}</td>
                     <td>${itemLoc.item.descricao}</td>
                     <td>${subtotal}</td>
-                    <td><input type="checkbox" name="limpeza" class="aplicar-taxa-limpeza" value="${itemLoc.item.id}"></td>
-                    <td><button class="registrar-avaria" data-item-id="${itemLoc.item.id}">Lançar avaria</button></td>
+                    <td class="taxa-coluna"><input type="checkbox" name="limpeza" class="aplicar-taxa-limpeza" value="${itemLoc.item.id}"></td>
+                    <td><button  class="registrar-avaria"><img src="../styles/images/avaria.png" title="Lançar avaria" data-item-id="${itemLoc.item.id}"></button></td>
                 </tr>
             ` 
         }
@@ -197,11 +202,49 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         const idItem = botao.dataset.itemId;
 
         document.querySelector<HTMLOutputElement>(sel.inputItemAvaria)!.innerText = idItem;
+        this.controladora.coletarAvariasDoItem();
         document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
+    }
+
+    exibirAvariasDoItem(avarias: Object[] | []) {
+        let tabela = document.querySelector(sel.tabelaAvarias)!;
+        let tbody =  document.querySelector(`${sel.tabelaAvarias} tbody`)!;
+        tabela.setAttribute('hidden', 'hidden');
+        tbody.innerHTML = '';
+
+        if(avarias.length == 0)
+            return
+
+        let linhasAvarias = avarias.map((e) => {
+            return `
+                <tr>
+                    <td>${e.datahora.toLocaleString()}</td>
+                    <td>${e.descricao}</td>
+                    <td>R$${e.valor}</td>
+                    <td>
+                        <img src=${URL.createObjectURL(e.imagem)} width=50px heigth=50px alt="Imagem da avaria">
+                    </td>
+                </tr>
+            `
+        }).join('')
+
+        tbody.innerHTML = linhasAvarias;
+        tabela.removeAttribute('hidden')
     }
 
     private aplicarTaxaDeLimpeza(){
         this.controladora.calcularValores();
+    }
+
+    private alterarInputFoto(e){
+        const input = e.target;
+
+        if (input.files && input.files.length > 0) {
+            const nomeArquivo = input.files[0].name;
+            document.querySelector(`${sel.labelFotoModal} span`)!.textContent = `📎 ${nomeArquivo}`;
+        } else {
+            document.querySelector(`${sel.labelFotoModal} span`)!.textContent = ''; 
+        }
     }
 
     atualizarValorFinal(valorFinal){
@@ -224,9 +267,10 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     limparFormAvaria() : void {
-        document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value = ''
-        document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value = ''
+        document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value = '';
+        document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value = '';
         document.querySelector<HTMLInputElement>(sel.inputFotoAvaria)!.value = '';
+        document.querySelector<HTMLLabelElement>(`${sel.labelFotoModal} span`)!.textContent = '';
     }
 
     fecharModal(){

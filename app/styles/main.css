@@ -229,3 +229,16 @@ footer {
     border-radius: 8px;
     background-color: #e7e7e7;
 }
+
+.nome-usuario{
+    display: flex;
+    width: 200px;
+}
+
+#nomeUsuario{
+    margin-top: 8px;
+}
+
+.botao-sair{
+    cursor: pointer;
+}

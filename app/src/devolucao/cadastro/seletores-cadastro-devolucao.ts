@@ -22,5 +22,7 @@ export const sel = {
     valorMultas                 : "#valor-multas",
     valorTaxaLimpeza            : "#valor-taxa-limpeza",
     botaoFecharModal            : ".fechar-modal",
-    checkboxTaxaLimpeza         : ".aplicar-taxa-limpeza"
+    checkboxTaxaLimpeza         : ".aplicar-taxa-limpeza",
+    tabelaAvarias               : ".tabela-avarias-item",
+    labelFotoModal              : ".label-foto"
 }

@@ -22,6 +22,7 @@ export class VisaoAutenticadorHTML implements VisaoAutenticador{
 
     criarDiv() : HTMLElement{
         const div = document.createElement('div');
+        div.classList.add('nome-usuario')
         
         div.append(
             this.criarOutputDeUsuario(),
@@ -32,13 +33,17 @@ export class VisaoAutenticadorHTML implements VisaoAutenticador{
     }
 
     criarBotaoDeSair(): HTMLElement{
-        const botao = document.createElement('button')
+        const botaoSair = document.createElement('img')
+        botaoSair.classList.add('botao-sair')
 
-        botao.innerText = "Sair";
-        botao.setAttribute('hidden', '');
-        botao.setAttribute('id', sel.botaoSair.replace('#', ''));
-        botao.addEventListener("click", this.controladora.sair.bind(this.controladora));
-        return botao;
+        botaoSair.src = "../styles/images/logout_exit_icon.png";
+        botaoSair.title = "Sair";
+        botaoSair.setAttribute('hidden', '');
+        botaoSair.setAttribute('id', sel.botaoSair.replace('#', ''));
+        botaoSair.addEventListener("click", this.controladora.sair.bind(this.controladora));
+
+        
+        return botaoSair;
     }
 
     criarOutputDeUsuario(): HTMLElement{

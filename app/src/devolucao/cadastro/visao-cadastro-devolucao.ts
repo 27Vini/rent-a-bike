@@ -13,6 +13,8 @@ export interface VisaoCadastroDevolucao{
     preencherValores({valorTotal, desconto, valorFinal, valorTaxaLimpeza});
     coletarDadosAvaria();
     coletarIdsItensASeremLimpos();
+    coletarIdItemAvaria();
+    exibirAvariasDoItem(avarias : Object[]|[])
     atualizarValorFinal(valorFinal);
     podeCadastrarAvaria(pode : boolean) : void
 }

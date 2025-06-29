@@ -120,3 +120,26 @@ input, select{
     top: 3px;
     border: solid 1px;
 }
+
+.registrar-avaria{
+    background-color: transparent;
+    border: none;
+}
+
+.registrar-avaria:hover{
+    background-color: transparent;
+}
+
+.registrar-avaria img{
+    width: 32px;
+    cursor: pointer;
+}
+
+.taxa-coluna{
+    width: 10px;
+    text-align: center;
+}
+
+.aplicar-taxa-limpeza{
+    width: 15px;
+}

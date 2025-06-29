@@ -133,6 +133,16 @@ export class GestorDevolucao{
         return itens;
     }
 
+    getAvariasDoGestorPeloIdItem(idItem:number|string){
+        const avariasDoGestor = this.avarias.filter(e => e.item.id == idItem)
+        let objsAvarias = [];
+        avariasDoGestor.forEach((e) => {
+            objsAvarias.push({datahora: e.dataHora, descricao:e.descricao, valor:e.valor, imagem:e.imagem});
+        })
+
+        return objsAvarias;
+    }
+
     calcularValores(subtotais : number [], itensASeremLimpos : number[]) : {valorTotal, desconto, valorFinal, valorTaxaLimpeza}{
         const itensLocacaoPraLimpeza = this.getItensDaLocacaoPeloId(itensASeremLimpos);
         const {valorTotal, desconto, valorFinal, valorTaxaLimpeza} = ServicoDevolucao.calcularValores(subtotais, this.horasCorridas, itensLocacaoPraLimpeza);

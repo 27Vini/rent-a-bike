@@ -81,6 +81,7 @@ export class ControladoraCadastroDevolucao {
             this.visao.atualizarValorFinal(novoValorFinal);
             
             this.visao.exibirMensagens(["Avaria do item registrada com sucesso!"], false);
+            this.coletarAvariasDoItem();
         }catch(error){
             if(error instanceof ErrorDominio)
                 this.visao.exibirMensagens(error.getProblemas(), true);
@@ -88,6 +89,19 @@ export class ControladoraCadastroDevolucao {
                 this.visao.exibirMensagens([ error.message ], true);
         }
     } 
+
+    coletarAvariasDoItem(){
+        try{
+            const idItem = this.visao.coletarIdItemAvaria();
+            const avarias = this.gestor.getAvariasDoGestorPeloIdItem(idItem);
+            this.visao.exibirAvariasDoItem(avarias);
+        }catch(error){
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas(), true);
+            else
+                this.visao.exibirMensagens([ error.message ], true);
+        }
+    }
 
     async enviarDados(){
         try{

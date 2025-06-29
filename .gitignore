@@ -5,3 +5,4 @@
 api.json
 test-results
 .env
+composer.lock
