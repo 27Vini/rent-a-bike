@@ -1,3 +1,4 @@
+import { exibirMensagens } from "../../infra/util/ExibirMensagens";
 import { ControladoraLogin } from "./controladora-login";
 import { sel } from "./seletores-login";
 import { VisaoLogin } from "./visao-login";
@@ -26,22 +27,7 @@ export class VisaoLoginHTML implements VisaoLogin{
     }
 
     exibirMensagens(mensagens: string[], erro: boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>(sel.output)!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000); 
+       exibirMensagens(mensagens, erro, sel.output);
     }
 
 }

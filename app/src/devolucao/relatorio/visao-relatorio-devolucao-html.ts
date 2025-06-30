@@ -1,6 +1,7 @@
 import { ControladoraRelatorioDevolucao } from "./controladora-relatorio-devolucao";
 import { VisaoRelatorioDevolucao } from "./visao-relatorio-devolucao";
 import { sel } from './sel-relatorio-devolucao';
+import { exibirMensagens } from "../../../infra/util/ExibirMensagens";
 import DOMPurify from "dompurify";
 import {Chart,BarController,BarElement,CategoryScale,LinearScale,Tooltip,Legend} from 'chart.js';
 Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -14,7 +15,23 @@ class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
     }
 
     iniciar(){
+        document.addEventListener('DOMContentLoaded', this.preencherInputsData.bind(this));
         document.querySelector(sel.enviarBtn)?.addEventListener("click", this.controladora.gerarRelatorio.bind(this.controladora));
+    }
+
+    private preencherInputsData(){
+        const inputInicial = document.querySelector<HTMLInputElement>(sel.dataInicial);
+        const inputFinal = document.querySelector<HTMLInputElement>(sel.dataFinal);
+
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = hoje.getMonth(); 
+
+        const primeiroDia = new Date(ano, mes, 1);
+        inputInicial!.value = primeiroDia.toISOString().slice(0, 10);;
+
+        const ultimoDia = new Date(ano, mes + 1, 0);
+        inputFinal!.value = ultimoDia.toISOString().slice(0, 10);;
     }
 
     coletarDataInicial(): string {
@@ -75,22 +92,7 @@ class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
     }
 
     exibirMensagens(mensagens: string[], erro:boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>(sel.erroOutput)!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000);    
+        exibirMensagens(mensagens, erro, sel.erroOutput);   
     }
 }
 

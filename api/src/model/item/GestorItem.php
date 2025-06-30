@@ -55,14 +55,14 @@ class GestorItem{
                 for($i = 0; $i < 10; $i++){
                     $qtd = intval($itens[$i]['qtdVezesAlugado']);
                     $somatorioDoTop10 += $qtd;
-                    $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO($qtd, $totalLocacoes, $itens[$i]['descricao']);
+                    $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO($itens[$i]['codigo'], $qtd, $totalLocacoes, $itens[$i]['descricao']);
                 }
 
                 $somatorioOutros = intval($totalLocacoes) - $somatorioDoTop10;
-                $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO((int)$somatorioOutros, $totalLocacoes, "Outros");
+                $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO('', (int)$somatorioOutros, $totalLocacoes, "Outros");
             } else {                
                 foreach($itens as $item){
-                    $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO($item['qtdVezesAlugado'], $totalLocacoes, $item['descricao']);
+                    $dadosItensRelatorio[] = $this->gerarItemRelatorioDTO($item['codigo'], $item['qtdVezesAlugado'], $totalLocacoes, $item['descricao']);
                 }
             }
 
@@ -74,13 +74,14 @@ class GestorItem{
 
     /**
      * Retorna um objeto de ItemRelatorioDTO
+     * @param string $codigo
      * @param string|int $qtdVezesAlugado
      * @param string|int $qtdTotalLocacoes
      * @param string $descricao
      * @return ItemRelatorioDTO
      */
-    private function gerarItemRelatorioDTO(string|int $qtdVezesAlugado, string|int $qtdTotalLocacoes, string $descricao) : ItemRelatorioDTO{
+    private function gerarItemRelatorioDTO(string $codigo, string|int $qtdVezesAlugado, string|int $qtdTotalLocacoes, string $descricao) : ItemRelatorioDTO{
         $porcentagem = intval($qtdVezesAlugado)/intval($qtdTotalLocacoes);
-        return new ItemRelatorioDTO(intval($qtdVezesAlugado), $descricao, floatval($porcentagem));
+        return new ItemRelatorioDTO($codigo, intval($qtdVezesAlugado), $descricao, floatval($porcentagem));
     }
 }

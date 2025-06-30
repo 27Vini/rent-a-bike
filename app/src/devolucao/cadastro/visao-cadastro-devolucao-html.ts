@@ -1,6 +1,7 @@
 import { ControladoraCadastroDevolucao } from "./controladora-cadastro-devolucao.js";
 import { VisaoCadastroDevolucao } from "./visao-cadastro-devolucao.js";
 import { sel } from './seletores-cadastro-devolucao.js';
+import { exibirMensagens } from "../../../infra/util/ExibirMensagens.js";
 import DOMPurify from "dompurify";
 
 export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
@@ -56,22 +57,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
     }
 
     exibirMensagens(mensagens: string[], erro:boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>(sel.output)!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000);    
+        exibirMensagens(mensagens, erro, sel.output);
     }
 
     coletarInputLocacao() {
@@ -203,7 +189,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
 
         document.querySelector<HTMLOutputElement>(sel.inputItemAvaria)!.innerText = idItem;
         this.controladora.coletarAvariasDoItem();
-        document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.showModal();
+        document.querySelector<HTMLDialogElement>(sel.modalAvaria)!.show();
     }
 
     exibirAvariasDoItem(avarias: Object[] | []) {
@@ -220,7 +206,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
                 <tr>
                     <td>${e.datahora.toLocaleString()}</td>
                     <td>${e.descricao}</td>
-                    <td>R$${e.valor}</td>
+                    <td>R$${Number(e.valor).toFixed(2)}</td>
                     <td>
                         <img src=${URL.createObjectURL(e.imagem)} width=50px heigth=50px alt="Imagem da avaria">
                     </td>

@@ -1,5 +1,6 @@
 import { ControladoraListagemDevolucao } from "./controladora-listagem-devolucao.js";
 import { VisaoListagemDevolucao } from "./visao-listagem-devolucao.js";
+import { exibirMensagens } from "../../../infra/util/ExibirMensagens.js";
 import { Money } from "ts-money";
 
 export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
@@ -19,22 +20,7 @@ export class VisaoListagemDevolucaoHTML implements VisaoListagemDevolucao{
     }
 
     exibirMensagens(mensagens: string[], erro:boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>("output")!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000); 
+        exibirMensagens(mensagens, erro, "output");
     }
 
     desenharDevolucao(d){

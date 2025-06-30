@@ -86,7 +86,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
      * Coleta dados dos itens para o relatório
      * @param string $dataInicial
      * @param string $dataFinal
-     * @return array{itens:list<array{descricao:string,qtdVezesAlugado:string}>,totalLocacoes:int}     
+     * @return array{itens:list<array{codigo:string,descricao:string,qtdVezesAlugado:string}>,totalLocacoes:int}     
      * @throws DominioException
      * @throws RepositorioException
      */
@@ -94,7 +94,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
         try{
             $dadosItensRelatorio = [];
 
-            $comando = "SELECT i.descricao as descricao, COUNT(il.id) as qtdVezesAlugado
+            $comando = "SELECT i.codigo as codigo, i.descricao as descricao, COUNT(il.id) as qtdVezesAlugado
                         FROM item_locacao il 
                         JOIN item i ON il.item_id = i.id
                         JOIN locacao l ON il.locacao_id = l.id
@@ -108,7 +108,7 @@ class RepositorioItemEmBDR extends RepositorioGenericoEmBDR implements Repositor
             if($totalDados == 0)
                 throw new DominioException('Dados não encontrados.');
 
-            /** @var list<array{descricao:string,qtdVezesAlugado:string}> $dadosItens */
+            /** @var list<array{codigo:string,descricao:string,qtdVezesAlugado:string}> $dadosItens */
             $dadosItens = $ps->fetchAll();
 
             $dadosItensRelatorio = [

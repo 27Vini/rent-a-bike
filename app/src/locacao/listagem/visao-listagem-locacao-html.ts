@@ -1,3 +1,4 @@
+import { exibirMensagens } from "../../../infra/util/ExibirMensagens";
 import { ControladoraListagemLocacao } from "./controladora-listagem-locacao";
 import { VisaoLocacao } from "./visao-listagem-locacao";
 
@@ -35,22 +36,7 @@ export class VisaoListagemLocacaoHTML implements VisaoLocacao{
     }
 
     exibirMensagens(mensagens: string[], erro:boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>("output")!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000);
+        exibirMensagens(mensagens, erro, "output");
     }
 }
 

@@ -28,7 +28,7 @@ interface RepositorioItem{
      * Coleta dados dos itens para o relatório
      * @param string $dataInicial
      * @param string $dataFinal
-     * @return array{itens:list<array{descricao:string,qtdVezesAlugado:string}>,totalLocacoes:int}     
+     * @return array{itens:list<array{codigo:string,descricao:string,qtdVezesAlugado:string}>,totalLocacoes:int}     
      * @throws DominioException
      * @throws RepositorioException
      */

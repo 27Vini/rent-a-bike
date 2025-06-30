@@ -4,6 +4,7 @@ import { seletores } from "./seletores-relatorio-itens";
 import { Chart } from 'chart.js/auto';
 import DOMPurify from "dompurify";
 import { PieController, ArcElement, Tooltip,Legend,Title } from 'chart.js';
+import { exibirMensagens } from "../../../infra/util/ExibirMensagens";
 Chart.register(PieController, ArcElement, Tooltip, Legend, Title);
 
 export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
@@ -15,7 +16,32 @@ export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
     }
 
     iniciar(){
+        document.addEventListener('DOMContentLoaded', this.preencherInputsData.bind(this));
         document.querySelector(seletores.botaoGerar)?.addEventListener("click", this.controladora.obterItensParaRelatorio.bind(this.controladora));
+    }
+
+    private preencherInputsData(){
+        const inputInicial = document.querySelector<HTMLInputElement>(seletores.dataInicial);
+        const inputFinal = document.querySelector<HTMLInputElement>(seletores.dataFinal);
+
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = hoje.getMonth(); 
+
+        const formatar = (data: Date): string => {
+            const y = data.getFullYear();
+            const m = String(data.getMonth() + 1).padStart(2, '0');
+            const d = String(data.getDate()).padStart(2, '0');
+            const h = String(data.getHours()).padStart(2, '0');
+            const min = String(data.getMinutes()).padStart(2, '0');
+            return `${y}-${m}-${d}T${h}:${min}`;
+        };
+
+        const primeiroDia = new Date(ano, mes, 1, 0, 0, 0);
+        inputInicial!.value = formatar(primeiroDia);
+
+        const ultimoDia = new Date(ano, mes + 1, 0, 23, 59, 59);
+        inputFinal!.value = formatar(ultimoDia);
     }
 
     coletarDataInicial(): string {
@@ -79,6 +105,8 @@ export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
     private gerarTabelaRanking(itensRanking:[]){
         const tabela = document.querySelector(seletores.tabelaRanking)!;
         tabela.innerHTML = itensRanking.map((item, i) => this.desenharLinhaRanking(item, i+1)).join('');
+        document.querySelector('.relatorio')!.removeAttribute('hidden');
+        document.querySelector<HTMLElement>(seletores.ranking)!.style.display = "table";
     }
 
     private desenharLinhaRanking(item, posicao){
@@ -86,28 +114,13 @@ export class VisaoRelatorioItensHTML implements VisaoRelatorioItens {
             <tr>
                 <td>${posicao}º</td>
                 <td>${item.qtdVezesAlugado}</td>
-                <td>${item.descricao}</td>
+                <td title=${item.codigo}>${item.descricao}</td>
             </tr>
         `
     }
 
     exibirMensagens(mensagens: string[], erro: boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>("output")!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000);
+        exibirMensagens(mensagens, erro, "output");
     }
 }
 

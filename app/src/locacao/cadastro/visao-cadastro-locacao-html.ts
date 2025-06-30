@@ -3,6 +3,7 @@ import { VisaoCadastroLocacao } from "./visao-cadastro-locacao";
 import { Money } from "ts-money";
 import { sel } from "./seletores-cadastro-locacao";
 import DOMPurify from "dompurify";
+import { exibirMensagens } from "../../../infra/util/ExibirMensagens";
 
 export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     private controladora:ControladoraCadastroLocacao;
@@ -150,22 +151,7 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
     }
 
     exibirMensagens(mensagens: string[], erro:boolean) {
-        const classErro = "alert";
-        const classSucesso = "success";
-
-        const output = document.querySelector<HTMLOutputElement>(sel.output)!;
-        if(erro == true){
-            output.classList.add(classErro);
-        }else{
-            output.classList.add(classSucesso);
-        }
-
-        output.innerHTML = mensagens.join('\n');        
-        output.removeAttribute('hidden');
-
-        setTimeout(() => {
-            output.setAttribute('hidden', '');
-        }, 5000); 
+        exibirMensagens(mensagens, erro, sel.output);
     }
 
     limparTelaCadastro(){
