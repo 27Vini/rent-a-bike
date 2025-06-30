@@ -14,6 +14,7 @@ export interface VisaoCadastroDevolucao{
     coletarDadosAvaria();
     coletarIdsItensASeremLimpos();
     coletarIdItemAvaria();
+    coletarIdAvariaParaRemover();
     exibirAvariasDoItem(avarias : Object[]|[])
     atualizarValorFinal(valorFinal);
     podeCadastrarAvaria(pode : boolean) : void

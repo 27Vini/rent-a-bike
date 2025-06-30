@@ -108,6 +108,13 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         }
     }
 
+    coletarIdAvariaParaRemover(){
+        const avaria = document.querySelector<HTMLElement>('.para-remover')!;
+        const idAvaria = avaria.getAttribute('data-avaria-id');
+
+        return idAvaria;
+    }
+
     exibirLocacoes(locacoes) {
         document.querySelector<HTMLOutputElement>(sel.output)!.innerText = "";
         if(locacoes.length > 1){
@@ -210,12 +217,26 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
                     <td>
                         <img src=${URL.createObjectURL(e.imagem)} width=50px heigth=50px alt="Imagem da avaria">
                     </td>
+                    <td>
+                        <button data-avaria-id="${e.id}" class=" remover-avaria btn-transparent" alt="remover avaria"><img src=".../../../styles/images/remover.png" class='icon'/></button>
+                    </td>
                 </tr>
             `
         }).join('')
 
         tbody.innerHTML = linhasAvarias;
+
+        document.querySelectorAll<HTMLElement>('.remover-avaria')!.forEach((e) => e.onclick = this.removerAvaria.bind(this));
+
         tabela.removeAttribute('hidden')
+    }
+
+    private removerAvaria(e){
+        const clicado = e.target;
+        clicado.classList.add('para-remover');
+
+        this.controladora.removerAvaria();
+        this.controladora.coletarAvariasDoItem();
     }
 
     private aplicarTaxaDeLimpeza(){
@@ -229,7 +250,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
             const nomeArquivo = input.files[0].name;
             document.querySelector(`${sel.labelFotoModal} span`)!.textContent = `📎 ${nomeArquivo}`;
         } else {
-            document.querySelector(`${sel.labelFotoModal} span`)!.textContent = ''; 
+            document.querySelector(`${sel.labelFotoModal} span`)!.textContent = '📎Selecionar imagem'; 
         }
     }
 
@@ -256,7 +277,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
         document.querySelector<HTMLInputElement>(sel.inputDescAvaria)!.value = '';
         document.querySelector<HTMLInputElement>(sel.inputValorAvaria)!.value = '';
         document.querySelector<HTMLInputElement>(sel.inputFotoAvaria)!.value = '';
-        document.querySelector<HTMLLabelElement>(`${sel.labelFotoModal} span`)!.textContent = '';
+        document.querySelector<HTMLLabelElement>(`${sel.labelFotoModal} span`)!.textContent = '📎Selecionar imagem';
     }
 
     fecharModal(){

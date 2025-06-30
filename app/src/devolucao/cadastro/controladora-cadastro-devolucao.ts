@@ -90,6 +90,19 @@ export class ControladoraCadastroDevolucao {
         }
     } 
 
+    removerAvaria(){
+        try{
+            const idAvariaParaRemover = this.visao.coletarIdAvariaParaRemover();
+            this.gestor.removerAvariaComId(idAvariaParaRemover);
+            this.visao.exibirMensagens(['Avaria removida com sucesso.'], false);
+        }catch(error){
+            if(error instanceof ErrorDominio)
+                this.visao.exibirMensagens(error.getProblemas(), true);
+            else
+                this.visao.exibirMensagens([ error.message ], true);
+        }
+    }
+
     coletarAvariasDoItem(){
         try{
             const idItem = this.visao.coletarIdItemAvaria();

@@ -140,7 +140,7 @@ export class VisaoCadastroLocacaoHTML implements VisaoCadastroLocacao{
                 <td>${item.codigo}</td>
                 <td>${item.descricao}</td>
                 <td>R$${subtotal}</td>
-                <td><a data-item-id="${item.codigo}" class="remover-item" alt="Remover item da locação"><img src=".../../../styles/images/remover.png" class='icon'/></a></td>
+                <td><button data-item-id="${item.codigo}" class="remover-item btn-transparent" alt="Remover item da locação"><img src=".../../../styles/images/remover.png" class='icon'/></button></td>
             </tr>
         `
     }   

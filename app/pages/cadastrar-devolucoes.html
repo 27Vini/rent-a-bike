@@ -75,9 +75,9 @@
 
     <dialog id="registro-avarias">
         <div class="botao-fechar">
-            <span class="fechar-modal">
+            <button class="fechar-modal btn-transparent" alt="fechar modal">
                 <img src="../styles/images/close.png">
-            </span>
+            </button>
         </div>
         <h2>Registro de Avarias do Item #<span id="item"></span></h2>
 
@@ -95,7 +95,7 @@
                 <label for="foto-avaria">Imagem:</label>
                 <input type="file" id="foto-avaria" accept=".jpg,.jpeg">
                 <label for="foto-avaria" class="label-foto">
-                    <span></span>
+                    <span>📎 Selecionar imagem</span>
                     <img src="../styles/images/arquivo.png">
                 </label>
             </div>
@@ -115,6 +115,7 @@
                     <th>Descrição</th>
                     <th>Valor(R$)</th>
                     <th>Imagem</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody></tbody>

@@ -58,4 +58,12 @@ export class ServicoDevolucao{
 
         return multa;
     }
+
+    public static gerarIdParaAvaria(avarias : Avaria[]){
+        if(avarias.length == 0)
+            return 0;
+
+        let ultimaAvariaRegistrada = avarias[avarias.length - 1];
+        return (ultimaAvariaRegistrada!.id + 1);
+    }
 }

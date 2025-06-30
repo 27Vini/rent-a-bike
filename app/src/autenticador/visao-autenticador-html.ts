@@ -33,17 +33,20 @@ export class VisaoAutenticadorHTML implements VisaoAutenticador{
     }
 
     criarBotaoDeSair(): HTMLElement{
+        const botao = document.createElement('button')
         const botaoSair = document.createElement('img')
-        botaoSair.classList.add('botao-sair')
+        botao.classList.add('botao-sair')
 
         botaoSair.src = "../styles/images/logout_exit_icon.png";
         botaoSair.title = "Sair";
-        botaoSair.setAttribute('hidden', '');
-        botaoSair.setAttribute('id', sel.botaoSair.replace('#', ''));
-        botaoSair.addEventListener("click", this.controladora.sair.bind(this.controladora));
+        
+        botao.appendChild(botaoSair);
+        botao.setAttribute('hidden', '');
+        botao.setAttribute('id', sel.botaoSair.replace('#', ''));
+        botao.addEventListener("click", this.controladora.sair.bind(this.controladora));
 
         
-        return botaoSair;
+        return botao;
     }
 
     criarOutputDeUsuario(): HTMLElement{

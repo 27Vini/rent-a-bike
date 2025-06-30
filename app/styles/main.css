@@ -242,4 +242,11 @@ footer {
 
 .botao-sair{
     cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+.botao-sair:hover{
+    background-color: transparent;
+    transform: scale(1.0);
 }

@@ -137,7 +137,7 @@ export class GestorDevolucao{
         const avariasDoGestor = this.avarias.filter(e => e.item.id == idItem)
         let objsAvarias = [];
         avariasDoGestor.forEach((e) => {
-            objsAvarias.push({datahora: e.dataHora, descricao:e.descricao, valor:e.valor, imagem:e.imagem});
+            objsAvarias.push({id: e.id, datahora: e.dataHora, descricao:e.descricao, valor:e.valor, imagem:e.imagem});
         })
 
         return objsAvarias;
@@ -190,11 +190,17 @@ export class GestorDevolucao{
 
     public registrarAvaria(dadosAvaria){
         const itemLocacaoDaAvaria = this.getItensDaLocacaoPeloId([dadosAvaria.idItem]);
-        const avaria = new Avaria(null, dadosAvaria.descricao, itemLocacaoDaAvaria[0].item, new Date(), dadosAvaria.funcionario, dadosAvaria.valor, dadosAvaria.imagem[0]);
+        const id = ServicoDevolucao.gerarIdParaAvaria(this.avarias);
+        const avaria = new Avaria(id, dadosAvaria.descricao, itemLocacaoDaAvaria[0].item, new Date(), dadosAvaria.funcionario, dadosAvaria.valor, dadosAvaria.imagem[0]);
         const problemas = avaria.validar();
         if(problemas.length > 0)
             throw ErrorDominio.comProblemas(problemas);
 
         this.avarias.push(avaria);
+    }
+
+    public removerAvariaComId(idAvaria : string | number){
+        const posicao = this.avarias.findIndex(avaria => avaria.id == idAvaria);
+        this.avarias.splice(posicao, 1);
     }
 }

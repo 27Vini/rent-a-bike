@@ -24,7 +24,6 @@ export class Avaria {
         if(this.valor < 0)
             problemas.push("Valor da avaria deve ser maior do que zero.");
 
-        console.log(this.item);
         if(this.valor > this.item.valorPorHora)
             problemas.push("Valor da avaria não deve ser maior do que o valor de um item novo.");
 
