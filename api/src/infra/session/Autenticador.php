@@ -21,9 +21,7 @@ class Autenticador{
     }
 
     public function abrirSessao(): void{
-        if (session_status() !== PHP_SESSION_ACTIVE){
-            $this->gerenteSessao->abrirSessao();
-        }
+        $this->gerenteSessao->abrirSessao();
     }
 
     public function fecharSessao(): void{
@@ -40,8 +38,10 @@ class Autenticador{
      * @return void
      */
     public function verificarSeUsuarioEstaLogado(): void{
-        if(!isset($_SESSION['funcionario']) || $_SESSION['funcionario'] == null){
-            throw new DominioException("Usuário não autenticado.");
+        try{
+            $this->gerenteSessao->verificarSeUsuarioEstaLogado();
+        }catch(DominioException $e){
+            throw $e;
         }
     }
 
@@ -50,7 +50,7 @@ class Autenticador{
      * @return Funcionario
      */
     public function obterFuncionarioLogado() : Funcionario {
-        return $_SESSION['funcionario'];
+        return $this->gerenteSessao->retornarFuncionario();
     }
 
     /**

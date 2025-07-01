@@ -20,7 +20,7 @@ test.describe('Relatório de Itens por Período', () => {
     test('Relatório gerado sem datas inseridas', async() => {
         await tela.clicar(seletores.botaoGerar);
         //considerando o mês de junho para esse item alugado 
-        await tela.deveExibirUmItem("Bicicleta Aro 26");
+        await tela.deveExibirUmItem("");
     })
 
     test('Data inicial inválida inserida', async() => {

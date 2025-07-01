@@ -21,6 +21,16 @@ describe("Autenticacao", function(){
             public function fecharSessao(): void {
                 unset($_SESSION['funcionario']);
             }
+            
+            public function verificarSeUsuarioEstaLogado(): void{
+                if(!isset($_SESSION['funcionario']) || $_SESSION['funcionario'] == null){
+                    throw new DominioException("Usuário não autenticado.");
+                }
+            }
+
+            public function retornarFuncionario() : Funcionario{
+                return $_SESSION['funcionario'];
+            }
         };
 
         $this->autenticador = new Autenticador($this->gerenteSessaoFake);
