@@ -27,7 +27,7 @@ test.describe('Cadastro de Devoluções', () =>{
 
     test("Select apenas mostra as locações ativas de um cliente", async()=>{
         await tela.preencherDados({locacao : "98765432100", data : new Date()});
-        await tela.exibirLocacoesDoCliente(3);
+        await tela.exibirLocacoesDoCliente(4);
     })
 
     test("Locação inexistente deve retornar mensagem de erro", async () => {

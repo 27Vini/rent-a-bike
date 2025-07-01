@@ -13,6 +13,7 @@ export class ServicoDevolucao{
     }
 
     private static calcularValorTotal(subtotais : number []) : Money{
+        console.log(subtotais);
         let valorTotal = new Money(0, Currencies.BRL)
         for(const subtotal of subtotais){
             valorTotal = valorTotal.add(new Money(subtotal * 100, Currencies.BRL));

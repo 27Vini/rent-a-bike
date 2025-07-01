@@ -72,6 +72,7 @@ class VisaoRelatorioDevolucaoHTML implements VisaoRelatorioDevolucao{
             }]
         },
         options: {
+            responsive: false,
             scales: {
             x: {
                 title: {

@@ -1,4 +1,5 @@
 export const sel = {
+    tabelaItensDevolucao        : ".itens-devolucao",
     locacaoInput                : "#locacao",
     pesquisarLocacao            : "#pesquisar-locacao",
     selectLocacao               : "#locacaoId",

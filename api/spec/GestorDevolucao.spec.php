@@ -30,7 +30,7 @@ describe('Gestor Devolução', function(){
 
     it("Retorna todas as devoluções corretamente", function(){
         $devolucoes = $this->gestor->coletarDevolucoes();
-        expect($devolucoes)->toHaveLength(3);
+        expect($devolucoes)->toHaveLength(11);
     });
 
     describe("Devoluções para gráfico", function(){

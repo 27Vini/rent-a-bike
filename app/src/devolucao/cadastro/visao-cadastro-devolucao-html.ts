@@ -90,7 +90,7 @@ export class VisaoCadastroDevolucaoHTML implements VisaoCadastroDevolucao{
 
     coletarSubtotais(): number[] {
         const valores : number[] = [];
-        const trs = document.querySelectorAll('tbody tr');
+        const trs = document.querySelectorAll(`${sel.tabelaItensDevolucao} tr`);
         for(const tr of trs){
             const td = tr.querySelectorAll('td')[2];
             valores.push(Number(DOMPurify.sanitize(td.textContent || '')));
