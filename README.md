@@ -1,8 +1,8 @@
 # g4
 
 ## Alunos
-    Vinícius Ouverney (vinicius.ouverney@aluno.cefet-rj.br)
-    Cynthia Arêas Jardim (cynthia.jardim@aluno.cefet-rj.br)
+    Vinícius Ouverney
+    Cynthia Arêas Jardim
 
 ## Comandos
 É preciso ligar o apache e mariaDB.
